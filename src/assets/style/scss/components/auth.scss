@@ -1,0 +1,38 @@
+.auth {
+  position: relative;
+
+  &__wrapper {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    background-color: $bg-white;
+    min-width: 22rem;
+    min-height: 20rem;
+    padding: 35px 35px;
+    overflow: hidden;
+    position: absolute;
+    top: 10rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__form {
+    .ant-form-item {
+      margin-bottom: 1rem;
+    }
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2.375rem;
+    color: $text-primary;
+    text-align: center;
+  }
+
+  a {
+    font-weight: 700;
+    color: #2c4a9f;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}

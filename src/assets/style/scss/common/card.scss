@@ -1,0 +1,45 @@
+.card-normal {
+  min-height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .ant-typography {
+    margin: 0px;
+    margin-left: 12px;
+    span {
+      display: none;
+    }
+  }
+  background: $bg-white;
+  border-radius: 4px;
+  padding: 0px 10px;
+}
+
+.card-medium {
+  min-height: 70px;
+  background: $bg-white;
+  border-radius: 4px;
+  .ant-typography {
+    margin: 0px;
+    margin-left: 8px;
+    span {
+      display: none;
+    }
+  }
+  .ant-collapse-header {
+    display: flex;
+    align-items: center;
+  }
+  .text-info-small {
+    font-size: 12px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    margin: 0px 8px;
+    p {
+      margin-left: 8px;
+    }
+  }
+
+  // padding: 10px;
+}

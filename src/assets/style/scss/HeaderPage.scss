@@ -1,0 +1,42 @@
+.header-page {
+  position: fixed;
+  z-index: 99;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  height: 55px;
+  padding: 0px 20px 0px 20px;
+  .ant-menu {
+    line-height: 55px;
+  }
+  .ant-menu-horizontal {
+    border-bottom: none;
+  }
+  .ant-avatar {
+    border: 2px solid $primary-color;
+    border-radius: 50%;
+  }
+}
+.ant-back-top {
+  right: 41px !important;
+  bottom: 83px !important;
+}
+
+.anticon-up {
+  font-weight: 900;
+  font-size: 22px;
+  margin: 12px 0 0 20px;
+}
+
+.up {
+  height: 50px;
+  width: 65px;
+  line-height: 40px;
+  border-radius: 8px;
+  background-color: rgba(1, 14, 27, 0.7);
+  color: #fff;
+}
+
+.up:hover {
+  background-color: black;
+}

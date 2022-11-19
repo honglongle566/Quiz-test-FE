@@ -1,0 +1,46 @@
+.text-left {
+  text-align: left !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
+}
+
+// Transformation
+
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+// Weight and italics
+
+.font-weight-light {
+  font-weight: 300 !important;
+}
+.font-weight-normal {
+  font-weight: 600 !important;
+}
+.font-weight-bold {
+  font-weight: 900 !important;
+}
+.font-italic {
+  font-style: italic !important;
+}
+
+.font-size-small {
+  font-size: 12px !important;
+}
+.font-size-normal {
+  font-size: 14px !important;
+}
+.font-size-medium {
+  font-size: 16px !important;
+}

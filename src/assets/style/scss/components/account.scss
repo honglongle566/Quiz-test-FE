@@ -1,0 +1,17 @@
+.account {
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    border-radius: 3px;
+  }
+
+  .ant-menu {
+    min-height: 400px;
+  }
+
+  .ant-menu-item {
+    margin: 5px !important;
+  }
+
+  h6 {
+    margin-top: 20px;
+  }
+}

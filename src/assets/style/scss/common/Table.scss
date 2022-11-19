@@ -1,0 +1,60 @@
+.ant-table-thead > tr > th {
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  font-weight: bold;
+  color: #959ba5;
+}
+.ant-table-tbody > tr > td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: white;
+  padding: 0px 16px;
+  height: 3.25rem;
+}
+.ant-table-tbody tr:last-child td {
+  border-bottom: none;
+}
+table {
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+}
+.table-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  height: calc(100% + 20px);
+  border-radius: 6px;
+}
+.ant-table-thead tr th:first-child {
+  padding: 16px 16px 16px 0px;
+}
+.ant-table-tbody tr td:first-child {
+  padding: 16px 0px 16px 0px;
+}
+
+.ant-progress-outer {
+  position: relative;
+}
+.ant-progress-text {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ant-progress-show-info .ant-progress-outer {
+  margin-left: calc(2em + 8px);
+}
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.pagination-bottom {
+  margin-top: calc(1rem + 10px);
+}
+.total-table {
+  width: calc(100% - 40px);
+}
