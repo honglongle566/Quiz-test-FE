@@ -1,177 +1,205 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { showAlert } from "slices/core/appState";
-import mockup from "mockup/categoryGroup";
-
-export const initData = createAsyncThunk(
-  "categoryGroup/initData",
-  async (_, thunkAPI) => {
-    try {
-      return mockup;
-    } catch (error) {
-      console.log("error", error);
-      return thunkAPI.rejectWithValue(error.toString());
-    }
-  }
-);
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { showAlert } from 'slices/core/appState';
+import categoryApi from 'api/categoryApi';
+import subjectApi from 'api/subjectApi';
+import { PAGE_SIZE } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
-  "categoryGroup/reloadData",
+  'categoryGroup/reloadData',
   async (_, thunkAPI) => {
     try {
-      console.log("reloadData");
       const currentState = thunkAPI.getState().categoryGroupReducer;
       let params = {
+        page_index: currentState.pagination.current_page,
+        page_size: PAGE_SIZE,
         keyword: currentState.keyword,
-        current_page: currentState.pagination.current_page,
       };
-      console.log("params", params);
-      console.log("addNewCategoryAll");
-      return mockup;
+
+      return Promise.all([
+        categoryApi.getAll(),
+        categoryApi.getAllPaging({
+          params,
+        }),
+      ]).then((values) => {
+        return values;
+      });
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const updateCategoryGroup = createAsyncThunk(
-  "categoryGroup/updateCategoryGroup",
+  'categoryGroup/updateCategoryGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("updateCategoryGroup", "id", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Cập nhật thanh công", type: "success" })
-      );
+      const category = await categoryApi.update(item);
+      if (category?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+        );
+      }
+      thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const updateSubject = createAsyncThunk(
-  "categoryGroup/updateSubject",
+  'categoryGroup/updateSubject',
   async (item, thunkAPI) => {
     try {
-      console.log("updateSubject", "id", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Cập nhật thanh công", type: "success" })
-      );
+      const subject = await subjectApi.update(item);
+      if (subject?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const removeCategoryGroup = createAsyncThunk(
-  "categoryGroup/removeCategoryGroup",
+  'categoryGroup/removeCategoryGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("removeCategoryGroup", "id", item.id);
+      await categoryApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: "Xoá thanh công", type: "success" })
+        showAlert({ message: 'Xoá thanh công', type: 'success' }),
       );
+      thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 export const removeSubject = createAsyncThunk(
-  "categoryGroup/removeSubject",
+  'categoryGroup/removeSubject',
   async (item, thunkAPI) => {
     try {
-      console.log("removeSubject", "id", item.id);
+      await subjectApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: "Xoá thanh công", type: "success" })
+        showAlert({ message: 'Xoá thanh công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const addCategoryGroup = createAsyncThunk(
-  "categoryGroup/addCategoryGroup",
+  'categoryGroup/addCategoryGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("addCategoryGroup", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Them thanh công", type: "success" })
-      );
+      const category = await categoryApi.create(item);
+      if (category?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Them thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const addSubject = createAsyncThunk(
-  "categoryGroup/addSubject",
+  'categoryGroup/addSubject',
   async (item, thunkAPI) => {
     try {
-      console.log("addSubject", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Them thanh công", type: "success" })
-      );
+      const subject = await subjectApi.create(item);
+      if (subject?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Them thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const moveSubject = createAsyncThunk(
-  "categoryGroup/moveSubject",
+  'categoryGroup/moveSubject',
   async (item, thunkAPI) => {
     try {
-      console.log("moveSubject", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Them thanh công", type: "success" })
-      );
+      const subject = await subjectApi.move(item);
+      if (subject?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Them thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 const categoryGroupSlice = createSlice({
-  name: "categoryGroup",
+  name: 'categoryGroup',
   initialState: {
     categoryGroup: [],
     categoryGroupAll: [],
     isLoading: false,
-    keyword: "",
+    keyword: '',
     pagination: {
       total_items: 0,
       total_pages: 0,
       current_page: 1,
-      rows: 5,
+      pageSize: PAGE_SIZE,
     },
     isDialog: false,
-    typeDialog: "",
-    targetItem: "",
-    targetSubject: "",
+    typeDialog: '',
+    targetItem: '',
+    targetSubject: '',
   },
   reducers: {
     showDialog: (state, action) => {
@@ -182,8 +210,8 @@ const categoryGroupSlice = createSlice({
     },
     hiddenDialog: (state, action) => {
       state.isDialog = false;
-      state.typeDialog = "";
-      state.targetItem = "";
+      state.typeDialog = '';
+      state.targetItem = '';
     },
     changePageNo: (state, action) => {
       state.pagination.current_page = action.payload;
@@ -193,25 +221,15 @@ const categoryGroupSlice = createSlice({
     },
   },
   extraReducers: {
-    [initData.pending]: (state, action) => {
-      state.isLoading = true;
-    },
-    [initData.fulfilled]: (state, action) => {
-      state.categoryGroup = action.payload?.list;
-      state.pagination = action.payload?.pagination;
-      state.isLoading = false;
-    },
-    [initData.rejected]: (state, action) => {
-      state.isLoading = false;
-    },
-
     [reloadData.pending]: (state, action) => {
       state.isLoading = true;
     },
     [reloadData.fulfilled]: (state, action) => {
-      state.categoryGroup = action.payload?.list;
-      state.categoryGroupAll = action.payload?.list;
-      state.pagination = action.payload?.pagination;
+      state.categoryGroupAll = action.payload[0].data;
+      state.categoryGroup = action.payload[1].data.rows;
+      state.pagination.total_items = action.payload[1].data.total_items;
+      state.pagination.total_pages = action.payload[1].data.total_pages;
+      state.pagination.current_page = action.payload[1].data.current_page;
       state.isLoading = false;
     },
     [reloadData.rejected]: (state, action) => {

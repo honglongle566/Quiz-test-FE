@@ -1,97 +1,96 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { showAlert } from "slices/core/appState";
-import mockup from "mockup/questionGroup";
-
-export const initData = createAsyncThunk(
-  "questionGroups/initData",
-  async (_, thunkAPI) => {
-    try {
-      console.log("initData");
-      return mockup;
-    } catch (error) {
-      console.log("error", error);
-      return thunkAPI.rejectWithValue(error.toString());
-    }
-  }
-);
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { showAlert } from 'slices/core/appState';
+import questionGroupApi from 'api/questionGroupApi';
+import { PAGE_SIZE } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
-  "questionGroups/reloadData",
+  'questionGroups/reloadData',
   async (_, thunkAPI) => {
     try {
-      console.log("reloadData");
       const currentState = thunkAPI.getState().questionGroupReducer;
       let params = {
+        page_index: currentState.pagination.current_page,
+        page_size: PAGE_SIZE,
         keyword: currentState.keyword,
-        current_page: currentState.pagination.current_page,
       };
-      console.log("params", params);
-      return mockup;
+      return questionGroupApi.getAllPaging({ params });
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const updateQuestionGroup = createAsyncThunk(
-  "questionGroups/updateQuestionGroup",
+  'questionGroups/updateQuestionGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("updateQuestionGroup", "id", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Cập nhật thanh công", type: "success" })
-      );
+      const questionGroup = await questionGroupApi.update(item);
+      if (questionGroup?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const removeQuestionGroup = createAsyncThunk(
-  "questionGroups/removeQuestionGroup",
+  'questionGroups/removeQuestionGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("removeQuestionGroup", "id", item.id);
+      await questionGroupApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: "Xoá thanh công", type: "success" })
+        showAlert({ message: 'Xoá thanh công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const addQuestionGroup = createAsyncThunk(
-  "questionGroups/addQuestionGroup",
+  'questionGroups/addQuestionGroup',
   async (item, thunkAPI) => {
     try {
-      console.log("addQuestionGroup", item);
-      thunkAPI.dispatch(
-        showAlert({ message: "Them thanh công", type: "success" })
-      );
+      const questionGroup = await questionGroupApi.create(item);
+      if (questionGroup?.status?.status === 407) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Them thanh công', type: 'success' }),
+        );
+      }
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
-      console.log("error", error);
-      thunkAPI.dispatch(showAlert({ message: "Lỗi kết nốt", type: "error" }));
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
       return thunkAPI.rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 const questionGroupsSlice = createSlice({
-  name: "questionGroups",
+  name: 'questionGroups',
   initialState: {
     questionGroups: [],
     isLoading: false,
-    keyword: "",
+    keyword: '',
     pagination: {
       total_items: 0,
       total_pages: 0,
@@ -115,24 +114,14 @@ const questionGroupsSlice = createSlice({
     },
   },
   extraReducers: {
-    [initData.pending]: (state, action) => {
-      state.isLoading = true;
-    },
-    [initData.fulfilled]: (state, action) => {
-      state.questionGroups = action.payload?.list;
-      state.pagination = action.payload?.pagination;
-      state.isLoading = false;
-    },
-    [initData.rejected]: (state, action) => {
-      state.isLoading = false;
-    },
-
     [reloadData.pending]: (state, action) => {
       state.isLoading = true;
     },
     [reloadData.fulfilled]: (state, action) => {
-      state.questionGroups = action.payload?.list;
-      state.pagination = action.payload?.pagination;
+      state.questionGroups = action.payload.data.rows;
+      state.pagination.total_items = action.payload.data.total_items;
+      state.pagination.total_pages = action.payload.data.total_pages;
+      state.pagination.current_page = action.payload.data.current_page;
       state.isLoading = false;
     },
     [reloadData.rejected]: (state, action) => {

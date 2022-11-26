@@ -1,19 +1,20 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Select } from "antd";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, Select } from 'antd';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addCategoryGroup,
   categoryGroupSelector,
+  addSubject,
   hiddenDialog,
   updateCategoryGroup,
   moveSubject,
-} from "slices/category/categoryGroup";
+} from 'slices/category/categoryGroup';
 const { Option } = Select;
 
 const ConfirmDialog = () => {
-  const { t } = useTranslation("category", "common");
+  const { t } = useTranslation('category', 'common');
   const { isDialog, typeDialog, targetItem, targetSubject, categoryGroupAll } =
     useSelector(categoryGroupSelector);
 
@@ -26,13 +27,13 @@ const ConfirmDialog = () => {
     return () => form.resetFields();
   });
   useEffect(() => {
-    if (typeDialog === "MOVE_SUBJECT") {
+    if (typeDialog === 'MOVE_SUBJECT') {
       setInitValueForm({ currentGroup: targetItem.name });
     }
   }, [typeDialog]);
 
   const onFinish = async (values) => {
-    if (typeDialog === "CREATE_NEW") {
+    if (typeDialog === 'CREATE_NEW') {
       const newCategory = {
         name: values?.name,
         subject: values?.subject
@@ -42,46 +43,53 @@ const ConfirmDialog = () => {
           : [],
       };
       dispatch(addCategoryGroup(newCategory));
-    } else if (typeDialog === "EDIT_CATEGORY") {
-      console.log("values", { ...targetItem, ...values });
+    } else if (typeDialog === 'EDIT_CATEGORY') {
+      console.log('values', { ...targetItem, ...values });
       dispatch(updateCategoryGroup({ ...targetItem, ...values }));
-    } else if (typeDialog === "MOVE_SUBJECT") {
+    } else if (typeDialog === 'MOVE_SUBJECT') {
       dispatch(
         moveSubject({
-          subject: targetSubject,
-          new_parent_id: values.new_parent_id,
-        })
+          id: targetSubject.id,
+          new_category_id: values.new_category_id,
+        }),
+      );
+    } else if (typeDialog === 'CREATE_SUBJECT') {
+      dispatch(
+        addSubject({
+          name: values?.name,
+          category_id: targetItem.id,
+        }),
       );
     }
   };
 
   const showTitle = () => {
     switch (typeDialog) {
-      case "CREATE_NEW":
-        return t("create_category", { ns: "category" });
-      case "EDIT_CATEGORY":
-        return t("update_category", { ns: "category" });
-      case "CREATE_SUBJECT":
-        return t("new_sub_category1", { ns: "category" });
-      case "MOVE_SUBJECT":
-        return t("move_sub_category", { ns: "category" });
+      case 'CREATE_NEW':
+        return t('create_category', { ns: 'category' });
+      case 'EDIT_CATEGORY':
+        return t('update_category', { ns: 'category' });
+      case 'CREATE_SUBJECT':
+        return t('new_sub_category1', { ns: 'category' });
+      case 'MOVE_SUBJECT':
+        return t('move_sub_category', { ns: 'category' });
       default:
-        return "Thông báo";
+        return 'Thông báo';
     }
   };
 
   const showForm = () => {
     switch (typeDialog) {
-      case "CREATE_NEW":
+      case 'CREATE_NEW':
         return <FormAdd />;
-      case "EDIT_CATEGORY":
+      case 'EDIT_CATEGORY':
         return <FormEdit />;
-      case "CREATE_SUBJECT":
+      case 'CREATE_SUBJECT':
         return <FormSubject />;
-      case "MOVE_SUBJECT":
+      case 'MOVE_SUBJECT':
         return <FormMoveSubject />;
       default:
-        return "Thông báo";
+        return 'Thông báo';
     }
   };
 
@@ -89,49 +97,49 @@ const ConfirmDialog = () => {
     return (
       <>
         <Form.Item
-          style={{ fontWeight: "500" }}
-          name="name"
-          label={t("category_name", { ns: "category" })}
+          style={{ fontWeight: '500' }}
+          name='name'
+          label={t('category_name', { ns: 'category' })}
           rules={[
             {
               required: true,
-              message: `${t("the_category_name_field_is_required", {
-                ns: "category",
+              message: `${t('the_category_name_field_is_required', {
+                ns: 'category',
               })}`,
             },
           ]}
         >
-          <Input placeholder={t("your_input_here", { ns: "category" })} />
+          <Input placeholder={t('your_input_here', { ns: 'category' })} />
         </Form.Item>
-        <Form.List name="subject">
+        <Form.List name='subject'>
           {(fields, { add }, { errors }) => (
             <>
               {fields.map((field, index) => (
                 <Form.Item
-                  style={{ fontWeight: "500" }}
+                  style={{ fontWeight: '500' }}
                   label={
                     index === 0
-                      ? `${t("subject_name1", { ns: "category" })}`
-                      : ""
+                      ? `${t('subject_name1', { ns: 'category' })}`
+                      : ''
                   }
                   key={field.key}
                 >
                   <Form.Item {...field} noStyle>
                     <Input
-                      placeholder={t("your_input_here", { ns: "category" })}
-                      style={{ width: "100%" }}
+                      placeholder={t('your_input_here', { ns: 'category' })}
+                      style={{ width: '100%' }}
                     />
                   </Form.Item>
                 </Form.Item>
               ))}
               <Form.Item>
                 <Button
-                  type="primary"
+                  type='primary'
                   onClick={() => add()}
                   icon={<PlusOutlined />}
-                  className="btn-primary-inverse"
+                  className='btn-primary-inverse'
                 >
-                  {t("new_subject1", { ns: "category" })}
+                  {t('new_subject1', { ns: 'category' })}
                 </Button>
                 <Form.ErrorList errors={errors} />
               </Form.Item>
@@ -145,20 +153,20 @@ const ConfirmDialog = () => {
   const FormEdit = () => {
     return (
       <Form.Item
-        style={{ fontWeight: "500" }}
-        name="name"
-        label={t("category_name", { ns: "category" })}
+        style={{ fontWeight: '500' }}
+        name='name'
+        label={t('category_name', { ns: 'category' })}
         initialValue={targetItem?.name}
         rules={[
           {
             required: true,
-            message: `${t("the_category_name_field_is_required", {
-              ns: "category",
+            message: `${t('the_category_name_field_is_required', {
+              ns: 'category',
             })}`,
           },
         ]}
       >
-        <Input placeholder={t("your_input_here", { ns: "category" })} />
+        <Input placeholder={t('your_input_here', { ns: 'category' })} />
       </Form.Item>
     );
   };
@@ -166,23 +174,17 @@ const ConfirmDialog = () => {
   const FormSubject = () => {
     return (
       <Form.Item
-        style={{ fontWeight: "500" }}
-        name="name"
-        label={t("sub_category_name2", { ns: "category" })}
+        style={{ fontWeight: '500' }}
+        name='name'
+        label='Tên danh mục con'
         rules={[
           {
             required: true,
-            message: `${t("the_category_name_field_is_required", {
-              ns: "category",
-            })}`,
+            message: 'Tên danh mục con không được để trống',
           },
         ]}
       >
-        <Input
-          placeholder={t("your_input_here", {
-            ns: "category",
-          })}
-        />
+        <Input placeholder='Nhập tên danh mục con' />
       </Form.Item>
     );
   };
@@ -191,26 +193,26 @@ const ConfirmDialog = () => {
     return (
       <>
         <Form.Item
-          name="currentGroup"
-          label={t("current_category", { ns: "category" })}
+          name='currentGroup'
+          label={t('current_category', { ns: 'category' })}
           rules={[{ required: true }]}
-          style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+          style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
         >
           <Input disabled />
         </Form.Item>
         <Form.Item
-          name="new_parent_id"
-          label={t("move_to_category", { ns: "category" })}
+          name='new_category_id'
+          label={t('move_to_category', { ns: 'category' })}
           rules={[
-            { required: true, message: "Please select an item in the list" },
+            { required: true, message: 'Please select an item in the list' },
           ]}
           style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: "0 8px",
+            display: 'inline-block',
+            width: 'calc(50% - 8px)',
+            margin: '0 8px',
           }}
         >
-          <Select placeholder="-- Chọn nhóm đề thi --">
+          <Select placeholder='-- Chọn nhóm đề thi --'>
             {categoryGroupAll
               .filter((item) => item.id !== targetItem.id)
               .map((item) => (
@@ -234,25 +236,25 @@ const ConfirmDialog = () => {
       footer={null}
     >
       <Form
-        name="testCategoryForm"
+        name='testCategoryForm'
         form={form}
-        layout="vertical"
+        layout='vertical'
         onFinish={onFinish}
         initialValues={initValueForm}
       >
         {showForm()}
-        <Form.Item className="ma-0 mt-4">
-          <div className="d-flex justify-content-end">
+        <Form.Item className='ma-0 mt-4'>
+          <div className='d-flex justify-content-end'>
             <Button
-              type="default"
-              htmlType="button"
-              className="btn-gray mr-2"
+              type='default'
+              htmlType='button'
+              className='btn-gray mr-2'
               onClick={() => dispatch(hiddenDialog())}
             >
-              {t("button.cancel", { ns: "common" })}
+              {t('button.cancel', { ns: 'common' })}
             </Button>
-            <Button type="primary" htmlType="submit">
-              {t("button.save", { ns: "common" })}
+            <Button type='primary' htmlType='submit'>
+              {t('button.save', { ns: 'common' })}
             </Button>
           </div>
         </Form.Item>
