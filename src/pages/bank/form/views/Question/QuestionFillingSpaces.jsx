@@ -1,23 +1,26 @@
-import { EditOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Modal, Row, Tooltip } from "antd";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import TinyMCE from "shares/common/TinyMCE";
+import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Col, Input, Modal, Row, Tooltip } from 'antd';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import TinyMCE from 'shares/common/TinyMCE';
 import {
   bankFormSliceSelector,
   setFillBlankCorrectAnswers,
   setName,
-} from "slices/bank/bankForm";
+  setIsShowQuestionSpace,
+} from 'slices/bank/bankForm';
 
 const QuestionFillingSpaces = () => {
-  const { t } = useTranslation("bank");
+  const { t } = useTranslation('bank');
   const dispatch = useDispatch();
   const {
+    isShowQuestionSpace,
     item: { name, fill_blank_correct_answers },
   } = useSelector(bankFormSliceSelector);
 
-  const [isAnswer, setIsAnswer] = useState(false);
+  const [isAnswer, setIsAnswer] = useState(isShowQuestionSpace ? true : false);
   const handleChangeAnswers = (e, key) => {
     dispatch(
       setFillBlankCorrectAnswers(
@@ -26,8 +29,8 @@ const QuestionFillingSpaces = () => {
             return { ...answer, content: [e.target.value] };
           }
           return answer;
-        })
-      )
+        }),
+      ),
     );
   };
 
@@ -36,7 +39,7 @@ const QuestionFillingSpaces = () => {
     for (let item of fill_blank_correct_answers) {
       newQuestion = newQuestion.replace(
         `[%${item.key}%]`,
-        `<strong>__${item.key}__</strong>`
+        `<strong>__${item.key}__</strong>`,
       );
     }
     return newQuestion;
@@ -62,19 +65,19 @@ const QuestionFillingSpaces = () => {
               if (!fill_blank_correct_answers.length)
                 return { key: item, content: [] };
               let oldAnswer = fill_blank_correct_answers.find(
-                (x) => x.key === item
+                (x) => x.key === item,
               );
               if (oldAnswer) return oldAnswer;
               return { key: item, content: [] };
-            })
-          )
+            }),
+          ),
         );
       } else {
         Modal.info({
-          title: t("Notification", { ns: "bank" }),
+          title: t('Notification', { ns: 'bank' }),
           icon: <ExclamationCircleOutlined />,
-          content: t("Please_enter_a_question", { ns: "bank" }),
-          okText: t("yes", { ns: "testCampaign" }),
+          content: t('Please_enter_a_question', { ns: 'bank' }),
+          okText: t('yes', { ns: 'testCampaign' }),
           onOk() {},
           maskClosable: true,
         });
@@ -85,23 +88,28 @@ const QuestionFillingSpaces = () => {
     dispatch(setName(question));
   };
 
+  const handleEditQuestion = () => {
+    setIsAnswer(false);
+    if (isShowQuestionSpace) dispatch(setIsShowQuestionSpace(false));
+  };
+
   return (
     <>
       <Col span={24}>
-        <div className="white-bg p-4 ">
+        <div className='white-bg p-4 '>
           <Row gutter={[8, 8]}>
             <Col flex={1}>
-              <h6>{t("Enter_the_question", { ns: "bank" })}</h6>
+              <h6>{t('Enter_the_question', { ns: 'bank' })}</h6>
             </Col>
             {isAnswer && (
               <Col>
-                <Tooltip title={t("Edit", { ns: "bank" })}>
-                  <EditOutlined onClick={() => setIsAnswer(false)} />
+                <Tooltip title={t('Edit', { ns: 'bank' })}>
+                  <EditOutlined onClick={() => handleEditQuestion(false)} />
                 </Tooltip>
               </Col>
             )}
-            <Col span={24} className="question">
-              <Row wrap={false} gutter={[8, 8]} justify="space-between">
+            <Col span={24} className='question'>
+              <Row wrap={false} gutter={[8, 8]} justify='space-between'>
                 {isAnswer && (
                   <div
                     dangerouslySetInnerHTML={{ __html: formatQuestion(name) }}
@@ -111,16 +119,16 @@ const QuestionFillingSpaces = () => {
                   <Col span={24}>
                     <TinyMCE value={name} onChange={handleOnchangeQuestion} />
                     <Col span={24}>
-                      <div className="white-bg p-4 footer_question_type">
-                        <p className="mb-3">
-                          {t("To_make_space", { ns: "bank" })}
+                      <div className='white-bg p-4 footer_question_type'>
+                        <p className='mb-3'>
+                          {t('To_make_space', { ns: 'bank' })}
                         </p>
                         <p>Công cha như núi thái [%1%]</p>
                         <p>[%2%] như nước trong nguồn chảy ra</p>
                       </div>
                     </Col>
-                    <Button type="primary" onClick={handleSaveQuestion}>
-                      {t("Save_question", { ns: "bank" })}
+                    <Button type='primary' onClick={handleSaveQuestion}>
+                      {t('Save_question', { ns: 'bank' })}
                     </Button>
                   </Col>
                 )}
@@ -131,23 +139,23 @@ const QuestionFillingSpaces = () => {
       </Col>
       {isAnswer && (
         <Col span={24}>
-          <div className="white-bg p-4 ">
+          <div className='white-bg p-4 '>
             <Row gutter={[16, 16]}>
               <Col span={24}>
-                <h6>{t("Enter_essay_question_info", { ns: "bank" })}</h6>
+                <h6>{t('Enter_essay_question_info', { ns: 'bank' })}</h6>
               </Col>
               <Col span={24}>
-                <p className="text_mute">
-                  - {t("The_system_does_not_distinguish", { ns: "bank" })}
+                <p className='text_mute'>
+                  - {t('The_system_does_not_distinguish', { ns: 'bank' })}
                 </p>
-                <p className="text_mute">
-                  -{" "}
-                  {t("To_record_more_than_one_correct_answer", { ns: "bank" })}
+                <p className='text_mute'>
+                  -{' '}
+                  {t('To_record_more_than_one_correct_answer', { ns: 'bank' })}
                 </p>
               </Col>
               <Col span={24}>
                 {fill_blank_correct_answers.map((item) => (
-                  <Row key={item.key} align="middle" className="mb-3">
+                  <Row key={item.key} align='middle' className='mb-3'>
                     <Col span={2}>
                       <b>{item.key}:</b>
                     </Col>

@@ -1,17 +1,17 @@
-import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Col, Row, Space } from "antd";
-import TinyMCE from "shares/common/TinyMCE";
-import { useTranslation } from "react-i18next";
-import { getLetter } from "utils/question";
-import { useDispatch, useSelector } from "react-redux";
+import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Row } from 'antd';
+import TinyMCE from 'shares/common/TinyMCE';
+import { useTranslation } from 'react-i18next';
+import { getLetter } from 'utils/question';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setMatchingAnswers,
   setMatchingCorrectAnswers,
   bankFormSliceSelector,
-} from "slices/bank/bankForm";
+} from 'slices/bank/bankForm';
 
 const Matching = () => {
-  const { t } = useTranslation("bank");
+  const { t } = useTranslation('bank');
   const dispatch = useDispatch();
   const {
     item: { matching_answers, matching_correct_answers },
@@ -23,9 +23,9 @@ const Matching = () => {
         ...matching_answers,
         questions: [
           ...matching_answers.questions,
-          { id: matching_answers.questions.length + 1, content: "" },
+          { id: matching_answers.questions.length + 1, content: '' },
         ],
-      })
+      }),
     );
     addCorRow();
   };
@@ -35,9 +35,9 @@ const Matching = () => {
         ...matching_answers,
         answers: [
           ...matching_answers.answers,
-          { id: getLetter(matching_answers.answers.length), content: "" },
+          { id: getLetter(matching_answers.answers.length), content: '' },
         ],
-      })
+      }),
     );
   };
   const handleDeleteQuestion = (question) => {
@@ -53,7 +53,7 @@ const Matching = () => {
       setMatchingAnswers({
         ...matching_answers,
         questions: deleteQuestion,
-      })
+      }),
     );
     deleteCorRow(question);
   };
@@ -62,7 +62,7 @@ const Matching = () => {
       setMatchingCorrectAnswers({
         ...matching_correct_answers,
         [matching_answers.questions.length + 1]: [],
-      })
+      }),
     );
   };
   const deleteCorRow = (question) => {
@@ -92,7 +92,7 @@ const Matching = () => {
       setMatchingAnswers({
         ...matching_answers,
         answers: deleteAnswers,
-      })
+      }),
     );
   };
   const deleteCorCol = (answer) => {
@@ -117,16 +117,16 @@ const Matching = () => {
         setMatchingCorrectAnswers({
           ...matching_correct_answers,
           [question.id]: [...matching_correct_answers[question.id], answer.id],
-        })
+        }),
       );
     } else {
       dispatch(
         setMatchingCorrectAnswers({
           ...matching_correct_answers,
           [question.id]: matching_correct_answers[question.id].filter(
-            (item) => item !== answer.id
+            (item) => item !== answer.id,
           ),
-        })
+        }),
       );
     }
   };
@@ -140,7 +140,7 @@ const Matching = () => {
           }
           return item;
         }),
-      })
+      }),
     );
   };
   const handleChangeQuestion = (question) => {
@@ -153,45 +153,45 @@ const Matching = () => {
           }
           return item;
         }),
-      })
+      }),
     );
   };
   return (
     <Col span={24}>
-      <div className="white-bg p-4">
-        <h6>{t("Enter_the_answer", { ns: "bank" })}</h6>
+      <div className='white-bg p-4'>
+        <h6>{t('Enter_the_answer', { ns: 'bank' })}</h6>
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <Row justify="space-around">
+            <Row justify='space-around'>
               <Col>
-                <b>{t("Column", { ns: "bank" })} 1</b>
+                <b>{t('Column', { ns: 'bank' })} 1</b>
               </Col>
               <Col>
-                <b>{t("Column", { ns: "bank" })} 2</b>
+                <b>{t('Column', { ns: 'bank' })} 2</b>
               </Col>
             </Row>
           </Col>
           <Col span={12}>
             {matching_answers.questions.map((question) => (
               <Row
-                align="middle"
+                align='middle'
                 wrap={false}
-                className="mb-3"
+                className='mb-3'
                 key={question.id}
               >
-                <Col span={1} className="mr-2">
+                <Col span={1} className='mr-2'>
                   <b>{question.id}</b>
                 </Col>
                 <Col span={20}>
                   <TinyMCE
                     value={question}
                     onChange={handleChangeQuestion}
-                    type="answer"
+                    type='answer'
                   />
                 </Col>
                 <Col span={1}>
                   <Button
-                    type="text"
+                    type='text'
                     onClick={() => handleDeleteQuestion(question)}
                   >
                     <CloseCircleOutlined />
@@ -199,26 +199,26 @@ const Matching = () => {
                 </Col>
               </Row>
             ))}
-            <Button onClick={handleAddQuestion} className="ml-4">
-              <PlusOutlined /> {t("Add_answer", { ns: "bank" })}
+            <Button onClick={handleAddQuestion} className='ml-4'>
+              <PlusOutlined /> {t('Add_answer', { ns: 'bank' })}
             </Button>
           </Col>
           <Col span={12}>
             {matching_answers.answers.map((answer) => (
-              <Row align="middle" wrap={false} className="mb-3" key={answer.id}>
-                <Col span={1} className="mr-2">
+              <Row align='middle' wrap={false} className='mb-3' key={answer.id}>
+                <Col span={1} className='mr-2'>
                   <b>{answer.id.toUpperCase()}</b>
                 </Col>
                 <Col span={20}>
                   <TinyMCE
                     value={answer}
                     onChange={handleChangeAnswer}
-                    type="answer"
+                    type='answer'
                   />
                 </Col>
                 <Col span={1}>
                   <Button
-                    type="text"
+                    type='text'
                     onClick={() => handleDeleteAnswer(answer)}
                   >
                     <CloseCircleOutlined />
@@ -226,23 +226,23 @@ const Matching = () => {
                 </Col>
               </Row>
             ))}
-            <Button onClick={handleAddAnswer} className="ml-4">
-              <PlusOutlined /> {t("Add_answer", { ns: "bank" })}
+            <Button onClick={handleAddAnswer} className='ml-4'>
+              <PlusOutlined /> {t('Add_answer', { ns: 'bank' })}
             </Button>
           </Col>
           <Col span={24}>
-            <h6>{t("Choose_the_answer", { ns: "bank" })}</h6>
-            <p>{t("Please_choose", { ns: "bank" })}</p>
+            <h6>{t('Choose_the_answer', { ns: 'bank' })}</h6>
+            <p>{t('Please_choose', { ns: 'bank' })}</p>
           </Col>
           <Col span={24}>
-            <Row justify="center">
+            <Row justify='center'>
               <Col>
                 <table>
                   <thead>
                     <tr>
                       <th></th>
                       {matching_answers.answers.map((answer) => (
-                        <th className="pa-2" key={answer.id}>
+                        <th className='pa-2' key={answer.id}>
                           {answer.id.toUpperCase()}
                         </th>
                       ))}
@@ -251,9 +251,9 @@ const Matching = () => {
                   <tbody>
                     {matching_answers.questions.map((question) => (
                       <tr key={question.id}>
-                        <td className="pa-2">{question.id}</td>
+                        <td className='pa-2'>{question.id}</td>
                         {matching_answers.answers.map((answer) => (
-                          <td className="pa-2" key={answer.id}>
+                          <td className='pa-2' key={answer.id}>
                             <Checkbox
                               checked={matching_correct_answers[
                                 question.id

@@ -115,8 +115,8 @@ export const addCategoryGroup = createAsyncThunk(
   'categoryGroup/addCategoryGroup',
   async (item, thunkAPI) => {
     try {
-      const category = await categoryApi.create(item);
-      if (category?.status?.status === 407) {
+      const subject = await subjectApi.createAll(item);
+      if (subject?.status?.status === 407) {
         thunkAPI.dispatch(
           showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
         );

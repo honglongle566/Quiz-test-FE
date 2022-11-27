@@ -5,6 +5,10 @@ const subjectApi = {
     const url = '/api/subject';
     return axiosClient.post(url, data);
   },
+  createAll(data) {
+    const url = `/api/subject/all`;
+    return axiosClient.post(url, data);
+  },
   update(data) {
     const url = `/api/subject/${data.id}`;
     return axiosClient.put(url, data);
