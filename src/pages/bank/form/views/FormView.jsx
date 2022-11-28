@@ -1,11 +1,12 @@
-import { Breadcrumb, Button, Col, Form, Row, Tabs, Radio } from 'antd';
+import { Breadcrumb, Button, Col, Radio, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
+  addQuestion,
   bankFormSliceSelector,
   setType,
-  addQuestion,
+  updateQuestion,
 } from 'slices/bank/bankForm';
 import Matching from './Answer/Matching';
 import MultipleChoice from './Answer/MultipleChoice';
@@ -28,7 +29,11 @@ const FormView = () => {
   };
 
   const handleCreateQuestion = () => {
-    dispatch(addQuestion());
+    if (isCreate) {
+      dispatch(addQuestion());
+    } else {
+      dispatch(updateQuestion());
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-const testApi = {
+const examApi = {
   getAllPaging(params) {
     const url = `/api/test/all-paging`;
     return axiosClient.get(url, params);
@@ -19,4 +19,4 @@ const testApi = {
   },
 };
 
-export default testApi;
+export default examApi;

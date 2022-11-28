@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { showAlert } from 'slices/core/appState';
-import testApi from 'api/testApi';
+import testApi from 'api/examApi';
 import categoryApi from 'api/categoryApi';
 import { PAGE_SIZE } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
-  'test/reloadData',
+  'testIndex/reloadData',
   async (_, thunkAPI) => {
     try {
-      const currentState = thunkAPI.getState().TestReducer;
+      const currentState = thunkAPI.getState().testIndexReducer;
       let params = {
         page_index: currentState.pagination.current_page,
         page_size: PAGE_SIZE,
@@ -30,7 +30,7 @@ export const reloadData = createAsyncThunk(
 );
 
 export const updateTest = createAsyncThunk(
-  'test/updateTest',
+  'testIndex/updateTest',
   async (item, thunkAPI) => {
     try {
       const test = await testApi.update(item);
@@ -53,7 +53,7 @@ export const updateTest = createAsyncThunk(
 );
 
 export const removeTest = createAsyncThunk(
-  'test/removeTest',
+  'testIndex/removeTest',
   async (item, thunkAPI) => {
     try {
       await testApi.delete(item);
@@ -69,20 +69,14 @@ export const removeTest = createAsyncThunk(
   },
 );
 
-export const addTest = createAsyncThunk(
-  'test/addTest',
+export const addExam = createAsyncThunk(
+  'testIndex/addExam',
   async (item, thunkAPI) => {
     try {
-      const test = await testApi.create(item);
-      if (test?.status?.status === 407) {
-        thunkAPI.dispatch(
-          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
-        );
-      } else {
-        thunkAPI.dispatch(
-          showAlert({ message: 'Them thanh công', type: 'success' }),
-        );
-      }
+      const exam = await testApi.create(item);
+      thunkAPI.dispatch(
+        showAlert({ message: 'Them thanh công', type: 'success' }),
+      );
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -93,23 +87,35 @@ export const addTest = createAsyncThunk(
   },
 );
 
-const testSlice = createSlice({
-  name: 'test',
-  initialState: {
-    test: [],
-    category: [],
-    typeSearch: [],
-    isLoading: false,
-    keyword: '',
-    pagination: {
-      total_items: 0,
-      total_pages: 0,
-      current_page: 1,
-      rows: 5,
-    },
-    isDialog: false,
+const initialState = {
+  test: [],
+  category: [],
+  typeSearch: [],
+  isLoading: false,
+  keyword: '',
+  isDialog: false,
+  isCreate: false,
+  pagination: {
+    total_items: 0,
+    total_pages: 0,
+    current_page: 1,
+    rows: 5,
   },
+};
+
+const testIndexSlice = createSlice({
+  name: 'testIndex',
+  initialState,
   reducers: {
+    destroy: (state, action) => {
+      for (const [key] of Object.entries(state)) {
+        state[key] = initialState[key];
+      }
+    },
+    setIsCreate: (state, action) => {
+      console.log('setIsCreate');
+      state.isCreate = true;
+    },
     showDialog: (state, action) => {
       state.isDialog = true;
     },
@@ -128,7 +134,6 @@ const testSlice = createSlice({
       state.isLoading = true;
     },
     [reloadData.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.test = action.payload[0].data.rows;
       state.pagination.total_items = action.payload[0].data.total_items;
       state.pagination.total_pages = action.payload[0].data.total_pages;
@@ -160,21 +165,27 @@ const testSlice = createSlice({
       state.isLoading = false;
     },
 
-    [addTest.pending]: (state, action) => {
+    [addExam.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [addTest.fulfilled]: (state, action) => {
+    [addExam.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [addTest.rejected]: (state, action) => {
+    [addExam.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
 });
 
-export const testSelector = (state) => state.TestReducer;
+export const testIndexSelector = (state) => state.testIndexReducer;
 
-export const { showDialog, hiddenDialog, onSearch, changePageNo } =
-  testSlice.actions;
+export const {
+  showDialog,
+  hiddenDialog,
+  onSearch,
+  changePageNo,
+  setIsCreate,
+  destroy,
+} = testIndexSlice.actions;
 
-export default testSlice.reducer;
+export default testIndexSlice.reducer;

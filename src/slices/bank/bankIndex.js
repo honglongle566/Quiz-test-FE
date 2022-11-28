@@ -12,10 +12,9 @@ export const reloadData = createAsyncThunk(
       let params = {
         page_index: currentState.pagination.current_page,
         page_size: PAGE_SIZE,
-        name: currentState.keyword,
-        group_question_id: currentState.targetGroupQuestion,
+        name: currentState.keyword || null,
+        group_question_id: currentState.targetGroupQuestion || null,
       };
-      console.log('reloadData', params);
 
       return Promise.all([
         questionGroupApi.getAll(),

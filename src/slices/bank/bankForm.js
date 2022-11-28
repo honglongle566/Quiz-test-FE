@@ -41,6 +41,26 @@ export const addQuestion = createAsyncThunk(
   },
 );
 
+export const updateQuestion = createAsyncThunk(
+  'bankForm/updateQuestion',
+  async (_, thunkAPI) => {
+    try {
+      const currentState = thunkAPI.getState().bankFormSliceReducer;
+      await questionApi.update({
+        ...showQuestion(currentState.item),
+        id: currentState.targetId,
+      });
+      thunkAPI.dispatch(
+        showAlert({ message: 'update thanh công', type: 'success' }),
+      );
+    } catch (error) {
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+      return thunkAPI.rejectWithValue(error.toString());
+    }
+  },
+);
+
 const getInitQuestion = (data) => {
   if (data.type === 1) {
     return {
@@ -265,6 +285,16 @@ const bankFormSlice = createSlice({
       state.isLoading = false;
     },
     [addQuestion.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+
+    [updateQuestion.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [updateQuestion.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [updateQuestion.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
