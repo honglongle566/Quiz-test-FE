@@ -17,7 +17,7 @@ const SearchForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
-  const { questionGroup } = useSelector(bankIndexSliceSelector);
+  const { questionGroup, isPage } = useSelector(bankIndexSliceSelector);
   const handleCreateQuestion = () => {
     navigate(`/bank/create-question`);
   };
@@ -70,16 +70,18 @@ const SearchForm = () => {
           ))}
         </Select>
       </Col>
-      <Col span={8} className='item-right'>
-        <Button
-          size='large'
-          type='primary'
-          icon={<PlusSquareOutlined />}
-          onClick={handleCreateQuestion}
-        >
-          {t('New_question', { ns: 'bank' })}
-        </Button>
-      </Col>
+      {isPage !== 'CREATE' && (
+        <Col span={8} className='item-right'>
+          <Button
+            size='large'
+            type='primary'
+            icon={<PlusSquareOutlined />}
+            onClick={handleCreateQuestion}
+          >
+            {t('New_question', { ns: 'bank' })}
+          </Button>
+        </Col>
+      )}
     </Row>
   );
 };

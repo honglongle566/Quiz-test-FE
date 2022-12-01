@@ -3,32 +3,29 @@ import {
   Col,
   Form,
   Input,
+  InputNumber,
   Modal,
+  Radio,
   Row,
   Select,
   TreeSelect,
-  InputNumber,
-  Radio,
 } from 'antd';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  addExam,
   hiddenDialog,
   testIndexSelector,
-  setIsCreate,
 } from 'slices/test/testIndex';
 const { TreeNode } = TreeSelect;
 
 const ConfirmDialog = () => {
   const { t } = useTranslation('test', 'common');
   const dispatch = useDispatch();
-  const { isDialog } = useSelector(testIndexSelector);
+  const { isDialog, category } = useSelector(testIndexSelector);
   const [form] = Form.useForm();
-  const [category, setCategory] = useState();
   const onFinish = (values) => {
-    console.log('12313');
-    dispatch(setIsCreate(true));
+    dispatch(addExam(values));
   };
   return (
     <Modal
@@ -69,24 +66,26 @@ const ConfirmDialog = () => {
             >
               <TreeSelect
                 style={{ width: '100%' }}
-                value={category}
                 dropdownStyle={{ maxHeight: 600, overflow: 'auto' }}
                 placeholder={t('choose_an_category', { ns: 'test' })}
                 treeDefaultExpandAll
-                onChange={(value) => setCategory(value)}
               >
-                <TreeNode
-                  value={'exam.id + exam.name'}
-                  title={'exam.name'}
-                  selectable={false}
-                  key={'exam.id + exam.name'}
-                >
+                {category.map((item) => (
                   <TreeNode
-                    value={'subExam.id'}
-                    title={'subExam.name'}
-                    key={'subExam.id'}
-                  ></TreeNode>
-                </TreeNode>
+                    value={'exam' + item.id}
+                    title={item.name}
+                    selectable={false}
+                    key={'exam' + item.id}
+                  >
+                    {item?.subjects.map((sub) => (
+                      <TreeNode
+                        value={sub.id}
+                        title={sub.name}
+                        key={sub.id}
+                      ></TreeNode>
+                    ))}
+                  </TreeNode>
+                ))}
               </TreeSelect>
             </Form.Item>
           </Col>
@@ -128,8 +127,8 @@ const ConfirmDialog = () => {
         </Form.Item>
         <Form.Item name='type' label='Cài đặt hiển thị'>
           <Radio.Group>
-            <Radio value='1'>Hiển thị một câu hỏi trên một trang</Radio>
-            <Radio value='2'>Hiển thị một phần thi trên một trang</Radio>
+            <Radio value={1}>Hiển thị một câu hỏi trên một trang</Radio>
+            <Radio value={2}>Hiển thị một phần thi trên một trang</Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item

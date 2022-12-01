@@ -1,117 +1,128 @@
 import {
-  EditOutlined,
-  SettingFilled,
-  QuestionCircleOutlined,
-  TrophyOutlined,
   ClockCircleOutlined,
+  DownOutlined,
+  FileDoneOutlined,
   FileTextOutlined,
   ForkOutlined,
-  FileDoneOutlined,
-  DownOutlined,
   PlusCircleOutlined,
-} from "@ant-design/icons";
+  QuestionCircleOutlined,
+  SettingFilled,
+  TrophyOutlined,
+} from '@ant-design/icons';
 import {
   Breadcrumb,
+  Button,
   Col,
+  Divider,
+  Dropdown,
   Menu,
   Row,
-  Space,
   Tooltip,
   Typography,
-  Divider,
-  Button,
-  Dropdown,
-} from "antd";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-// import ConfirmDialog from "./ConfirmDialog";
-import FormInfo from "./FormInfo";
+} from 'antd';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { testFormSelector, showDialog } from 'slices/test/testForm';
+import ConfirmDialog from './ConfirmDialog';
+import FormInfo from './FormInfo';
 
 const LayoutForm = () => {
-  const { t } = useTranslation("test");
+  const { t } = useTranslation('test');
+  const param = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleAddQuestion = () => {
+    navigate(`/bank/create-question?test_id=${param?.id}`);
+  };
+  const { test } = useSelector(testFormSelector);
   return (
     <div>
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <Link to="/tests">Đề Thi</Link>
+              <Link to='/tests'>Đề Thi</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>name</Breadcrumb.Item>
+            <Breadcrumb.Item>{test.name}</Breadcrumb.Item>
           </Breadcrumb>
         </Col>
         <Col span={24}>
-          <Row align="middle" justify="space-between">
+          <Row align='middle' justify='space-between'>
             <Col>
-              <Typography.Title level={3}>test</Typography.Title>
+              <Typography.Title level={3}>{test.name}</Typography.Title>
             </Col>
             <Col>
-              <Space size="large">
-                <Tooltip title={t("update_test_infomation", { ns: "test" })}>
-                  <EditOutlined style={{ fontSize: "16px" }} />
-                </Tooltip>
-                <Tooltip title={t("test_setting", { ns: "test" })}>
-                  <SettingFilled style={{ fontSize: "16px" }} />
-                </Tooltip>
-              </Space>
+              <Tooltip title={t('test_setting', { ns: 'test' })}>
+                <Button type='text' onClick={() => dispatch(showDialog())}>
+                  <SettingFilled style={{ fontSize: '16px' }} />
+                </Button>
+              </Tooltip>
             </Col>
           </Row>
-          <Divider className="ma-0 pa-0" />
+          <Divider className='ma-0 pa-0' />
         </Col>
         <Col span={24}>
-          <Row gutter={[24, 24]} align="middle" justify="space-between">
+          <Row gutter={[24, 24]} align='middle' justify='space-between'>
             <Col span={14}>
               <Row gutter={16}>
                 <Col>
                   <QuestionCircleOutlined style={{ marginRight: 4 }} />
-                  <span>{t("question", { ns: "test" })}</span>
+                  <span>
+                    {(test.question && test.question.length) || 0}{' '}
+                    {t('question', { ns: 'test' })}
+                  </span>
                 </Col>
                 <Col>
                   <TrophyOutlined style={{ marginRight: 4 }} />
-                  <span>{t("point", { ns: "test" })}</span>
+                  {test.max_score} <span>{t('point', { ns: 'test' })}</span>
                 </Col>
                 <Col>
                   <ClockCircleOutlined style={{ marginRight: 4 }} />
-                  <span>{`${t("no_time_limit", { ns: "test" })}`}</span>
+                  {test.time_limit}{' '}
+                  <span>{`${t('no_time_limit', { ns: 'test' })}`}</span>
                 </Col>
                 <Col>
                   <FileTextOutlined style={{ marginRight: 4 }} />
                   <span>
-                    {t("show_all_questions_per_page", { ns: "test" })}
+                    {t('show_all_questions_per_page', { ns: 'test' })}
                   </span>
                 </Col>
                 <Col>
                   <ForkOutlined style={{ marginRight: 4 }} />
-                  <span>{t("shuffle_question", { ns: "test" })}</span>
+                  <span>{t('shuffle_question', { ns: 'test' })}</span>
                 </Col>
               </Row>
             </Col>
             <Col>
-              <Link to="/tests/12/result" className="link mr-2">
-                <Button size="large">
+              <Link to='/tests/12/result' className='link mr-2'>
+                <Button size='large'>
                   <FileDoneOutlined />
                   <Typography.Text>
-                    {t("view_result", { ns: "test" })}
+                    {t('view_result', { ns: 'test' })}
                   </Typography.Text>
                 </Button>
               </Link>
               <Dropdown.Button
+                onClick={handleAddQuestion}
                 overlay={
                   <Menu
                     items={[
                       {
-                        key: "1",
+                        key: '1',
                         label: (
-                          <Link to="/questions">
-                            {t("add_new_question", { ns: "test" })}
+                          <Link
+                            to={`/bank/create-question?test_id=${param?.id}`}
+                          >
+                            {t('add_new_question', { ns: 'test' })}
                           </Link>
                         ),
                       },
                       {
-                        key: "2",
+                        key: '2',
                         label: (
-                          <Link to="/questions">
-                            {t("my_question_bank", { ns: "test" })}
+                          <Link to={`/bank?test_id=${param?.id}`}>
+                            {t('my_question_bank', { ns: 'test' })}
                           </Link>
                         ),
                       },
@@ -119,12 +130,12 @@ const LayoutForm = () => {
                   />
                 }
                 icon={<DownOutlined />}
-                type="primary"
-                size="large"
+                type='primary'
+                size='large'
               >
                 <PlusCircleOutlined />
-                <Typography.Text style={{ color: "#fff" }}>
-                  {t("add_question", { ns: "test" })}
+                <Typography.Text style={{ color: '#fff' }}>
+                  {t('add_question', { ns: 'test' })}
                 </Typography.Text>
               </Dropdown.Button>
             </Col>
@@ -132,7 +143,7 @@ const LayoutForm = () => {
         </Col>
       </Row>
       <FormInfo />
-      {/* <ConfirmDialog /> */}
+      <ConfirmDialog />
     </div>
   );
 };

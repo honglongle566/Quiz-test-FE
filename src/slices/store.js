@@ -5,6 +5,7 @@ import categoryGroupReducer from './category/categoryGroup';
 import bankFormSliceReducer from './bank/bankForm';
 import bankIndexSliceReducer from './bank/bankIndex';
 import testIndexReducer from './test/testIndex';
+import testFormReducer from './test/testForm';
 
 const rootReducer = {
   appStateReducer,
@@ -13,6 +14,7 @@ const rootReducer = {
   bankFormSliceReducer,
   bankIndexSliceReducer,
   testIndexReducer,
+  testFormReducer,
 };
 
 const store = configureStore({

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const LANGUAGE_VI = 'vi';
 export const LANGUAGE_EN = 'en';
 export const PAGE_SIZE = 10;
+export const PAGE_SIZE_MAX = 9999;
 
 const appState = createSlice({
   name: 'appState',

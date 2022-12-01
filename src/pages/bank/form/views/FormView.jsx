@@ -20,7 +20,7 @@ const FormView = () => {
   const { t } = useTranslation('bank');
   const dispatch = useDispatch();
   const {
-    isCreate,
+    isPage,
     item: { type },
   } = useSelector(bankFormSliceSelector);
 
@@ -29,7 +29,7 @@ const FormView = () => {
   };
 
   const handleCreateQuestion = () => {
-    if (isCreate) {
+    if (isPage === 'CREATE' || isPage === 'TEST_CREATE_QUESTION') {
       dispatch(addQuestion());
     } else {
       dispatch(updateQuestion());
@@ -45,7 +45,7 @@ const FormView = () => {
               <Link to='/bank'>{t('Question_bank', { ns: 'bank' })}</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              {isCreate
+              {isPage === 'CREATE' || isPage === 'TEST_CREATE_QUESTION'
                 ? t('Create', { ns: 'bank' })
                 : t('Update', { ns: 'bank' })}
             </Breadcrumb.Item>
@@ -53,7 +53,7 @@ const FormView = () => {
         </Col>
         <Col>
           <Button type='primary' onClick={() => handleCreateQuestion()}>
-            {isCreate
+            {isPage === 'CREATE' || isPage === 'TEST_CREATE_QUESTION'
               ? t('Create', { ns: 'bank' })
               : t('Update', { ns: 'bank' })}
           </Button>

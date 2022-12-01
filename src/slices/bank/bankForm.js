@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import questionGroupApi from 'api/questionGroupApi';
 import questionApi from 'api/questionApi';
+import examApi from 'api/examApi';
 import { showAlert } from 'slices/core/appState';
 
 export const initData = createAsyncThunk(
@@ -8,7 +9,10 @@ export const initData = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const currentState = thunkAPI.getState().bankFormSliceReducer;
-      if (currentState.isCreate) {
+      if (
+        currentState.isPage === 'CREATE' ||
+        currentState.isPage === 'TEST_CREATE_QUESTION'
+      ) {
         return questionGroupApi.getAll();
       }
       return Promise.all([
@@ -29,7 +33,14 @@ export const addQuestion = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const currentState = thunkAPI.getState().bankFormSliceReducer;
-      await questionApi.create(showQuestion(currentState.item));
+      if (currentState.isPage === 'CREATE') {
+        await questionApi.create(showQuestion(currentState.item));
+      } else {
+        await examApi.createQuestion(
+          currentState.targetTestId,
+          showQuestion(currentState.item),
+        );
+      }
       thunkAPI.dispatch(
         showAlert({ message: 'Them thanh công', type: 'success' }),
       );
@@ -69,8 +80,8 @@ const getInitQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      answer_mul: JSON.parse(data.answer),
-      correct_answers_mul: JSON.parse(data.correct_answer),
+      answer_mul: data.answer,
+      correct_answers_mul: data.correct_answer,
       has_mul_correct_answers: data.has_mul_correct_answers,
     };
   }
@@ -81,8 +92,8 @@ const getInitQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      answer_boolean: JSON.parse(data.answer),
-      correct_answers_boolean: JSON.parse(data.correct_answer),
+      answer_boolean: data.answer,
+      correct_answers_boolean: data.correct_answer,
     };
   }
   if (data.type === 3) {
@@ -92,8 +103,8 @@ const getInitQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      matching_answers: JSON.parse(data.matching_answers),
-      matching_correct_answers: JSON.parse(data.matching_correct),
+      matching_answers: data.matching_answers,
+      matching_correct_answers: data.matching_correct,
     };
   }
   if (data.type === 4) {
@@ -103,7 +114,7 @@ const getInitQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      fill_blank_correct_answers: JSON.parse(data.fill_blank_correct_answer),
+      fill_blank_correct_answers: data.fill_blank_correct_answer,
     };
   }
 };
@@ -116,8 +127,8 @@ const showQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      answer: JSON.stringify(data.answer_mul),
-      correct_answer: JSON.stringify(data.correct_answers_mul),
+      answer: data.answer_mul,
+      correct_answer: data.correct_answers_mul,
       has_mul_correct_answers: data.correct_answers_mul.length >= 2 ? 1 : 0,
     };
   }
@@ -128,8 +139,8 @@ const showQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      answer: JSON.stringify(data.answer_boolean),
-      correct_answer: JSON.stringify(data.correct_answers_boolean),
+      answer: data.answer_boolean,
+      correct_answer: data.correct_answers_boolean,
     };
   }
   if (data.type === 3) {
@@ -139,8 +150,8 @@ const showQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      matching_answers: JSON.stringify(data.matching_answers),
-      matching_correct: JSON.stringify(data.matching_correct_answers),
+      matching_answers: data.matching_answers,
+      matching_correct: data.matching_correct_answers,
     };
   }
   if (data.type === 4) {
@@ -150,16 +161,15 @@ const showQuestion = (data) => {
       type: data.type,
       note_answer: data.note_answer,
       score: data.score,
-      fill_blank_correct_answer: JSON.stringify(
-        data.fill_blank_correct_answers,
-      ),
+      fill_blank_correct_answer: data.fill_blank_correct_answers,
     };
   }
 };
 const initialState = {
   questionGroup: [],
   targetId: '',
-  isCreate: true,
+  targetTestId: '',
+  isPage: 'CREATE',
   isShowQuestionSpace: false,
   item: {
     group_question: null,
@@ -209,11 +219,14 @@ const bankFormSlice = createSlice({
     setIsShowQuestionSpace: (state, action) => {
       state.isShowQuestionSpace = action.payload;
     },
-    setIsCreate: (state, action) => {
-      state.isCreate = action.payload;
+    setIsPage: (state, action) => {
+      state.isPage = action.payload;
     },
     setTargetId: (state, action) => {
       state.targetId = action.payload;
+    },
+    setTargetTestId: (state, action) => {
+      state.targetTestId = action.payload;
     },
     setType: (state, action) => {
       state.item.type = action.payload;
@@ -260,7 +273,10 @@ const bankFormSlice = createSlice({
       state.isLoading = true;
     },
     [initData.fulfilled]: (state, action) => {
-      if (state.isCreate) {
+      if (
+        state.isPage === 'CREATE' ||
+        state.isPage === 'TEST_CREATE_QUESTION'
+      ) {
         state.questionGroup = action.payload.data;
       } else {
         state.questionGroup = action.payload[0].data;
@@ -305,7 +321,8 @@ const bankFormSliceReducer = bankFormSlice.reducer;
 export const bankFormSliceSelector = (state) => state.bankFormSliceReducer;
 
 export const {
-  setIsCreate,
+  setTargetTestId,
+  setIsPage,
   setIsShowQuestionSpace,
   setTargetId,
   setType,

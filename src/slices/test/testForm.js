@@ -1,25 +1,26 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { showAlert } from 'slices/core/appState';
 import examApi from 'api/examApi';
+import questionApi from 'api/questionApi';
 import categoryApi from 'api/categoryApi';
-import { PAGE_SIZE } from 'slices/core/appState';
+import { PAGE_SIZE_MAX } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
-  'testIndex/reloadData',
+  'testForm/reloadData',
   async (_, thunkAPI) => {
     try {
-      const currentState = thunkAPI.getState().testIndexReducer;
+      const currentState = thunkAPI.getState().testFormReducer;
       let params = {
-        page_index: currentState.pagination.current_page,
-        page_size: PAGE_SIZE,
-        name: currentState.keyword,
-        subject_id: currentState.targetSubject || null,
+        page_index: 1,
+        page_size: PAGE_SIZE_MAX,
+        exam_id: currentState.targetExam,
       };
       return Promise.all([
-        examApi.getAllPaging({
+        examApi.getById(currentState.targetExam),
+        categoryApi.getAll(),
+        questionApi.getAllPaging({
           params,
         }),
-        categoryApi.getAll(),
       ]).then((values) => {
         return values;
       });
@@ -31,20 +32,14 @@ export const reloadData = createAsyncThunk(
 );
 
 export const updateTest = createAsyncThunk(
-  'testIndex/updateTest',
+  'testForm/updateTest',
   async (item, thunkAPI) => {
     try {
-      const test = await examApi.update(item);
-      if (test?.status?.status === 407) {
-        thunkAPI.dispatch(
-          showAlert({ message: 'Lỗi trùng tên', type: 'error' }),
-        );
-      } else {
-        thunkAPI.dispatch(
-          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
-        );
-      }
-      thunkAPI.dispatch(reloadData());
+      await examApi.update(item);
+      thunkAPI.dispatch(
+        showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+      );
+      thunkAPI.dispatch(hiddenDialog());
     } catch (error) {
       console.log('error', error);
       thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
@@ -53,11 +48,14 @@ export const updateTest = createAsyncThunk(
   },
 );
 
-export const removeTest = createAsyncThunk(
-  'testIndex/removeTest',
+export const removeQuestionsToExam = createAsyncThunk(
+  'testForm/removeQuestionsToExam',
   async (id, thunkAPI) => {
     try {
-      await examApi.delete(id);
+      const currentState = thunkAPI.getState().testFormReducer;
+      await examApi.removeQuestionsToExam(currentState.targetExam, {
+        questions: [id],
+      });
       thunkAPI.dispatch(
         showAlert({ message: 'Xoá thanh công', type: 'success' }),
       );
@@ -70,17 +68,22 @@ export const removeTest = createAsyncThunk(
   },
 );
 
-export const addExam = createAsyncThunk(
-  'testIndex/addExam',
+export const addQuestion = createAsyncThunk(
+  'testForm/addQuestion',
   async (item, thunkAPI) => {
     try {
-      const newExam = await examApi.create(item);
+      let newItem = { ...item };
+      delete newItem.created_by;
+      delete newItem.creted_date;
+      delete newItem.updated_by;
+      delete newItem.updated_date;
+      delete newItem.user_id;
+      delete newItem.id;
+      const currentState = thunkAPI.getState().testFormReducer;
+      await examApi.createQuestion(currentState.targetExam, newItem);
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Copy thanh công', type: 'success' }),
       );
-      thunkAPI.dispatch(setTargetCreate(newExam?.data?.id));
-      thunkAPI.dispatch(setIsCreate());
-      thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
     } catch (error) {
       console.log('error', error);
@@ -91,25 +94,17 @@ export const addExam = createAsyncThunk(
 );
 
 const initialState = {
+  test: {},
   list: [],
   category: [],
-  typeSearch: [],
-  targetSubject: '',
+  targetExam: '',
   isLoading: false,
   keyword: '',
   isDialog: false,
-  isCreate: false,
-  targetCreate: 0,
-  pagination: {
-    total_items: 0,
-    total_pages: 0,
-    current_page: 1,
-    rows: 5,
-  },
 };
 
-const testIndexSlice = createSlice({
-  name: 'testIndex',
+const testFormSlice = createSlice({
+  name: 'testForm',
   initialState,
   reducers: {
     destroy: (state, action) => {
@@ -117,15 +112,8 @@ const testIndexSlice = createSlice({
         state[key] = initialState[key];
       }
     },
-    onChangeSubject: (state, action) => {
-      state.targetSubject = action.payload.targetSubject;
-      state.keyword = action.payload.keyword;
-    },
-    setTargetCreate: (state, action) => {
-      state.targetCreate = action.payload;
-    },
-    setIsCreate: (state, action) => {
-      state.isCreate = true;
+    setTargetExam: (state, action) => {
+      state.targetExam = action.payload;
     },
     showDialog: (state, action) => {
       state.isDialog = true;
@@ -133,23 +121,15 @@ const testIndexSlice = createSlice({
     hiddenDialog: (state, action) => {
       state.isDialog = false;
     },
-    changePageNo: (state, action) => {
-      state.pagination.current_page = action.payload;
-    },
-    onSearch: (state, action) => {
-      state.keyword = action.payload;
-    },
   },
   extraReducers: {
     [reloadData.pending]: (state, action) => {
       state.isLoading = true;
     },
     [reloadData.fulfilled]: (state, action) => {
-      state.list = action.payload[0].data.rows;
-      state.pagination.total_items = action.payload[0].data.total_items;
-      state.pagination.total_pages = action.payload[0].data.total_pages;
-      state.pagination.current_page = action.payload[0].data.current_page;
+      state.test = action.payload[0].data;
       state.category = action.payload[1].data;
+      state.list = action.payload[2].data.rows;
       state.isLoading = false;
     },
     [reloadData.rejected]: (state, action) => {
@@ -166,39 +146,31 @@ const testIndexSlice = createSlice({
       state.isLoading = false;
     },
 
-    [removeTest.pending]: (state, action) => {
+    [removeQuestionsToExam.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [removeTest.fulfilled]: (state, action) => {
+    [removeQuestionsToExam.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [removeTest.rejected]: (state, action) => {
+    [removeQuestionsToExam.rejected]: (state, action) => {
       state.isLoading = false;
     },
 
-    [addExam.pending]: (state, action) => {
+    [addQuestion.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [addExam.fulfilled]: (state, action) => {
+    [addQuestion.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [addExam.rejected]: (state, action) => {
+    [addQuestion.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
 });
 
-export const testIndexSelector = (state) => state.testIndexReducer;
+export const testFormSelector = (state) => state.testFormReducer;
 
-export const {
-  showDialog,
-  hiddenDialog,
-  onSearch,
-  changePageNo,
-  setIsCreate,
-  destroy,
-  setTargetCreate,
-  onChangeSubject,
-} = testIndexSlice.actions;
+export const { showDialog, hiddenDialog, destroy, setTargetExam } =
+  testFormSlice.actions;
 
-export default testIndexSlice.reducer;
+export default testFormSlice.reducer;

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PAGE_SIZE } from 'slices/core/appState';
 import questionApi from 'api/questionApi';
 import questionGroupApi from 'api/questionGroupApi';
+import examApi from 'api/examApi';
 import { showAlert } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
@@ -15,15 +16,26 @@ export const reloadData = createAsyncThunk(
         name: currentState.keyword || null,
         group_question_id: currentState.targetGroupQuestion || null,
       };
-
-      return Promise.all([
-        questionGroupApi.getAll(),
-        questionApi.getAllPaging({
-          params,
-        }),
-      ]).then((values) => {
-        return values;
-      });
+      if (currentState.isPage === 'CREATE')
+        return Promise.all([
+          questionGroupApi.getAll(),
+          questionApi.getAllPaging({
+            params,
+          }),
+          examApi.getById(currentState.targetExamId),
+        ]).then((values) => {
+          return values;
+        });
+      else {
+        return Promise.all([
+          questionGroupApi.getAll(),
+          questionApi.getAllPaging({
+            params,
+          }),
+        ]).then((values) => {
+          return values;
+        });
+      }
     } catch (error) {
       console.log('error', error);
       return thunkAPI.rejectWithValue(error.toString());
@@ -39,6 +51,45 @@ export const duplicateQuestion = createAsyncThunk(
       await questionApi.create(getDuplicateQuestion(data));
       thunkAPI.dispatch(
         showAlert({ message: 'Nhân bản thanh công', type: 'success' }),
+      );
+      thunkAPI.dispatch(reloadData());
+    } catch (error) {
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+      return thunkAPI.rejectWithValue(error.toString());
+    }
+  },
+);
+export const addQuestionsToExam = createAsyncThunk(
+  'bankForm/addQuestionsToExam',
+  async (id, thunkAPI) => {
+    try {
+      const currentState = thunkAPI.getState().bankIndexSliceReducer;
+      await examApi.addQuestionsToExam(currentState.targetExamId, {
+        questions: [id],
+      });
+      thunkAPI.dispatch(
+        showAlert({ message: 'Them thanh công', type: 'success' }),
+      );
+      thunkAPI.dispatch(reloadData());
+    } catch (error) {
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+      return thunkAPI.rejectWithValue(error.toString());
+    }
+  },
+);
+
+export const removeQuestionsToExam = createAsyncThunk(
+  'bankForm/removeQuestionsToExam',
+  async (id, thunkAPI) => {
+    try {
+      const currentState = thunkAPI.getState().bankIndexSliceReducer;
+      await examApi.removeQuestionsToExam(currentState.targetExamId, {
+        questions: [id],
+      });
+      thunkAPI.dispatch(
+        showAlert({ message: 'Xoa thanh công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -116,10 +167,13 @@ export const removeQuestion = createAsyncThunk(
 const bankIndexSlice = createSlice({
   name: 'bankIndexSlice',
   initialState: {
+    questionChecked: [],
     questionGroup: [],
     list: [],
     isLoading: false,
     keyword: '',
+    isPage: 'INDEX',
+    targetExamId: '',
     targetGroupQuestion: null,
     pagination: {
       total_items: 0,
@@ -129,8 +183,14 @@ const bankIndexSlice = createSlice({
     },
   },
   reducers: {
+    setTargetExamId: (state, action) => {
+      state.targetExamId = action.payload;
+    },
     changePageNo: (state, action) => {
       state.pagination.current_page = action.payload;
+    },
+    setIsPage: (state, action) => {
+      state.isPage = action.payload;
     },
     onSearch: (state, action) => {
       state.keyword = action.payload;
@@ -150,7 +210,9 @@ const bankIndexSlice = createSlice({
       state.pagination.total_items = action.payload[1].data.total_items;
       state.pagination.total_pages = action.payload[1].data.total_pages;
       state.pagination.current_page = action.payload[1].data.current_page;
-      state.isLoading = false;
+      if (state.isPage === 'CREATE') {
+        state.questionChecked = action.payload[2].data.question || [];
+      }
       state.isLoading = false;
     },
     [reloadData.rejected]: (state, action) => {
@@ -176,6 +238,26 @@ const bankIndexSlice = createSlice({
     [duplicateQuestion.rejected]: (state, action) => {
       state.isLoading = false;
     },
+
+    [addQuestionsToExam.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [addQuestionsToExam.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [addQuestionsToExam.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+
+    [removeQuestionsToExam.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [removeQuestionsToExam.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [removeQuestionsToExam.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
   },
 });
 
@@ -183,7 +265,12 @@ const bankIndexSliceReducer = bankIndexSlice.reducer;
 
 export const bankIndexSliceSelector = (state) => state.bankIndexSliceReducer;
 
-export const { changePageNo, onSearch, onChangeGroupQuestion } =
-  bankIndexSlice.actions;
+export const {
+  changePageNo,
+  onSearch,
+  onChangeGroupQuestion,
+  setIsPage,
+  setTargetExamId,
+} = bankIndexSlice.actions;
 
 export default bankIndexSliceReducer;

@@ -26,6 +26,8 @@ import {
   bankIndexSliceSelector,
   removeQuestion,
   duplicateQuestion,
+  removeQuestionsToExam,
+  addQuestionsToExam,
 } from 'slices/bank/bankIndex';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +39,7 @@ const ListIndex = () => {
   const { t } = useTranslation('bank');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { list } = useSelector(bankIndexSliceSelector);
+  const { list, isPage, questionChecked } = useSelector(bankIndexSliceSelector);
   const [checkAll, setCheckAll] = useState(false);
   const [showOption, setShowOption] = useState(false);
   const handleMassDelete = (e) => {};
@@ -45,6 +47,14 @@ const ListIndex = () => {
     e.stopPropagation();
     dispatch(duplicateQuestion(item));
     // navigate(`/bank/question/${item.id}/edit`);
+  };
+  const handleAddQuestionsToExam = (e, id) => {
+    e.stopPropagation();
+    dispatch(addQuestionsToExam(id));
+  };
+  const handleRemoveQuestionsToExam = (e, id) => {
+    e.stopPropagation();
+    dispatch(removeQuestionsToExam(id));
   };
   const handleDelete = (e, item) => {
     e.stopPropagation();
@@ -96,27 +106,61 @@ const ListIndex = () => {
           >
             <Panel
               key={index}
-              extra={[
-                <Tooltip title={t('Update', { ns: 'bank' })} key='Update'>
-                  <Button type='text' onClick={(e) => handleEdit(e, item.id)}>
-                    <EditOutlined />
-                  </Button>
-                </Tooltip>,
-                <Tooltip title={t('Duplicate', { ns: 'bank' })} key='Duplicate'>
-                  <Button type='text' onClick={(e) => handleCopy(e, item)}>
-                    <CopyOutlined />
-                  </Button>
-                </Tooltip>,
-                <Tooltip title={t('Delete', { ns: 'bank' })} key='Delete'>
-                  <Button
-                    type='text'
-                    danger
-                    onClick={(e) => handleDelete(e, item)}
-                  >
-                    <DeleteOutlined />
-                  </Button>
-                </Tooltip>,
-              ]}
+              extra={
+                isPage === 'CREATE'
+                  ? [
+                      questionChecked.includes(item.id) ? (
+                        <Button
+                          key='deleteExam'
+                          danger
+                          onClick={(e) =>
+                            handleRemoveQuestionsToExam(e, item.id)
+                          }
+                        >
+                          Xóa Khỏi Đề Thi
+                        </Button>
+                      ) : (
+                        <Button
+                          type='primary'
+                          ghost
+                          key='addExam'
+                          onClick={(e) => handleAddQuestionsToExam(e, item.id)}
+                        >
+                          Thêm Vào Đề Thi
+                        </Button>
+                      ),
+                    ]
+                  : [
+                      <Tooltip title={t('Update', { ns: 'bank' })} key='Update'>
+                        <Button
+                          type='text'
+                          onClick={(e) => handleEdit(e, item.id)}
+                        >
+                          <EditOutlined />
+                        </Button>
+                      </Tooltip>,
+                      <Tooltip
+                        title={t('Duplicate', { ns: 'bank' })}
+                        key='Duplicate'
+                      >
+                        <Button
+                          type='text'
+                          onClick={(e) => handleCopy(e, item)}
+                        >
+                          <CopyOutlined />
+                        </Button>
+                      </Tooltip>,
+                      <Tooltip title={t('Delete', { ns: 'bank' })} key='Delete'>
+                        <Button
+                          type='text'
+                          danger
+                          onClick={(e) => handleDelete(e, item)}
+                        >
+                          <DeleteOutlined />
+                        </Button>
+                      </Tooltip>,
+                    ]
+              }
               header={
                 <div className='d-flex'>
                   <div className='mr-3'>

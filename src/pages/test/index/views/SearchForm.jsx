@@ -1,50 +1,53 @@
-import { Col, Input, Row, Select } from "antd";
-import { useTranslation } from "react-i18next";
+import { Col, Input, Row, Select } from 'antd';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  testIndexSelector,
+  onSearch,
+  onChangeSubject,
+} from 'slices/test/testIndex';
 const { Search } = Input;
 const { Option, OptGroup } = Select;
 
 const SearchForm = () => {
-  const { t } = useTranslation("test");
-  const onSearch = (values) => {};
+  const { t } = useTranslation('test');
+  const dispatch = useDispatch();
   const handleChange = () => {};
-
+  const [keyword, setKeyword] = useState('');
+  const { category } = useSelector(testIndexSelector);
   return (
-    <Row gutter={24} align="middle" justify="start" className="mb-1">
+    <Row gutter={24} align='middle' justify='start' className='mb-1'>
       <Col span={8}>
         <Search
-          className="search-btn"
-          size="large"
-          placeholder={t("enter_keyword_to_search_tests", { ns: "test" })}
-          loading={false}
-          onSearch={onSearch}
+          className='search-btn'
+          size='large'
+          placeholder={t('enter_keyword_to_search_tests', { ns: 'test' })}
+          onChange={(e) => setKeyword(e.target.value)}
+          onSearch={(values) => dispatch(onSearch(values))}
         />
       </Col>
       <Col span={8}>
         <Select
-          defaultValue="lucy"
-          onChange={handleChange}
-          className="select"
-          size="large"
+          defaultValue=''
+          onChange={(values) =>
+            dispatch(
+              onChangeSubject({ targetSubject: values, keyword: keyword }),
+            )
+          }
+          className='select'
+          size='large'
         >
-          <OptGroup label="Manager">
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-          </OptGroup>
-          <OptGroup label="Engineer">
-            <Option value="Yiminghe">yiminghe</Option>
-          </OptGroup>
-        </Select>
-      </Col>
-      <Col span={8}>
-        <Select
-          placeholder="Search to Select"
-          onChange={handleChange}
-          className="select"
-          size="large"
-        >
-          <Option value="1">Tạo gần đây</Option>
-          <Option value="2">A-Z</Option>
-          <Option value="2">Z-A</Option>
+          <Option value={''}>All</Option>
+          {category.map((item) => (
+            <OptGroup label={item.name} key={item.id}>
+              {item?.subjects.map((sub) => (
+                <Option value={sub.id} key={item.id}>
+                  {sub.name}
+                </Option>
+              ))}
+            </OptGroup>
+          ))}
         </Select>
       </Col>
     </Row>
