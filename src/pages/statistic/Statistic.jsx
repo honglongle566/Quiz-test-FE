@@ -1,42 +1,43 @@
-import { Menu, Row, Col } from "antd";
-import React from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { Menu, Row, Col } from 'antd';
+import React from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function Statistic(props) {
-  const { t } = useTranslation("statistic");
+  const { t } = useTranslation('statistic');
 
   const location = useLocation();
 
   return (
-    <div className="statistic container">
+    <div className='statistic container'>
+      <h6 className='ma-0 mb-4'>Thống kê</h6>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Menu
-            mode="horizontal"
+            mode='horizontal'
             selectedKeys={location.pathname}
             items={[
               {
-                key: "/statistic/campaigns",
+                key: '/statistic/campaigns',
                 label: (
-                  <Link to="/statistic/campaigns">
-                    {t("test_campaign", { ns: "statistic" })}
+                  <Link to='/statistic/campaigns'>
+                    {t('test_campaign', { ns: 'statistic' })}
                   </Link>
                 ),
               },
               {
-                key: "/statistic/tests",
+                key: '/statistic/tests',
                 label: (
-                  <Link to="/statistic/tests">
-                    {t("test", { ns: "statistic" })}
+                  <Link to='/statistic/tests'>
+                    {t('test', { ns: 'statistic' })}
                   </Link>
                 ),
               },
               {
-                key: "/statistic/answer-sheets",
+                key: '/statistic/answer-sheets',
                 label: (
-                  <Link to="/statistic/answer-sheets">
-                    {t("candidates", { ns: "statistic" })}
+                  <Link to='/statistic/answer-sheets'>
+                    {t('candidates', { ns: 'statistic' })}
                   </Link>
                 ),
               },

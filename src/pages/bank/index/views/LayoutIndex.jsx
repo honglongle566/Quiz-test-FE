@@ -1,8 +1,8 @@
-import ListIndex from "./ListIndex";
-import SearchForm from "./SearchForm";
-import { Pagination } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { changePageNo, bankIndexSliceSelector } from "slices/bank/bankIndex";
+import ListIndex from './ListIndex';
+import SearchForm from './SearchForm';
+import { Pagination } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePageNo, bankIndexSliceSelector } from 'slices/bank/bankIndex';
 
 const LayoutIndex = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,10 @@ const LayoutIndex = () => {
   } = useSelector(bankIndexSliceSelector);
   return (
     <div>
+      <h6 className='ma-0 mb-4'>Ngân hàng đề </h6>
       <SearchForm />
       <ListIndex />
-      <div className="d-flex justify-content-center">
+      <div className='d-flex justify-content-center'>
         <Pagination
           defaultCurrent={1}
           current={current_page}

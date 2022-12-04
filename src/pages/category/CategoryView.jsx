@@ -1,25 +1,26 @@
-import { Tabs } from "antd";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { Tabs } from 'antd';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 const { TabPane } = Tabs;
 
 const CategoryView = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation("category");
+  const { t } = useTranslation('category');
   let location = useLocation();
   function callback(key) {
     navigate(key);
   }
   return (
-    <div className="container tab-style">
+    <div className='container tab-style'>
+      <h6 className='ma-0'>Nhóm đề thi</h6>
       <Tabs defaultActiveKey={location.pathname} onChange={callback}>
         <TabPane
-          tab={t("category", { ns: "category" })}
-          key="/test-categories"
+          tab={t('category', { ns: 'category' })}
+          key='/test-categories'
         ></TabPane>
         <TabPane
-          tab={t("question_group", { ns: "category" })}
-          key="/question-group"
+          tab={t('question_group', { ns: 'category' })}
+          key='/question-group'
         ></TabPane>
       </Tabs>
       <Outlet />

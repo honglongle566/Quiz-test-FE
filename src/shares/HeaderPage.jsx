@@ -60,47 +60,7 @@ const HeaderPage = () => {
           <span className='logo logo__md mr-2'>Quiz Test</span>
         </Link>
       </Col>
-      <Col span={16}>
-        <Menu
-          mode='horizontal'
-          selectedKeys={(() => {
-            const string = /\/[a-z0-9_-]{0,32}/.exec(location.pathname)[0];
-            if (string === '/question-tags') return '/test-categories';
-            return string;
-          })()}
-          defaultSelectedKeys={['/']}
-          items={[
-            {
-              key: '/',
-              label: <Link to='/'>{t('header.dashboard')}</Link>,
-            },
-            {
-              key: '/test-categories',
-              label: <Link to='/test-categories'>{t('header.category')}</Link>,
-            },
-            {
-              key: '/tests',
-              label: <Link to='/tests'>{t('header.test')}</Link>,
-            },
-            {
-              key: '/test-campaigns',
-              label: (
-                <Link to='/test-campaigns'>{t('header.test_campaign')}</Link>
-              ),
-            },
-            {
-              key: '/bank',
-              label: <Link to='/bank'>{t('header.question_bank')}</Link>,
-            },
-            {
-              key: '/statistic/campaigns',
-              label: (
-                <Link to='/statistic/campaigns'>{t('header.statistic')}</Link>
-              ),
-            },
-          ]}
-        />
-      </Col>
+      <Col span={16}></Col>
       <Col span={3} className='flex-end'>
         <Dropdown overlay={menu} placement='bottomRight'>
           <a onClick={(e) => e.preventDefault()}>

@@ -1,4 +1,4 @@
-import { Col, Input, Row, Select } from 'antd';
+import { Col, Input, Row, Select, Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,9 @@ import {
   testIndexSelector,
   onSearch,
   onChangeSubject,
+  showDialog,
 } from 'slices/test/testIndex';
+import { PlusCircleOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const { Option, OptGroup } = Select;
 
@@ -49,6 +51,16 @@ const SearchForm = () => {
             </OptGroup>
           ))}
         </Select>
+      </Col>
+      <Col span={8} className='d-flex justify-content-end'>
+        <Button
+          type='primary'
+          size='large'
+          icon={<PlusCircleOutlined />}
+          onClick={() => dispatch(showDialog())}
+        >
+          {t('create_new_test', { ns: 'test' })}
+        </Button>
       </Col>
     </Row>
   );
