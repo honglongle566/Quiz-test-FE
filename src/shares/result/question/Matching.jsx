@@ -1,22 +1,22 @@
-import { Button, Col, Row } from "antd";
-import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
-import { useState, useEffect } from "react";
-import Xarrow from "react-xarrows";
-import { sortAnswers } from "../../../../utils/question";
+import { Button, Col, Row } from 'antd';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import Xarrow from 'react-xarrows';
+import { sortAnswers } from '../../../utils/question';
 
-function Matching({ data, answers }) {
+const Matching = ({ data, answers }) => {
   const [showArrow, setShowArrow] = useState(false);
 
   const showIconResult = (questionID) => {
     const dataCorrect = [...data.matching_correct_answers[questionID]].sort();
     const dataAnswer = [...answers[questionID]].sort();
     if (dataCorrect.length != dataAnswer.length)
-      return <CloseCircleFilled className="icon-error" />;
+      return <CloseCircleFilled className='text-red' />;
     for (let i = 0; i < dataCorrect.length; i++) {
       if (dataCorrect[i] != dataAnswer[i])
-        return <CloseCircleFilled className="icon-error" />;
+        return <CloseCircleFilled className='text-red' />;
     }
-    return <CheckCircleFilled className="icon-success" />;
+    return <CheckCircleFilled className='text-green' />;
   };
 
   useEffect(() => {
@@ -25,20 +25,20 @@ function Matching({ data, answers }) {
 
   return (
     <div>
-      <span className="question_order">CÂU HỎI {data.index}</span>
-      <Row gutter={[24, 24]} className="questionMatching">
+      <span className='question_order'>CÂU HỎI {data.index}</span>
+      <Row gutter={[24, 24]} className='question-matching'>
         <Col span={24}>
           <div
-            style={{ marginBottom: "10px" }}
+            className='mb-3'
             dangerouslySetInnerHTML={{ __html: data?.content }}
           ></div>
           <Row>
-            <Col className="questions" span={12}>
+            <Col className='questions' span={12}>
               {data?.matching_answers?.questions &&
                 data?.matching_answers?.questions.map((question) => (
-                  <div className="box-questions" key={question.id}>
-                    <div className="questions-item">
-                      <div className="item-questions">
+                  <div className='questions__box' key={question.id}>
+                    <div className='questions__box__item'>
+                      <div className='questions__box__item__content'>
                         <span>
                           <strong>{question.id}.</strong>
                         </span>
@@ -48,30 +48,30 @@ function Matching({ data, answers }) {
                           }}
                         ></span>
                       </div>
-                      <div className="question-item-circle">
+                      <div className='questions__box__item__circle'>
                         <div
-                          id={`${data.index}o${question.id}`}
-                          className="icon-circle"
+                          id={`${data.index}-${question.id}`}
+                          className='questions__box__item__circle__icon'
                         ></div>
                       </div>
                     </div>
                   </div>
                 ))}
             </Col>
-            <Col className="answers" span={12}>
+            <Col className='answers' span={12}>
               {data?.matching_answers?.answers &&
                 data?.matching_answers?.answers
                   .sort(sortAnswers)
                   .map((answer) => (
-                    <div className="box-answers" key={answer.id}>
-                      <div className="answers-item">
-                        <div className="answers-item-circle">
+                    <div className='answers__box' key={answer.id}>
+                      <div className='answers__box__item'>
+                        <div className='answers__box__item__circle'>
                           <div
-                            id={`${data.index}%${answer.id}`}
-                            className="icon-circle"
+                            id={`${data.index}-${answer.id}`}
+                            className='answers__box__item__circle__icon'
                           ></div>
                         </div>
-                        <div className="item-answers">
+                        <div className='answers__box__item__content'>
                           <span>
                             <strong>{answer.id.toUpperCase()}.</strong>
                           </span>
@@ -81,39 +81,37 @@ function Matching({ data, answers }) {
                             }}
                           ></span>
                         </div>
+                        {data.matching_answers.questions.map((question) => (
+                          <Xarrow
+                            key={`${question.id}+${answer.id}`}
+                            start={`${data.index}-${question.id}`}
+                            end={`${data.index}-${answer.id}`}
+                            path='straight'
+                            strokeWidth={2}
+                            headSize={4}
+                            color='#2c4a9f'
+                            showHead={showArrow}
+                          />
+                        ))}
                       </div>
                     </div>
                   ))}
             </Col>
           </Row>
-          {data.matching_answers.questions.map((question) => (
-            <div key={question.id}>
-              {answers[question.id].length > 0 &&
-                answers[question.id].map((answer) => (
-                  <Xarrow
-                    key={`${question.id}*${answer}`}
-                    start={`${data.index}o${question.id}`}
-                    end={`${data.index}%${answer}`}
-                    path="straight"
-                    strokeWidth={2}
-                    headSize={4}
-                    color="#2c4a9f"
-                    showHead={showArrow}
-                  />
-                ))}
-            </div>
-          ))}
-          <div className="mb-1">
+          <div className='mt-3 mb-2'>
             <strong>Trả lời</strong>
           </div>
-          <div className="list-answer">
+          <div>
             {data?.matching_answers?.questions &&
               data?.matching_answers?.questions.map((question) => (
-                <div className="box-answer" key={question.id}>
-                  <div className="icon-answer">
+                <div
+                  className='d-flex align-items-center mb-2'
+                  key={question.id}
+                >
+                  <div style={{ width: '15px' }} className='mr-2'>
                     {showIconResult(question.id)}
                   </div>
-                  <div className="order-answer">
+                  <div className='mr-2'>
                     <strong>{question.id}.</strong>
                   </div>
                   <div>
@@ -122,12 +120,12 @@ function Matching({ data, answers }) {
                         .sort(sortAnswers)
                         .map((answer) => (
                           <Button
-                            type="primary"
+                            type='primary'
                             ghost
                             className={
                               answers[question.id].includes(answer.id)
-                                ? "btn-outline btn-answer active"
-                                : "btn-outline btn-answer"
+                                ? 'btn-outline btn-answer active mr-2'
+                                : 'btn-outline btn-answer mr-2'
                             }
                             key={answer.id}
                           >
@@ -140,8 +138,16 @@ function Matching({ data, answers }) {
           </div>
         </Col>
       </Row>
+      {data.note_answer && (
+        <Col className='mt-2'>
+          <div>
+            <strong>Giải thích đáp án</strong>
+          </div>
+          <div dangerouslySetInnerHTML={{ __html: data.note_answer }}></div>
+        </Col>
+      )}
     </div>
   );
-}
+};
 
 export default Matching;

@@ -51,7 +51,7 @@
   },
   "scripts": {
     "beautiful": "prettier --single-quote --trailing-comma all --jsx-single-quote --print-width 80 --tab-width 2 --write 'src/**/*.{js,json,scss,jsx}'",
-    "start": "PORT=8000 react-scripts start",
+    "start": "PORT=8080 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,14 +1,14 @@
-import { Col, Row } from "antd";
-import { Outlet } from "react-router-dom";
-import HeaderAuth from "../../components/commons/HeaderAuth";
+import { Col, Row } from 'antd';
+import { Outlet } from 'react-router-dom';
+import HeaderAuth from '../../shares/HeaderAuth';
 
 function Auth(props) {
   return (
-    <div className="auth">
+    <div className='auth'>
       <HeaderAuth />
-      <Row justify="center">
+      <Row justify='center'>
         <Col>
-          <div className="auth__wrapper">
+          <div className='auth__wrapper'>
             <Outlet />
           </div>
         </Col>

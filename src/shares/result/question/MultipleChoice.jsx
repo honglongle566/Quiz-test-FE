@@ -4,19 +4,19 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import { Col, Row } from 'antd';
-import { sortAnswers } from "../../../../utils/question";
+import { sortAnswers } from '../../../utils/question';
 
-function MultipleChoice({ data, answers }) {
+const MultipleChoice = ({ data, answers }) => {
   const showIconResult = (answer) => {
     if (data.correct_answers.includes(answer.id)) {
       if (answers.includes(answer.id)) {
-        return <CheckCircleFilled className='icon-success' />;
+        return <CheckCircleFilled className='text-green' />;
       }
-      return <CheckCircleOutlined className='icon-success' />;
+      return <CheckCircleOutlined className='text-green' />;
     }
 
     if (answers.includes(answer.id)) {
-      return <CloseCircleOutlined className='icon-error' />;
+      return <CloseCircleOutlined className='text-red' />;
     }
   };
   return (
@@ -24,7 +24,7 @@ function MultipleChoice({ data, answers }) {
       <span className='question_order'>CÂU HỎI {data.index}</span>
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <div style={{ marginBottom: '10px' }}>
+          <div className='my-2'>
             <strong
               dangerouslySetInnerHTML={{
                 __html: data.content,
@@ -33,9 +33,11 @@ function MultipleChoice({ data, answers }) {
           </div>
           {data.answers &&
             data.answers.sort(sortAnswers).map((answer) => (
-              <div className='flex-center' key={answer.id}>
-                <div className='icon-answer'>{showIconResult(answer)}</div>
-                <div style={{ marginRight: '4px', width: '15px' }}>
+              <div className='d-flex' key={answer.id}>
+                <div style={{ width: '15px' }} className='mr-2'>
+                  {showIconResult(answer)}
+                </div>
+                <div className='mr-1'>
                   <b>
                     {answer.id}
                     {')'}
@@ -60,6 +62,6 @@ function MultipleChoice({ data, answers }) {
       </Row>
     </div>
   );
-}
+};
 
 export default MultipleChoice;

@@ -15,10 +15,10 @@ function FillingBlankSpace({ data, answers }) {
 
   const showIconResult = (correct, examinee) => {
     if (correct == examinee) {
-      return <CheckCircleFilled className='icon-success mr-1' />;
+      return <CheckCircleFilled className='text-green ml-1' />;
     }
 
-    return <CloseCircleFilled className='icon-error mr-1' />;
+    return <CloseCircleFilled className='text-red ml-1' />;
   };
 
   return (
@@ -27,30 +27,33 @@ function FillingBlankSpace({ data, answers }) {
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <div
-            style={{ marginBottom: '10px' }}
+            className='mb-3'
             dangerouslySetInnerHTML={{ __html: changeContent(data.content) }}
           ></div>
-          <div className='fill-blank__box'>
+          <div>
+            <strong className='mb-3'>Trả lời</strong>
             <div>
-              <strong className=''>Trả lời</strong>
-            </div>
-            <div className='c-box-answers'>
               {data?.fill_blank_correct_answers &&
                 data?.fill_blank_correct_answers.map((item) => (
-                  <div className='c-answers' key={item.key}>
-                    <div className='c-answers-number'>{item.key}</div>
-                    <div className='c-answer-box'>
+                  <div
+                    className='d-flex align-items-center mb-1'
+                    key={item.key}
+                  >
+                    <div className='mr-2'>
+                      <b>{item.key}</b>
+                    </div>
+                    <div className='mr-2'>
                       <input
                         type='text'
-                        className='c-fill_input'
+                        className='fill_input'
                         id={item.key}
                         defaultValue={answers[item.key - 1]}
                         readOnly='readonly'
                       />
                       {showIconResult(item.content[0], answers[item.key - 1])}
-                      <p>
-                        Đáp án: <span>{item.content[0]}</span>
-                      </p>
+                    </div>
+                    <div>
+                      <b> Đáp án:</b> <span>{item.content[0]}</span>
                     </div>
                   </div>
                 ))}
@@ -59,7 +62,7 @@ function FillingBlankSpace({ data, answers }) {
         </Col>
       </Row>
       {data.note_answer && (
-        <Col>
+        <Col className='mt-3'>
           <div>
             <strong>Giải thích đáp án</strong>
           </div>

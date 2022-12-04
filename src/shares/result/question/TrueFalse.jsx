@@ -2,29 +2,29 @@ import {
   CheckCircleFilled,
   CheckCircleOutlined,
   CloseCircleOutlined,
-} from "@ant-design/icons";
-import { Col, Row } from "antd";
-import { sortAnswers } from "../../../../utils/question";
+} from '@ant-design/icons';
+import { Col, Row } from 'antd';
+import { sortAnswers } from '../../../utils/question';
 
-function TrueFalse({ data, answers }) {
+const TrueFalse = ({ data, answers }) => {
   const showIconResult = (answer) => {
     if (data.correct_answers.includes(answer.id)) {
       if (answers.includes(answer.id)) {
-        return <CheckCircleFilled className="icon-success" />;
+        return <CheckCircleFilled className='icon-success' />;
       }
-      return <CheckCircleOutlined className="icon-success" />;
+      return <CheckCircleOutlined className='icon-success' />;
     }
 
     if (answers.includes(answer.id)) {
-      return <CloseCircleOutlined className="icon-error" />;
+      return <CloseCircleOutlined className='icon-error' />;
     }
   };
   return (
     <div>
-      <span className="question_order">CÂU HỎI {data.index}</span>
+      <span className='question_order'>CÂU HỎI {data.index}</span>
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <div style={{ marginBottom: "10px" }}>
+          <div className='my-2'>
             <strong
               dangerouslySetInnerHTML={{
                 __html: data.content,
@@ -33,12 +33,14 @@ function TrueFalse({ data, answers }) {
           </div>
           {data.answers &&
             data.answers.sort(sortAnswers).map((answer) => (
-              <div className="flex-center" key={answer.id}>
-                <div className="icon-answer">{showIconResult(answer)}</div>
-                <div style={{ marginRight: "4px", width: "15px" }}>
+              <div className='d-flex' key={answer.id}>
+                <div style={{ width: '15px' }} className='mr-2'>
+                  {showIconResult(answer)}
+                </div>
+                <div className='mr-1'>
                   <b>
                     {answer.id}
-                    {")"}
+                    {')'}
                   </b>
                 </div>
                 <div
@@ -60,6 +62,6 @@ function TrueFalse({ data, answers }) {
       </Row>
     </div>
   );
-}
+};
 
 export default TrueFalse;

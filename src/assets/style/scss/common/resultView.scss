@@ -1,0 +1,14 @@
+.result-view {
+  .box-border {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  .ant-progress-inner {
+    border: 0.3px solid #ccc;
+  }
+  .fill_input {
+    outline: none;
+    border: none;
+    border-bottom: 1px dashed $text-primary;
+  }
+}

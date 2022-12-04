@@ -16,7 +16,7 @@ body {
   }
 }
 .logo {
-  font-family: "Wendy One", sans-serif;
+  font-family: 'Wendy One', sans-serif;
   color: $text-primary;
 
   &__sm {
@@ -81,7 +81,6 @@ body {
 
 .btn-outline.btn-answer {
   padding: 0.3rem 0.6rem !important;
-  margin-right: 1.5rem !important;
 }
 
 p,
@@ -362,7 +361,7 @@ a:hover {
   outline: 0;
 }
 
-.mce-content-body:not([dir="rtl"])[data-mce-placeholder]:not(.mce-visualblocks)::before {
+.mce-content-body:not([dir='rtl'])[data-mce-placeholder]:not(.mce-visualblocks)::before {
   margin-left: 10px;
 }
 

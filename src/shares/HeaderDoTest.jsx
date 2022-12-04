@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Row, Col, Button, Modal } from "antd";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Col, Modal, Row } from 'antd';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import {
+  appStateSelector,
   changeLocales,
   LANGUAGE_EN,
   LANGUAGE_VI,
-  appStateSelector,
-} from "slices/core/appState";
+} from 'slices/core/appState';
 
 function HeaderDoTest(props) {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation('common');
   const { language } = useSelector(appStateSelector);
 
   const dispatch = useDispatch();
@@ -36,19 +36,19 @@ function HeaderDoTest(props) {
   };
 
   return (
-    <div className="header-do-test">
-      <div className="header-do-test__wrapper">
-        <Row align="middle" gutter={[16, 16]}>
+    <div className='layout-result'>
+      <div className='layout-result__header'>
+        <Row align='middle' gutter={[16, 16]}>
           <Col>
-            <span className="logo logo__md">Quiz Test</span>
+            <span className='logo logo__md'>Quiz Test</span>
           </Col>
           <Col>
             <b>ten dot thi</b>
           </Col>
         </Row>
-        <Row align="middle" gutter={[16, 16]}>
+        <Row align='middle' gutter={[16, 16]}>
           <Col>
-            <Button onClick={showModal} type="primary">
+            <Button onClick={showModal} type='primary'>
               Hướng dẫn
             </Button>
             <Modal
@@ -78,7 +78,7 @@ function HeaderDoTest(props) {
                   <p>- Bài thi này có thể làm lại</p>
                 </Col>
                 <Col span={10} offset={10}>
-                  <Button type="primary" onClick={handleOk}>
+                  <Button type='primary' onClick={handleOk}>
                     Đã hiểu
                   </Button>
                 </Col>
@@ -86,33 +86,33 @@ function HeaderDoTest(props) {
             </Modal>
           </Col>
           <Col>
-            <Button type="primary">Thoát</Button>
+            <Button type='primary'>Thoát</Button>
           </Col>
           <Col>
             <Button
-              type="link"
+              type='link'
               onClick={() => handleClick(language)}
-              className="btn-space-none btn-language"
+              className='btn-space-none btn-language'
             >
-              {t("header.language")}&nbsp;
+              {t('header.language')}&nbsp;
               {language === LANGUAGE_VI ? (
                 <img
-                  className="language"
-                  src={require("../../assets/img/US.png")}
-                  alt=""
+                  className='language'
+                  src={require('assets/img/US.png')}
+                  alt=''
                 />
               ) : (
                 <img
-                  className="language"
-                  src={require("../../assets/img/VI.png")}
-                  alt=""
+                  className='language'
+                  src={require('assets/img/VI.png')}
+                  alt=''
                 />
               )}
             </Button>
           </Col>
         </Row>
       </div>
-      <Row justify="center">
+      <Row justify='center'>
         <Col>
           <Outlet />
         </Col>

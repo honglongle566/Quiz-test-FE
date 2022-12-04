@@ -1,47 +1,51 @@
-import HeaderDoTest from '../components/commons/HeaderDoTest';
-import LayoutComponent from '../components/commons/LayoutComponent';
-import LayoutWeb from '../components/commons/LayoutWeb';
-import Account from '../pages/account/Account';
-import AccountInfo from '../pages/account/AccountInfo';
-import ChangePassword from '../pages/account/ChangePassword';
-import Auth from '../pages/auth/Auth';
-import ForgetPassword from '../pages/auth/ForgetPassword';
-import LoginForm from '../pages/auth/LoginForm';
-import RegisterForm from '../pages/auth/RegisterForm';
-import ResetPassword from '../pages/auth/ResetPassword';
+import HeaderDoTest from 'shares/HeaderDoTest';
+import Account from 'pages/account/Account';
+import AccountInfo from 'pages/account/AccountInfo';
+import ChangePassword from 'pages/account/ChangePassword';
+import Auth from 'pages/auth/Auth';
+import ForgetPassword from 'pages/auth/ForgetPassword';
+import LoginForm from 'pages/auth/LoginForm';
+import RegisterForm from 'pages/auth/RegisterForm';
+import ResetPassword from 'pages/auth/ResetPassword';
 
-import Dashboard from '../pages/dashboard/Dashboard';
-import DoTest from '../pages/doTest/DoTest';
-import ExamQuestions from '../pages/doTest/ExamQuestions';
-import Guide from '../pages/doTest/Guide';
-import InfoCollect from '../pages/doTest/InfoCollect';
-import JoinTest from '../pages/doTest/JoinTest';
-import HeaderResult from '../pages/result/HeadResult';
+import Dashboard from 'pages/dashboard/Dashboard';
+import DoTest from 'pages/doTest/DoTest';
+import ExamQuestions from 'pages/doTest/ExamQuestions';
+import Guide from 'pages/doTest/Guide';
+import InfoCollect from 'pages/doTest/InfoCollect';
+import JoinTest from 'pages/doTest/JoinTest';
 
-import CreateCampaign from '../pages/testCampaign/CreateCampaign';
-import ResultsStatistic from '../pages/testCampaign/DetailResultCampaign';
-import Preview from '../pages/testCampaign/EditCampaign';
-import QuestionStatistic from '../pages/testCampaign/QuestionStatistic';
-import ResultCampaign from '../pages/testCampaign/ResultCampaign';
-import TestCampaigns from '../pages/testCampaign/TestCampaigns';
+import CreateCampaign from 'pages/testCampaign/CreateCampaign';
+import ResultsStatistic from 'pages/testCampaign/DetailResultCampaign';
+import Preview from 'pages/testCampaign/EditCampaign';
+import QuestionStatistic from 'pages/testCampaign/QuestionStatistic';
+import ResultCampaign from 'pages/testCampaign/ResultCampaign';
+import TestCampaigns from 'pages/testCampaign/TestCampaigns';
 
 // New
 // Category
-import CategoryView from '../pages/category/CategoryView';
-import CategoryLayoutIndex from '../pages/category/category/index/CategoryLayoutIndex';
-import GroupQuestionLayoutIndex from '../pages/category/groupQuestion/index/GroupQuestionLayoutIndex';
+import CategoryView from 'pages/category/CategoryView';
+import CategoryLayoutIndex from 'pages/category/category/index/CategoryLayoutIndex';
+import GroupQuestionLayoutIndex from 'pages/category/groupQuestion/index/GroupQuestionLayoutIndex';
 // Test
-import TestLayoutIndex from '../pages/test/index/TestLayoutIndex';
-import TestLayoutReview from '../pages/test/review/TestLayoutReview';
-import TestLayoutForm from '../pages/test/form/TestLayoutForm';
+import TestLayoutIndex from 'pages/test/index/TestLayoutIndex';
+import TestLayoutReview from 'pages/test/review/TestLayoutReview';
+import TestLayoutForm from 'pages/test/form/TestLayoutForm';
 //Statistic
-import Statistic from '../pages/statistic/Statistic';
-import TabCandidateLayoutIndex from '../pages/statistic/candidate/index/TabCandidateLayoutIndex';
-import TabTestLayoutIndex from '../pages/statistic/test/index/TabTestLayoutIndex';
-import TabTestCampaignLayoutIndex from '../pages/statistic/testCampaign/index/TabTestCampaignLayoutIndex';
+import Statistic from 'pages/statistic/Statistic';
+import TabCandidateLayoutIndex from 'pages/statistic/candidate/index/TabCandidateLayoutIndex';
+import TabTestLayoutIndex from 'pages/statistic/test/index/TabTestLayoutIndex';
+import TabTestCampaignLayoutIndex from 'pages/statistic/testCampaign/index/TabTestCampaignLayoutIndex';
 //bank
 import BankLayoutIndex from 'pages/bank/index/BankLayoutIndex';
 import BankLayoutForm from 'pages/bank/form/BankLayoutForm';
+
+//result
+import ResultLayoutIndex from 'pages/result/review/ResultLayoutIndex';
+
+//layout
+import LayoutComponent from 'shares/LayoutComponent';
+import LayoutWeb from 'shares/LayoutWeb';
 
 export const routes = [
   {
@@ -158,6 +162,7 @@ export const routes = [
       },
     ],
   },
+  // New
   {
     path: '/do-test',
     element: <DoTest />,
@@ -182,8 +187,9 @@ export const routes = [
   },
   {
     path: '/result',
-    element: <HeaderResult />,
+    element: <ResultLayoutIndex />,
   },
+  // Old
   {
     path: '/login',
     element: <Auth />,
