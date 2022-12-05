@@ -17,7 +17,7 @@ const SideBar = () => {
   return (
     <div className='sidebar'>
       <Menu
-        className='mt-1'
+        className='pt-1 sidebar-menu'
         mode='vertical'
         selectedKeys={(() => {
           const string = /\/[a-z0-9_-]{0,32}/.exec(location.pathname)[0];

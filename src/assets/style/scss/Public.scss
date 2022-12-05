@@ -450,10 +450,19 @@ a:hover {
 }
 
 .container {
+  max-width: 1140px !important;
   width: 1140px !important;
+  min-width: 900px !important;
   position: relative;
 }
+
 .container-fluid {
   width: 1920px !important;
   position: relative;
+}
+
+@media only screen and (max-width: 1450px) {
+  .container {
+    width: 1000px !important;
+  }
 }
