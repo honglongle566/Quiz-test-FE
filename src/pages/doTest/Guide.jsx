@@ -1,10 +1,10 @@
-import { Button, Col, Row } from "antd";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Button, Col, Row } from 'antd';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Guide(props) {
   return (
-    <Row align="middle" gutter={[24, 24]} className="container guide">
+    <Row align='middle' gutter={[24, 24]} className='container guide'>
       <Col span={6} offset={10}>
         <h4>Hướng dẫn</h4>
       </Col>
@@ -24,8 +24,8 @@ function Guide(props) {
         <p>- Bài thi này có thể làm lại</p>
       </Col>
       <Col span={6} offset={10}>
-        <Link to="/do-test-in-single/exam-question">
-          <Button type="primary">Bắt đầu làm bài</Button>
+        <Link to='/do-test/exam-question'>
+          <Button type='primary'>Bắt đầu làm bài</Button>
         </Link>
       </Col>
     </Row>

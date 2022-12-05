@@ -1,13 +1,12 @@
-import { Row, Col, Skeleton, Button, Divider, Statistic, Anchor } from 'antd';
-import React from 'react';
 import {
   BackwardOutlined,
-  ForwardOutlined,
   CheckCircleOutlined,
+  ForwardOutlined,
 } from '@ant-design/icons';
-import Questions from '../../components/container/DoTest/Questions';
+import { Button, Col, Divider, Row, Statistic } from 'antd';
+import Questions from './Questions';
 
-function ExamQuestions(props) {
+const ExamQuestions = (props) => {
   const onFinish = () => {
     console.log('finished!');
   };
@@ -85,7 +84,7 @@ function ExamQuestions(props) {
       </Row>
     </div>
   );
-}
+};
 
 const data = [
   {

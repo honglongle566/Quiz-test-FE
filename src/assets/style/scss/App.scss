@@ -45,6 +45,20 @@
   width: calc(100% / 6);
 }
 
+.bg-white {
+  background: $bg-white;
+}
+
+.box-radius {
+  border-radius: 3px;
+}
+
 body {
   background-color: #f2f3f7;
+}
+
+.img-md {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
 }

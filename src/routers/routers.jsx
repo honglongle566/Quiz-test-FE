@@ -1,7 +1,7 @@
-import HeaderDoTest from 'shares/HeaderDoTest';
 import Account from 'pages/account/Account';
 import AccountInfo from 'pages/account/AccountInfo';
 import ChangePassword from 'pages/account/ChangePassword';
+
 import Auth from 'pages/auth/Auth';
 import ForgetPassword from 'pages/auth/ForgetPassword';
 import LoginForm from 'pages/auth/LoginForm';
@@ -9,18 +9,6 @@ import RegisterForm from 'pages/auth/RegisterForm';
 import ResetPassword from 'pages/auth/ResetPassword';
 
 import Dashboard from 'pages/dashboard/Dashboard';
-import DoTest from 'pages/doTest/DoTest';
-import ExamQuestions from 'pages/doTest/ExamQuestions';
-import Guide from 'pages/doTest/Guide';
-import InfoCollect from 'pages/doTest/InfoCollect';
-import JoinTest from 'pages/doTest/JoinTest';
-
-import CreateCampaign from 'pages/testCampaign/CreateCampaign';
-import ResultsStatistic from 'pages/testCampaign/DetailResultCampaign';
-import Preview from 'pages/testCampaign/EditCampaign';
-import QuestionStatistic from 'pages/testCampaign/QuestionStatistic';
-import ResultCampaign from 'pages/testCampaign/ResultCampaign';
-import TestCampaigns from 'pages/testCampaign/TestCampaigns';
 
 // New
 // Category
@@ -47,12 +35,26 @@ import ResultLayoutIndex from 'pages/result/review/ResultLayoutIndex';
 import LayoutComponent from 'shares/LayoutComponent';
 import LayoutWeb from 'shares/LayoutWeb';
 
+//Test campaign
+import TestCampaigns from 'pages/testCampaign/index/TestCampaignLayoutIndex';
+import TestCampaignLayoutForm from 'pages/testCampaign/form/TestCampaignLayoutForm';
+import TestCampaignLayoutReview from 'pages/testCampaign/review/TestCampaignLayoutReview';
+import ResultTestCampainLayoutIndex from 'pages/testCampaign/result/ResultTestCampainLayoutIndex';
+import StatisticTestCampainLayoutIndex from 'pages/testCampaign/statistic/StatisticTestCampainLayoutIndex';
+
+// Dotest
+import LayoutDoTest from 'shares/LayoutDoTest';
+import DoTest from 'pages/doTestCollect/DoTest';
+
+import HeaderDoTest from 'shares/HeaderDoTest';
+import Guide from 'pages/doTest/Guide';
+import ExamQuestions from 'pages/doTest/ExamQuestions';
+
 export const routes = [
   {
     path: '/',
     element: <LayoutWeb />,
     children: [
-      // NEW
       {
         path: '/test-categories',
         element: <CategoryView />,
@@ -117,12 +119,6 @@ export const routes = [
         ],
       },
 
-      // Old
-      { index: true, element: <Dashboard /> },
-      {
-        path: 'results/:id',
-        element: <ResultsStatistic />,
-      },
       {
         path: '/test-campaigns',
         element: <LayoutComponent />,
@@ -130,22 +126,25 @@ export const routes = [
           { index: true, element: <TestCampaigns /> },
           {
             path: '/test-campaigns/create',
-            element: <CreateCampaign />,
+            element: <TestCampaignLayoutForm />,
           },
           {
             path: '/test-campaigns/:id/result',
-            element: <ResultCampaign />,
+            element: <ResultTestCampainLayoutIndex />,
           },
           {
             path: '/test-campaigns/:id/edit',
-            element: <Preview />,
+            element: <TestCampaignLayoutReview />,
           },
           {
             path: '/test-campaigns/:id/question-statistic',
-            element: <QuestionStatistic />,
+            element: <StatisticTestCampainLayoutIndex />,
           },
         ],
       },
+
+      // Old
+      { index: true, element: <Dashboard /> },
       {
         path: '/account',
         element: <Account />,
@@ -164,32 +163,35 @@ export const routes = [
   },
   // New
   {
-    path: '/do-test',
-    element: <DoTest />,
+    path: '/info-collect',
+    element: <LayoutDoTest />,
     children: [
-      { index: true, element: <JoinTest /> },
       {
-        path: '/do-test/info-collect',
-        element: <InfoCollect />,
+        path: '/info-collect/:id',
+        element: <DoTest />,
       },
     ],
   },
   {
-    path: '/do-test-in-single',
+    path: '/do-test',
     element: <HeaderDoTest />,
     children: [
       { index: true, element: <Guide /> },
       {
-        path: '/do-test-in-single/exam-question',
+        path: '/do-test/exam-question',
         element: <ExamQuestions />,
       },
     ],
   },
   {
     path: '/result',
-    element: <ResultLayoutIndex />,
+    children: [
+      {
+        path: '/result/:id',
+        element: <ResultLayoutIndex />,
+      },
+    ],
   },
-  // Old
   {
     path: '/login',
     element: <Auth />,
