@@ -13,6 +13,7 @@ const LayoutIndex = () => {
   } = useSelector(questionGroupsSelector);
   return (
     <div>
+      <h6 className='mb-3'>Đợt thi tuyển</h6>
       <SearchForm />
       <ListIndex />
       <div className='d-flex justify-content-center'>
