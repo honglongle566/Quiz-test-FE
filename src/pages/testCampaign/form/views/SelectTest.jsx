@@ -1,37 +1,29 @@
 import { CalendarOutlined, FolderOutlined } from '@ant-design/icons';
-import { Col, Divider, Input, Radio, Row, Select } from 'antd';
-import React from 'react';
+import { Col, Input, Radio, Row, Select } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  testCampaignFormSelector,
+  onChangeSubject,
+  setExamId,
+  onSearch,
+} from 'slices/testCampain/testCampaignForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatDate } from 'utils/utils';
 const { Search } = Input;
+const { Option, OptGroup } = Select;
 
-function SelectTest(props) {
+const SelectTest = () => {
   const { t } = useTranslation('testCampaign');
-
-  const onSearch = (value) => {
-    //console.log(value);
-  };
-
-  function handleChange(value) {
-    //console.log(`selected ${value}`);
-  }
-
-  const [value, setValue] = React.useState();
-
-  const onChangeRadio = (e) => {
-    // //console.log('radio checked', e.target.value);
-    setValue(e.target.value);
-    e.target.value > 0
-      ? props.setCheckSelectTest(true)
-      : props.setCheckSelectTest(false);
-  };
-
-  const onClickBtnContinue = () => {
-    if (props.checkSelectTest) {
-      props.setCurrent(1);
-    } else {
-      props.modalError();
-    }
-  };
+  const dispatch = useDispatch();
+  const {
+    exams,
+    category,
+    keyword,
+    targetSubject,
+    item: { exam_id },
+  } = useSelector(testCampaignFormSelector);
+  const [currentKeyword, setCurrentKeyword] = useState(keyword);
 
   return (
     <>
@@ -42,52 +34,67 @@ function SelectTest(props) {
               {t('Choose_a_test', { ns: 'testCampaign' })}{' '}
             </h6>
           </Col>
-          <Col>
+          <Col span={6}>
             <Search
               className='search-btn'
               size='large'
               placeholder={t('Search_the_test', { ns: 'testCampaign' })}
-              onSearch={onSearch}
+              value={currentKeyword}
+              onChange={(e) => setCurrentKeyword(e.target.value)}
+              onSearch={(values) => dispatch(onSearch(values))}
             />
           </Col>
-          <Col>
+          <Col span={6}>
             <Select
-              defaultValue={1}
+              defaultValue={''}
+              value={targetSubject}
               className='select'
-              onChange={handleChange}
+              onChange={(values) =>
+                dispatch(
+                  onChangeSubject({
+                    targetSubject: values,
+                    keyword: currentKeyword,
+                  }),
+                )
+              }
               size='large'
-              style={{ width: 150 }}
+              style={{ width: '100%' }}
             >
-              <Select.Option value={1}>
-                {t('All_tests', { ns: 'testCampaign' })}
-              </Select.Option>
-              <Select.Option value={2}>1</Select.Option>
+              <Option value={''}>All</Option>
+              {category.map((item) => (
+                <OptGroup label={item.name} key={item.id}>
+                  {item?.subjects.map((sub) => (
+                    <Option value={sub.id} key={sub.id}>
+                      {sub.name}
+                    </Option>
+                  ))}
+                </OptGroup>
+              ))}
             </Select>
           </Col>
           <Col span={24}>
             <Radio.Group
-              onChange={onChangeRadio}
-              value={value}
+              onChange={(e) => dispatch(setExamId(e.target.value))}
+              value={exam_id}
               className='d-flex flex-column'
             >
-              <Radio value={1}>
-                <p>test 1</p>
-                <p>
-                  <CalendarOutlined /> 11/05/2022 <FolderOutlined /> test
-                </p>
-              </Radio>
-              <Radio value={1}>
-                <p>test 1</p>
-                <p>
-                  <CalendarOutlined /> 11/05/2022 <FolderOutlined /> test
-                </p>
-              </Radio>
+              {exams.map((item) => (
+                <Radio value={item.id} key={item.id}>
+                  <p>{item.name}</p>
+                  <p>
+                    <CalendarOutlined className='mr-1' />
+                    {formatDate(item.created_date)}
+                    <FolderOutlined className='ml-2 mr-1' />
+                    {item?.subject?.name}
+                  </p>
+                </Radio>
+              ))}
             </Radio.Group>
           </Col>
         </Row>
       </div>
     </>
   );
-}
+};
 
 export default SelectTest;

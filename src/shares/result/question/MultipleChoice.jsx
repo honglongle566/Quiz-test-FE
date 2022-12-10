@@ -4,7 +4,7 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import { Col, Row } from 'antd';
-import { sortAnswers } from '../../../utils/question';
+import { sortAnswers } from 'utils/utils';
 
 const MultipleChoice = ({ data, answers }) => {
   const showIconResult = (answer) => {

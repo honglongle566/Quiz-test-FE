@@ -1,10 +1,10 @@
 import {
   HomeOutlined,
-  ClusterOutlined,
+  FolderOutlined,
   PieChartOutlined,
   FileTextOutlined,
-  FileDoneOutlined,
-  ProfileOutlined,
+  LinkOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -34,24 +34,24 @@ const SideBar = () => {
           {
             key: '/test-categories',
             label: <Link to='/test-categories'>{t('header.category')}</Link>,
-            icon: <ClusterOutlined />,
+            icon: <FolderOutlined />,
           },
           {
             key: '/tests',
             label: <Link to='/tests'>{t('header.test')}</Link>,
-            icon: <ProfileOutlined />,
+            icon: <FileTextOutlined />,
           },
           {
             key: '/test-campaigns',
             label: (
               <Link to='/test-campaigns'>{t('header.test_campaign')}</Link>
             ),
-            icon: <FileDoneOutlined />,
+            icon: <LinkOutlined />,
           },
           {
             key: '/bank',
             label: <Link to='/bank'>{t('header.question_bank')}</Link>,
-            icon: <FileTextOutlined />,
+            icon: <QuestionCircleOutlined />,
           },
           {
             key: '/statistic/campaigns',

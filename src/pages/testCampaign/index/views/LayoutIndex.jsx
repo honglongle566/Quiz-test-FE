@@ -2,15 +2,16 @@ import { Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changePageNo,
-  questionGroupsSelector,
-} from 'slices/category/questionGroup';
+  testCampaignIndexSelector,
+} from 'slices/testCampain/testCampaignIndex';
 import ListIndex from './ListIndex';
 import SearchForm from './SearchForm';
 const LayoutIndex = () => {
   const dispatch = useDispatch();
   const {
     pagination: { total_items, total_pages, current_page, rows },
-  } = useSelector(questionGroupsSelector);
+  } = useSelector(testCampaignIndexSelector);
+  console.log('rows', rows, total_items);
   return (
     <div>
       <h6 className='mb-3'>Đợt thi tuyển</h6>

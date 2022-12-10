@@ -1,7 +1,7 @@
 import { Button, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import Xarrow from 'react-xarrows';
-import { sortAnswers } from '../../../utils/question';
+import { sortAnswers } from 'utils/utils';
 
 const Matching = ({ data }) => {
   const [chooseAnswer, setChooseAnswer] = useState({});

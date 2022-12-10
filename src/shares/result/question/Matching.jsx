@@ -2,7 +2,7 @@ import { Button, Col, Row } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import Xarrow from 'react-xarrows';
-import { sortAnswers } from '../../../utils/question';
+import { sortAnswers } from 'utils/utils';
 
 const Matching = ({ data, answers }) => {
   const [showArrow, setShowArrow] = useState(false);

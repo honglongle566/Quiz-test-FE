@@ -1,28 +1,30 @@
 import { Collapse, DatePicker, Select, Space, Col, Row } from 'antd';
 import React, { useState } from 'react';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  testCampaignFormSelector,
+  setLimitTime,
+} from 'slices/testCampain/testCampaignForm';
 
-moment().format('MMMM Do YYYY, h:mm:ss a');
+const { RangePicker } = DatePicker;
 
-function AvailableTest(props) {
+const AvailableTest = (props) => {
   const { t } = useTranslation('testCampaign');
-
+  const dispatch = useDispatch();
+  const {
+    item: { time_limit },
+  } = useSelector(testCampaignFormSelector);
+  const dateFormat = 'YYYY-MM-DD HH:mm:ss';
   const [renderTime, setRenderTime] = useState(
     t('Unlimited', { ns: 'testCampaign' }),
   );
 
-  const children = [];
-
-  function handleChange(value) {
-    //console.log(`selected ${value}`);
-  }
-
-  function onChange(dates, dateStrings) {
-    //console.log('From: ', dates[0], ', to: ', dates[1]);
-    //console.log('From: ', dateStrings[0], ', to: ', dateStrings[1])
+  const onChange = (dates, dateStrings) => {
     setRenderTime(`${dateStrings[0]} - ${dateStrings[1]}`);
-  }
+    dispatch(setLimitTime(dateStrings));
+  };
 
   return (
     <div>
@@ -42,26 +44,18 @@ function AvailableTest(props) {
               </p>
             </Col>
             <Col span={24}>
-              <Space direction='vertical' dateRender={{ currentDate: moment }}>
-                <DatePicker.RangePicker
-                  ranges={{
-                    Today: [moment(), moment()],
-                    'This Month': [
-                      moment().startOf('month'),
-                      moment().endOf('month'),
-                    ],
-                  }}
-                  showTime
-                  format='YYYY/MM/DD HH:mm:ss'
-                  onChange={onChange}
-                />
-              </Space>
+              <RangePicker
+                showTime
+                format={dateFormat}
+                value={time_limit.map((item) => moment(item))}
+                onChange={onChange}
+              />
             </Col>
           </Row>
         </Collapse.Panel>
       </Collapse>
     </div>
   );
-}
+};
 
 export default AvailableTest;

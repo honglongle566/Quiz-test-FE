@@ -2,7 +2,7 @@ import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Row } from 'antd';
 import TinyMCE from 'shares/common/TinyMCE';
 import { useTranslation } from 'react-i18next';
-import { getLetter } from 'utils/question';
+import { getLetter } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setMatchingAnswers,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { LOCAL_STORAGE_TOKEN_NAME } from 'slices/core/appState';
 
 const axiosClient = axios.create({
   baseURL: 'http://localhost:3000',
@@ -9,6 +10,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   function (config) {
+    config.headers.Authorization = `Bearer ${localStorage[LOCAL_STORAGE_TOKEN_NAME]}`;
     return config;
   },
   function (error) {

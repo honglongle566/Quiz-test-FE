@@ -44,7 +44,7 @@ const SearchForm = () => {
           {category.map((item) => (
             <OptGroup label={item.name} key={item.id}>
               {item?.subjects.map((sub) => (
-                <Option value={sub.id} key={item.id}>
+                <Option value={sub.id} key={sub.id}>
                   {sub.name}
                 </Option>
               ))}

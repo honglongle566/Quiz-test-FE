@@ -1,22 +1,28 @@
 import { Breadcrumb, Button, Col, Modal, Row, Steps } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import SelectTest from './SelectTest';
 import SettingTestCampaigns from 'shares/testCampaign/SettingTestCampaigns';
-
+import {
+  testCampaignFormSelector,
+  createTestCampaign,
+} from 'slices/testCampain/testCampaignForm';
+import SelectTest from './SelectTest';
 const { Step } = Steps;
 
 const FormView = () => {
   const { t } = useTranslation('testCampaign');
-
+  const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
-  const [checkSelectTest, setCheckSelectTest] = useState(false);
+  const {
+    item: { exam_id },
+  } = useSelector(testCampaignFormSelector);
 
   const steps = [
     {
       title: t('Select_test', { ns: 'testCampaign' }),
-      content: <SelectTest setCheckSelectTest={setCheckSelectTest} />,
+      content: <SelectTest />,
       description: t('Exam_cannot_be_changed_after_the_exam_is_created', {
         ns: 'testCampaign',
       }),
@@ -41,8 +47,8 @@ const FormView = () => {
     });
   };
 
-  const onClickBtnContinue = () => {
-    if (checkSelectTest) {
+  const handleContinue = () => {
+    if (exam_id) {
       setCurrent(current + 1);
     } else {
       modalError();
@@ -89,7 +95,7 @@ const FormView = () => {
                   </Link>
                 </Col>
                 <Col>
-                  <Button onClick={onClickBtnContinue} type='primary'>
+                  <Button onClick={handleContinue} type='primary'>
                     {t('continue', { ns: 'testCampaign' })}
                   </Button>
                 </Col>
@@ -103,11 +109,12 @@ const FormView = () => {
                   </Link>
                 </Col>
                 <Col>
-                  <Link to={`/test-campaigns/:id/edit`}>
-                    <Button type='primary'>
-                      {t('Public', { ns: 'testCampaign' })}
-                    </Button>
-                  </Link>
+                  <Button
+                    type='primary'
+                    onClick={() => dispatch(createTestCampaign())}
+                  >
+                    {t('Public', { ns: 'testCampaign' })}
+                  </Button>
                 </Col>
               </Row>
             )}

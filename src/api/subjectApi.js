@@ -1,6 +1,10 @@
 import axiosClient from './axiosClient';
 
 const subjectApi = {
+  getAll(data) {
+    const url = `/api/subject`;
+    return axiosClient.get(url, data);
+  },
   create(data) {
     const url = '/api/subject';
     return axiosClient.post(url, data);

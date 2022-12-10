@@ -126,20 +126,12 @@ const ReviewInfo = (props) => {
                     <span>{t('Unlimited', { ns: 'testCampaign' })}</span>
                   </Col>
                   <Col span={12}>
-                    <p>{t('RESULT_PAGE', { ns: 'testCampaign' })}</p>
-                    <span>
-                      {t('Score', { ns: 'testCampaign' })},
-                      {t('Complete_percent', { ns: 'testCampaign' })},
-                      {t('Detail', { ns: 'testCampaign' })}
-                    </span>
+                    <p>{t('ACCESS_CODE_LINK', { ns: 'testCampaign' })}</p>
+                    <span>{t('Public_Link', { ns: 'testCampaign' })}</span>
                   </Col>
                   <Col span={12}>
                     <p>{t('Phone', { ns: 'testCampaign' })}</p>
                     <span>{t('Fullname', { ns: 'testCampaign' })}</span>
-                  </Col>
-                  <Col span={12}>
-                    <p>{t('ACCESS_CODE_LINK', { ns: 'testCampaign' })}</p>
-                    <span>{t('Public_Link', { ns: 'testCampaign' })}</span>
                   </Col>
                 </Row>
               </div>

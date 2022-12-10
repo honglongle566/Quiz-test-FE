@@ -22,6 +22,7 @@
     "bootstrap-icons": "^1.8.2",
     "chart.js": "^3.8.0",
     "copy-text-to-clipboard": "^3.0.1",
+    "dayjs": "^1.11.6",
     "dotenv": "^16.0.1",
     "faker": "^5.5.3",
     "i18next": "^21.8.4",

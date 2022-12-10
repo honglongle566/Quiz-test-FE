@@ -3,7 +3,7 @@ import { Button, Col, Input, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { onSearch } from 'slices/category/categoryGroup';
+import { onSearch } from 'slices/testCampain/testCampaignIndex';
 
 const { Search } = Input;
 

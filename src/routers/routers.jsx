@@ -213,5 +213,3 @@ export const routes = [
     children: [{ index: true, element: <ResetPassword /> }],
   },
 ];
-
-// config router https://stackblitz.com/github/remix-run/react-router/tree/main/examples/route-objects?file=src%2FApp.tsx

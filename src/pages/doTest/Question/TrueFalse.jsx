@@ -1,6 +1,6 @@
 import { Col, Radio, Row, Space } from 'antd';
 import { useState } from 'react';
-import { sortAnswers } from '../../../utils/question';
+import { sortAnswers } from 'utils/utils';
 
 const TrueFalse = ({ data }) => {
   const [answer, setAnswer] = useState();

@@ -1,6 +1,6 @@
 import { Checkbox, Col, Radio, Row, Space } from 'antd';
 import { useState } from 'react';
-import { sortAnswers } from '../../../utils/question';
+import { sortAnswers } from 'utils/utils';
 const MultipleChoice = ({ data }) => {
   const [answer, setAnswer] = useState();
   const handleChangeAnswer = (value) => {

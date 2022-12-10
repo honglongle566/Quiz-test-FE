@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Outlet } from 'react-router-dom';
 import HeaderAuth from '../../shares/HeaderAuth';
 
-function Auth(props) {
+const Auth = (props) => {
   return (
     <div className='auth'>
       <HeaderAuth />
@@ -15,6 +15,6 @@ function Auth(props) {
       </Row>
     </div>
   );
-}
+};
 
 export default Auth;

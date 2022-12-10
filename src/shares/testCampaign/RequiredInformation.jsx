@@ -2,24 +2,22 @@ import { Checkbox, Col, Collapse, Row } from 'antd';
 import React, { useState } from 'react';
 import { RequiredInformationType, renderExtra } from 'utils/utils';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  testCampaignFormSelector,
+  setRequireInfo,
+} from 'slices/testCampain/testCampaignForm';
+import { useEffect } from 'react';
 
-function RequiredInformation(props) {
+const RequiredInformation = (props) => {
   const { t } = useTranslation('testCampaign');
-
-  // const [requiredInformation, setRequiredInformation] = useState(['Họ và tên'])
+  const dispatch = useDispatch();
+  const { requireInfo } = useSelector(testCampaignFormSelector);
 
   const [valueExtra, setValueExtra] = useState([
     {
       status: false,
-      name: t('Phone', { ns: 'testCampaign' }),
-    },
-    {
-      status: true,
       name: t('Fullname', { ns: 'testCampaign' }),
-    },
-    {
-      status: false,
-      name: t('Group', { ns: 'testCampaign' }),
     },
     {
       status: false,
@@ -27,17 +25,21 @@ function RequiredInformation(props) {
     },
     {
       status: false,
-      name: t('ID', { ns: 'testCampaign' }),
+      name: t('Phone', { ns: 'testCampaign' }),
     },
     {
       status: false,
-      name: t('Position', { ns: 'testCampaign' }),
+      name: t('Group', { ns: 'testCampaign' }),
+    },
+    {
+      status: false,
+      name: t('ID', { ns: 'testCampaign' }),
     },
   ]);
-
-  function onChangeRequiredInformation(checkedValues) {
-    // //console.log('checked = ', checkedValues);
-
+  useEffect(() => {
+    onChangeExtra(requireInfo);
+  }, []);
+  const onChangeExtra = (checkedValues) => {
     for (let i = 0; i < valueExtra.length; i++) {
       if (checkedValues.indexOf(i) !== -1) {
         setValueExtra((prev) => {
@@ -51,7 +53,11 @@ function RequiredInformation(props) {
         });
       }
     }
-  }
+  };
+  const handleChangeRequiredInfo = (checkedValues) => {
+    dispatch(setRequireInfo(checkedValues));
+    onChangeExtra(checkedValues);
+  };
 
   return (
     <>
@@ -62,39 +68,32 @@ function RequiredInformation(props) {
           extra={renderExtra(valueExtra).join(', ')}
         >
           <Checkbox.Group
-            onChange={onChangeRequiredInformation}
-            defaultValue={`${RequiredInformationType.full_name}`}
+            onChange={handleChangeRequiredInfo}
+            value={requireInfo}
           >
             <Row gutter={[16, 16]}>
               <Col span={7}>
-                <Checkbox value={RequiredInformationType.phone}>
-                  {t('Phone', { ns: 'testCampaign' })}
-                </Checkbox>
-              </Col>
-              <Col span={7}>
-                <Checkbox value={RequiredInformationType.full_name}>
+                <Checkbox value={0}>
                   {t('Fullname', { ns: 'testCampaign' })}
                 </Checkbox>
               </Col>
               <Col span={7}>
-                <Checkbox value={RequiredInformationType.group}>
-                  {t('Group', { ns: 'testCampaign' })}
-                </Checkbox>
-              </Col>
-              <Col span={7}>
-                <Checkbox value={RequiredInformationType.email}>
+                <Checkbox value={1}>
                   {t('Email', { ns: 'testCampaign' })}
                 </Checkbox>
               </Col>
               <Col span={7}>
-                <Checkbox value={RequiredInformationType.id}>
-                  {t('ID', { ns: 'testCampaign' })}
+                <Checkbox value={2}>
+                  {t('Phone', { ns: 'testCampaign' })}
                 </Checkbox>
               </Col>
               <Col span={7}>
-                <Checkbox value={RequiredInformationType.position}>
-                  {t('Position', { ns: 'testCampaign' })}
+                <Checkbox value={3}>
+                  {t('Group', { ns: 'testCampaign' })}
                 </Checkbox>
+              </Col>
+              <Col span={7}>
+                <Checkbox value={4}>{t('ID', { ns: 'testCampaign' })}</Checkbox>
               </Col>
             </Row>
           </Checkbox.Group>
@@ -102,6 +101,6 @@ function RequiredInformation(props) {
       </Collapse>
     </>
   );
-}
+};
 
 export default RequiredInformation;
