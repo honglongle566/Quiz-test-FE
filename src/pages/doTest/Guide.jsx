@@ -1,8 +1,17 @@
 import { Button, Col, Row } from 'antd';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { setTargetId, startDoingExam } from 'slices/doTest/doTest';
 
-function Guide(props) {
+const Guide = () => {
+  const dispatch = useDispatch();
+  const param = useParams();
+  useEffect(() => {
+    if (param?.id) {
+      dispatch(setTargetId(param.id));
+    }
+  }, []);
   return (
     <Row align='middle' gutter={[24, 24]} className='container guide'>
       <Col span={6} offset={10}>
@@ -24,12 +33,12 @@ function Guide(props) {
         <p>- Bài thi này có thể làm lại</p>
       </Col>
       <Col span={6} offset={10}>
-        <Link to='/do-test/exam-question'>
-          <Button type='primary'>Bắt đầu làm bài</Button>
-        </Link>
+        <Button type='primary' onClick={() => dispatch(startDoingExam())}>
+          Bắt đầu làm bài
+        </Button>
       </Col>
     </Row>
   );
-}
+};
 
 export default Guide;

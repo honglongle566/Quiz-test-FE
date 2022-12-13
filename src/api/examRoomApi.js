@@ -5,9 +5,17 @@ const examRoomApi = {
     const url = `/api/examination-room`;
     return axiosClient.get(url);
   },
+  getExamQuestion(id) {
+    const url = `/api/examination-room/do-test/${id}`;
+    return axiosClient.get(url);
+  },
   getAllPaging(params) {
     const url = `/api/examination-room/all-paging`;
     return axiosClient.get(url, params);
+  },
+  getInfoCollect(id) {
+    const url = `/api/examination-room/info-collect/${id}`;
+    return axiosClient.get(url);
   },
   create(data) {
     const url = '/api/examination-room';

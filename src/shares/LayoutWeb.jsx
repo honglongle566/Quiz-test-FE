@@ -1,9 +1,36 @@
 import { Col, Row } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import HeaderPage from 'shares/HeaderPage';
+import PageLoading from 'shares/PageLoading';
 import SideBar from 'shares/SideBar';
+import { appStateSelector, loadUser } from 'slices/core/appState';
 
 const LayoutWeb = (props) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  let location = useLocation();
+  const { authLoading, isAuthenticated } = useSelector(appStateSelector);
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated && !authLoading) navigate('/login');
+    else if (
+      isAuthenticated &&
+      !authLoading &&
+      ['/login', '/register'].includes(location.pathname)
+    ) {
+      navigate('/');
+    }
+  }, [authLoading, isAuthenticated]);
+
+  if (authLoading) {
+    return <PageLoading />;
+  }
+
   return (
     <>
       <div className='layout-web'>

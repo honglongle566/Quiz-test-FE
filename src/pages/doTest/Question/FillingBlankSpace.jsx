@@ -11,8 +11,8 @@ const FillingBlankSpace = ({ data }) => {
   };
 
   const changeContent = (answers) => {
-    let newContent = data?.content;
-    for (let item of data?.fill_blank_correct_answers) {
+    let newContent = data?.name;
+    for (let item of data?.fill_blank_correct_answer) {
       if (answers[item.key] && answers[item.key] !== '') {
         newContent = newContent.replace(
           `[%${item.key}%]`,
@@ -41,22 +41,19 @@ const FillingBlankSpace = ({ data }) => {
               <strong className=''>Trả lời</strong>
             </div>
             <div className='fill-blank__box'>
-              {data?.fill_blank_correct_answers &&
-                data?.fill_blank_correct_answers.map((item) => (
-                  <div className='fill-blank__box__item' key={item.key}>
-                    <div className='fill-blank__box_item__number'>
-                      {item.key}
-                    </div>
-                    <div>
-                      <input
-                        type='text'
-                        className='fill-blank__box__item__input'
-                        id={item.key}
-                        onChange={handleChangeAnswer}
-                      />
-                    </div>
+              {data?.fill_blank_correct_answer.map((item) => (
+                <div className='fill-blank__box__item' key={item.key}>
+                  <div className='fill-blank__box_item__number'>{item.key}</div>
+                  <div>
+                    <input
+                      type='text'
+                      className='fill-blank__box__item__input'
+                      id={item.key}
+                      onChange={handleChangeAnswer}
+                    />
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
         </Col>

@@ -4,9 +4,27 @@ import {
   ForwardOutlined,
 } from '@ant-design/icons';
 import { Button, Col, Divider, Row, Statistic } from 'antd';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import {
+  doTestSelector,
+  getExamQuestion,
+  setTargetId,
+} from 'slices/doTest/doTest';
 import Questions from './Questions';
 
 const ExamQuestions = (props) => {
+  const dispatch = useDispatch();
+  const { listQuestion } = useSelector(doTestSelector);
+
+  const param = useParams();
+  useEffect(() => {
+    if (param?.id) {
+      dispatch(setTargetId(param.id));
+      dispatch(getExamQuestion());
+    }
+  }, []);
   const onFinish = () => {
     console.log('finished!');
   };
@@ -16,7 +34,7 @@ const ExamQuestions = (props) => {
       <Row gutter={[36, 0]}>
         <Col span={16} className='mb-5'>
           <Row gutter={[16, 16]} justify='center'>
-            <Questions data={data} />
+            <Questions />
             <Col span={24} className='mt-2'>
               <Row>
                 <Col flex={1}>
@@ -62,21 +80,23 @@ const ExamQuestions = (props) => {
             </Col>
             <Col span={24}>
               <Row gutter={[16, 16]}>
-                {data &&
-                  data.map((question, index) => (
-                    <Col span={24} key={question.id}>
-                      <Row>
-                        <Col span={22}>
-                          <p className='text-bold text_mute'>
-                            Cau {index + 1}:
-                          </p>
-                        </Col>
-                        <Col span={2}>
-                          <CheckCircleOutlined />
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
+                {listQuestion.map((question, index) => (
+                  <Col span={24} key={question.id}>
+                    <Row>
+                      <Col span={22}>
+                        <a
+                          href={`#${question.index}`}
+                          className='text-bold text_mute'
+                        >
+                          Cau {index + 1}: {question.name}
+                        </a>
+                      </Col>
+                      <Col span={2}>
+                        <CheckCircleOutlined />
+                      </Col>
+                    </Row>
+                  </Col>
+                ))}
               </Row>
             </Col>
           </Row>
@@ -85,120 +105,5 @@ const ExamQuestions = (props) => {
     </div>
   );
 };
-
-const data = [
-  {
-    id: 240286,
-    index: 1,
-    content: '<p>1</p>',
-    type: 1,
-    old_time_limit: 0,
-    time_limit: 0,
-    start_at: null,
-    has_mul_correct_answers: false,
-    answers: [
-      { id: 'd', content: '<p>4</p>' },
-      { id: 'b', content: '<p>2</p>' },
-      { id: 'c', content: '<p>3</p>' },
-      { id: 'a', content: '<p>1</p>' },
-    ],
-    examinee_answers: [],
-    section_id: null,
-  },
-  {
-    id: 240344,
-    index: 1,
-    content:
-      'This question has a time limit to answer is 01:00:00, click start to view and answer the question',
-    type: 1,
-    old_time_limit: 3600,
-    time_limit: 3600,
-    start_at: null,
-    has_mul_correct_answers: true,
-    answers: [
-      { id: 'b', content: '<p>2</p>' },
-      { id: 'a', content: '<p>1</p>' },
-      { id: 'd', content: '<p>4</p>' },
-      { id: 'e', content: '<p>5</p>' },
-      { id: 'c', content: '<p>3</p>' },
-    ],
-    examinee_answers: [],
-    section_id: null,
-  },
-  {
-    id: 240278,
-    index: 3,
-    content:
-      '<p><span style="background-color:rgb(44,75,159);color:rgb(255,255,255);">Filling blank spaces</span><span style="background-color:hsl(204,8%,98%);color:hsl(0,0%,0%);"> &nbsp;test</span></p><div class="mt-2" style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);box-sizing:border-box;color:rgb(33, 37, 41);font-family:mainfont, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, &quot;Liberation Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;font-size:14px;font-style:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-weight:400;letter-spacing:normal;margin-top:0.5rem !important;orphans:2;text-align:left;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;"><p>C\u00f4ng cha nh\u01b0 n\u00fai th\u00e1i [%1%]</p></div><div class="mt-1" style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);box-sizing:border-box;color:rgb(33, 37, 41);font-family:mainfont, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, &quot;Liberation Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;font-size:14px;font-style:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-weight:400;letter-spacing:normal;margin-top:0.25rem !important;orphans:2;text-align:left;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;"><p>[%2%] nh\u01b0 n\u01b0\u1edbc trong ngu\u1ed3n ch\u1ea3y ra</p></div>',
-    type: 4,
-    old_time_limit: 0,
-    time_limit: 10,
-    start_at: null,
-    fill_blank_correct_answers: [{ key: 1 }, { key: 2 }],
-    scoring_type: 1,
-    section_id: null,
-  },
-  {
-    id: 240289,
-    index: 5,
-    content: '<p>dd</p>',
-    type: 2,
-    old_time_limit: 0,
-    time_limit: 0,
-    start_at: null,
-    has_mul_correct_answers: false,
-    answers: [
-      { id: 'a', content: '\u0110\u00fang' },
-      { id: 'b', content: 'Sai' },
-    ],
-    examinee_answers: [],
-    section_id: null,
-  },
-  {
-    id: 240290,
-    index: 6,
-    content:
-      '<p>test <span style="background-color:rgb(44,75,159);color:rgb(255,255,255);">Matching</span></p>',
-    type: 3,
-    old_time_limit: 0,
-    time_limit: 0,
-    start_at: null,
-    answer: [],
-    matching_answers: {
-      questions: [
-        { id: 1, content: '<p>1</p>' },
-        { id: 2, content: '<p>2</p>' },
-        { id: 3, content: '<p>3</p>' },
-      ],
-      answers: [
-        { id: 'a', content: '<p>2</p>' },
-        { id: 'b', content: '<p>1</p>' },
-        { id: 'c', content: '<p>3</p>' },
-      ],
-    },
-    matching_answer_type: 1,
-    scoring_type: 1,
-    section_id: null,
-  },
-  {
-    id: 240345,
-    index: 9,
-    content: '<p>asa</p>',
-    type: 1,
-    old_time_limit: 0,
-    time_limit: 0,
-    start_at: null,
-    has_mul_correct_answers: true,
-    answers: [
-      { id: 'a', content: '<p>1</p>' },
-      { id: 'c', content: '<p>3</p>' },
-      { id: 'e', content: '<p>5</p>' },
-      { id: 'b', content: '<p>2</p>' },
-      { id: 'd', content: '<p>4</p>' },
-    ],
-    examinee_answers: [],
-    section_id: null,
-  },
-];
 
 export default ExamQuestions;

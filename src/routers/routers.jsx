@@ -3,12 +3,8 @@ import AccountInfo from 'pages/account/AccountInfo';
 import ChangePassword from 'pages/account/ChangePassword';
 
 import Auth from 'pages/auth/Auth';
-import ForgetPassword from 'pages/auth/ForgetPassword';
 import LoginForm from 'pages/auth/LoginForm';
 import RegisterForm from 'pages/auth/RegisterForm';
-import ResetPassword from 'pages/auth/ResetPassword';
-
-import Dashboard from 'pages/dashboard/Dashboard';
 
 // New
 // Category
@@ -35,6 +31,9 @@ import ResultLayoutIndex from 'pages/result/review/ResultLayoutIndex';
 import LayoutComponent from 'shares/LayoutComponent';
 import LayoutWeb from 'shares/LayoutWeb';
 
+//Dashboard
+import Dashboard from 'pages/dashboard/Dashboard';
+
 //Test campaign
 import TestCampaigns from 'pages/testCampaign/index/TestCampaignLayoutIndex';
 import TestCampaignLayoutForm from 'pages/testCampaign/form/TestCampaignLayoutForm';
@@ -45,6 +44,8 @@ import StatisticTestCampainLayoutIndex from 'pages/testCampaign/statistic/Statis
 // Dotest
 import LayoutDoTest from 'shares/LayoutDoTest';
 import DoTest from 'pages/doTestCollect/DoTest';
+import JoinTest from 'pages/doTestCollect/JoinTest';
+import InfoCollect from 'pages/doTestCollect/InfoCollect';
 
 import HeaderDoTest from 'shares/HeaderDoTest';
 import Guide from 'pages/doTest/Guide';
@@ -161,7 +162,16 @@ export const routes = [
       },
     ],
   },
-  // New
+  {
+    path: '/login',
+    element: <Auth />,
+    children: [{ index: true, element: <LoginForm /> }],
+  },
+  {
+    path: '/register',
+    element: <Auth />,
+    children: [{ index: true, element: <RegisterForm /> }],
+  },
   {
     path: '/info-collect',
     element: <LayoutDoTest />,
@@ -169,6 +179,16 @@ export const routes = [
       {
         path: '/info-collect/:id',
         element: <DoTest />,
+        children: [
+          {
+            path: '/info-collect/:id/join-access-code',
+            element: <JoinTest />,
+          },
+          {
+            path: '/info-collect/:id/info',
+            element: <InfoCollect />,
+          },
+        ],
       },
     ],
   },
@@ -176,9 +196,12 @@ export const routes = [
     path: '/do-test',
     element: <HeaderDoTest />,
     children: [
-      { index: true, element: <Guide /> },
       {
-        path: '/do-test/exam-question',
+        path: '/do-test/:id/guide',
+        element: <Guide />,
+      },
+      {
+        path: '/do-test/:id/exam-question',
         element: <ExamQuestions />,
       },
     ],
@@ -191,25 +214,5 @@ export const routes = [
         element: <ResultLayoutIndex />,
       },
     ],
-  },
-  {
-    path: '/login',
-    element: <Auth />,
-    children: [{ index: true, element: <LoginForm /> }],
-  },
-  {
-    path: '/register',
-    element: <Auth />,
-    children: [{ index: true, element: <RegisterForm /> }],
-  },
-  {
-    path: '/forget-password/',
-    element: <Auth />,
-    children: [{ index: true, element: <ForgetPassword /> }],
-  },
-  {
-    path: '/reset-password/',
-    element: <Auth />,
-    children: [{ index: true, element: <ResetPassword /> }],
   },
 ];

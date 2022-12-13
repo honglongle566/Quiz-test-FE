@@ -1,6 +1,5 @@
 import { Checkbox, Col, Radio, Row, Space } from 'antd';
 import { useState } from 'react';
-import { sortAnswers } from 'utils/utils';
 const MultipleChoice = ({ data }) => {
   const [answer, setAnswer] = useState();
   const handleChangeAnswer = (value) => {
@@ -12,28 +11,27 @@ const MultipleChoice = ({ data }) => {
       <Col span={24}>
         <div
           className='mb-3'
-          dangerouslySetInnerHTML={{ __html: data.content }}
+          dangerouslySetInnerHTML={{ __html: data.name }}
         ></div>
         {data?.has_mul_correct_answers ? (
           <Checkbox.Group onChange={(value) => handleChangeAnswer(value)}>
             <Space direction='vertical'>
-              {data.answers &&
-                data.answers.sort(sortAnswers).map((answer) => (
-                  <Col key={answer.id}>
-                    <Checkbox value={answer.id}>
-                      <div className='d-flex'>
-                        <div className='mr-1'>
-                          <b>{answer.id.toUpperCase()}</b>
-                        </div>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: answer.content,
-                          }}
-                        ></div>
+              {data.answer.map((item) => (
+                <Col key={item.id}>
+                  <Checkbox value={item.id}>
+                    <div className='d-flex'>
+                      <div className='mr-1'>
+                        <b>{item.id.toUpperCase()}</b>
                       </div>
-                    </Checkbox>
-                  </Col>
-                ))}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item.content,
+                        }}
+                      ></div>
+                    </div>
+                  </Checkbox>
+                </Col>
+              ))}
             </Space>
           </Checkbox.Group>
         ) : (
@@ -42,22 +40,21 @@ const MultipleChoice = ({ data }) => {
             onChange={(e) => handleChangeAnswer(e.target.value)}
           >
             <Space direction='vertical'>
-              {data.answers &&
-                data.answers.sort(sortAnswers).map((answer) => (
-                  <Radio value={answer.id} key={answer.id}>
-                    <div className='d-flex'>
-                      <div className='mr-1'>
-                        <b>
-                          {answer.id.toUpperCase()}
-                          {')'}
-                        </b>
-                      </div>
-                      <div
-                        dangerouslySetInnerHTML={{ __html: answer.content }}
-                      ></div>
+              {data.answer.map((item) => (
+                <Radio value={item.id} key={item.id}>
+                  <div className='d-flex'>
+                    <div className='mr-1'>
+                      <b>
+                        {item.id.toUpperCase()}
+                        {')'}
+                      </b>
                     </div>
-                  </Radio>
-                ))}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></div>
+                  </div>
+                </Radio>
+              ))}
             </Space>
           </Radio.Group>
         )}

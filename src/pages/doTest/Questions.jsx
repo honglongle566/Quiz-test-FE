@@ -4,9 +4,11 @@ import FillingBlankSpace from './Question/FillingBlankSpace';
 import Matching from './Question/Matching';
 import MultipleChoice from './Question/MultipleChoice';
 import TrueFalse from './Question/TrueFalse';
+import { useSelector } from 'react-redux';
+import { doTestSelector } from 'slices/doTest/doTest';
 
-const Questions = (props) => {
-  const { data } = props;
+const Questions = () => {
+  const { questions } = useSelector(doTestSelector);
   const showArrayQuestion = (question) => {
     if (question.type === 1) return <MultipleChoice data={question} />;
     if (question.type === 2) return <TrueFalse data={question} />;
@@ -14,25 +16,26 @@ const Questions = (props) => {
     if (question.type === 4) return <FillingBlankSpace data={question} />;
   };
 
+  const showMessageQuestion = (question) => {
+    if (question.type === 4) return;
+    if (question.type === 3 || question?.has_mul_correct_answers)
+      return '(Chọn nhiều đáp án)';
+    return '(Chỉ chọn một đáp án)';
+  };
+
   return (
     <>
-      {data &&
-        data.map((question, index) => (
-          <Col span={24} key={question.id}>
-            <div className='exam exam__border question-box'>
-              <span>
-                CÂU HỎI {index + 1}{' '}
-                <small>
-                  {question?.has_mul_correct_answers
-                    ? '(Chọn nhiều đáp án)'
-                    : '(Chỉ chọn một đáp án)'}
-                </small>
-              </span>
-              <Divider className='ma-0 my-3' />
-              {showArrayQuestion(question)}
-            </div>
-          </Col>
-        ))}
+      {questions.map((question, index) => (
+        <Col id={question.index} span={24} key={question.id}>
+          <div className='exam exam__border question-box'>
+            <span>
+              CÂU HỎI {index + 1} <small>{showMessageQuestion(question)}</small>
+            </span>
+            <Divider className='ma-0 my-3' />
+            {showArrayQuestion(question)}
+          </div>
+        </Col>
+      ))}
     </>
   );
 };

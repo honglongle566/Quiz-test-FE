@@ -1,6 +1,5 @@
 import { Col, Radio, Row, Space } from 'antd';
 import { useState } from 'react';
-import { sortAnswers } from 'utils/utils';
 
 const TrueFalse = ({ data }) => {
   const [answer, setAnswer] = useState();
@@ -14,26 +13,25 @@ const TrueFalse = ({ data }) => {
         <Col span={24}>
           <div
             className='mb-3'
-            dangerouslySetInnerHTML={{ __html: data.content }}
+            dangerouslySetInnerHTML={{ __html: data.name }}
           ></div>
           <Radio.Group className='ml-2'>
             <Space direction='vertical'>
-              {data.answers &&
-                data.answers.sort(sortAnswers).map((answer) => (
-                  <Radio value={answer.id} key={answer.id}>
-                    <div style={{ display: 'flex' }}>
-                      <div className='mr-1'>
-                        <b>
-                          {answer.id.toUpperCase()}
-                          {')'}
-                        </b>
-                      </div>
-                      <div
-                        dangerouslySetInnerHTML={{ __html: answer.content }}
-                      ></div>
+              {data.answer.map((item) => (
+                <Radio value={item.id} key={item.id}>
+                  <div style={{ display: 'flex' }}>
+                    <div className='mr-1'>
+                      <b>
+                        {item.id.toUpperCase()}
+                        {')'}
+                      </b>
                     </div>
-                  </Radio>
-                ))}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></div>
+                  </div>
+                </Radio>
+              ))}
             </Space>
           </Radio.Group>
         </Col>

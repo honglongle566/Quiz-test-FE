@@ -1,9 +1,11 @@
 import { Button, Form, Input } from 'antd';
+import { joinTest } from 'slices/doTest/doTest';
+import { useDispatch } from 'react-redux';
 
-const JoinTest = ({ setIsAccessCode }) => {
+const JoinTest = () => {
+  const dispatch = useDispatch();
   const onFinish = (values) => {
-    console.log('Success:', values);
-    setIsAccessCode(false);
+    dispatch(joinTest(values));
   };
 
   return (
@@ -15,7 +17,7 @@ const JoinTest = ({ setIsAccessCode }) => {
     >
       <Form.Item
         label='Mã truy cập'
-        name='username'
+        name='code_room'
         rules={[{ required: true, message: 'Trường này là bắt buộc!' }]}
       >
         <Input />
