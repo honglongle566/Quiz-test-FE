@@ -28,16 +28,14 @@
   margin-top: 70px;
 }
 .exam_question {
-  margin-top: 70px;
   position: relative;
   &__category {
     max-height: 40rem;
-    overflow: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 
     &--role {
       position: sticky;
-      top: 70px;
+      top: 0px;
       left: 0px;
     }
 

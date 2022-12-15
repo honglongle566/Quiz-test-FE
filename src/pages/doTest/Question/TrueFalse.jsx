@@ -1,12 +1,21 @@
 import { Col, Radio, Row, Space } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateListAnswer, doTestSelector } from 'slices/doTest/doTest';
 
 const TrueFalse = ({ data }) => {
   const [answer, setAnswer] = useState();
+  const dispatch = useDispatch();
   const handleChangeAnswer = (e) => {
     setAnswer(e.target.value);
+    dispatch(updateListAnswer({ index: data.index, answer: [e.target.value] }));
   };
-
+  const { listAnswers } = useSelector(doTestSelector);
+  useEffect(() => {
+    if (listAnswers[data.index]) {
+      setAnswer(listAnswers[data.index][0]);
+    }
+  }, []);
   return (
     <div>
       <Row gutter={[24, 24]}>
@@ -15,7 +24,11 @@ const TrueFalse = ({ data }) => {
             className='mb-3'
             dangerouslySetInnerHTML={{ __html: data.name }}
           ></div>
-          <Radio.Group className='ml-2'>
+          <Radio.Group
+            className='ml-2'
+            onChange={handleChangeAnswer}
+            value={answer}
+          >
             <Space direction='vertical'>
               {data.answer.map((item) => (
                 <Radio value={item.id} key={item.id}>

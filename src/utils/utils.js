@@ -46,3 +46,22 @@ export const convertToPlain = (html) => {
   tempDivElement.innerHTML = html;
   return tempDivElement.textContent || tempDivElement.innerText || '';
 };
+
+export const checkQuestionDone = (question, listAnswers) => {
+  if (
+    (question.type === 1 || question.type === 2) &&
+    listAnswers[question.index]?.length > 0
+  ) {
+    return true;
+  } else if (question.type === 3 && listAnswers[question.index]) {
+    if (Object.keys(listAnswers[question.index])?.length) {
+      return true;
+    }
+  } else if (question.type === 4 && listAnswers[question.index]) {
+    for (let item of listAnswers[question.index]) {
+      if (!item.content) return false;
+    }
+    return true;
+  }
+  return false;
+};

@@ -3,6 +3,7 @@ import { showAlert, onchangeRouterLink } from 'slices/core/appState';
 import examRoomApi from 'api/examRoomApi';
 import candidateApi from 'api/candidateApi';
 import { convertToPlain } from 'utils/utils';
+import { LOCAL_STORAGE_ANSWER } from 'slices/core/appState';
 
 export const infoCollect = createAsyncThunk(
   'doTest/infoCollect',
@@ -60,6 +61,7 @@ export const submitTheExam = createAsyncThunk(
     }
   },
 );
+
 export const joinTest = createAsyncThunk(
   'doTest/joinTest',
   async (data, thunkAPI) => {
@@ -121,6 +123,7 @@ const initialState = {
   candidate: {},
   questions: [],
   listQuestion: [],
+  listAnswers: {},
   isAccessCode: false,
   isLoading: false,
 };
@@ -136,6 +139,16 @@ const doTestSlice = createSlice({
     },
     setTargetId: (state, action) => {
       state.targetId = action.payload;
+    },
+    updateListAnswer: (state, action) => {
+      state.listAnswers = {
+        ...state.listAnswers,
+        [action.payload.index]: action.payload.answer,
+      };
+      localStorage.setItem(
+        LOCAL_STORAGE_ANSWER,
+        JSON.stringify(state.listAnswers),
+      );
     },
   },
   extraReducers: {
@@ -197,6 +210,8 @@ const doTestSlice = createSlice({
         name: convertToPlain(item.name),
       }));
       state.isLoading = false;
+      state.listAnswers =
+        JSON.parse(localStorage[LOCAL_STORAGE_ANSWER] || null) || {};
     },
     [getExamQuestion.rejected]: (state, action) => {
       state.isLoading = false;
@@ -206,6 +221,6 @@ const doTestSlice = createSlice({
 
 export const doTestSelector = (state) => state.doTestReducer;
 
-export const { destroy, setTargetId } = doTestSlice.actions;
+export const { destroy, setTargetId, updateListAnswer } = doTestSlice.actions;
 
 export default doTestSlice.reducer;

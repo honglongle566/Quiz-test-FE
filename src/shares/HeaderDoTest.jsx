@@ -9,10 +9,12 @@ import {
   LANGUAGE_EN,
   LANGUAGE_VI,
 } from 'slices/core/appState';
+import { doTestSelector } from 'slices/doTest/doTest';
 
-function HeaderDoTest(props) {
+const HeaderDoTest = () => {
   const { t, i18n } = useTranslation('common');
   const { language } = useSelector(appStateSelector);
+  const { examRoom } = useSelector(doTestSelector);
 
   const dispatch = useDispatch();
 
@@ -43,7 +45,7 @@ function HeaderDoTest(props) {
             <span className='logo logo__md'>Quiz Test</span>
           </Col>
           <Col>
-            <b>ten dot thi</b>
+            <b>{examRoom.name}</b>
           </Col>
         </Row>
         <Row align='middle' gutter={[16, 16]}>
@@ -112,13 +114,14 @@ function HeaderDoTest(props) {
           </Col>
         </Row>
       </div>
-      <Row justify='center'>
+      <div style={{ height: '50px', with: '100%' }}></div>
+      <Row justify='center' className='layer-box-test'>
         <Col>
           <Outlet />
         </Col>
       </Row>
     </div>
   );
-}
+};
 
 export default HeaderDoTest;

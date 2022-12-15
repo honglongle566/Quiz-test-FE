@@ -13,10 +13,11 @@ import {
   setTargetId,
 } from 'slices/doTest/doTest';
 import Questions from './Questions';
+import { checkQuestionDone } from 'utils/utils';
 
 const ExamQuestions = (props) => {
   const dispatch = useDispatch();
-  const { listQuestion } = useSelector(doTestSelector);
+  const { listQuestion, listAnswers } = useSelector(doTestSelector);
 
   const param = useParams();
   useEffect(() => {
@@ -24,7 +25,11 @@ const ExamQuestions = (props) => {
       dispatch(setTargetId(param.id));
       dispatch(getExamQuestion());
     }
+    if (Number(new Date('2022-12-16 00:40:00')) + 60 * 1000 < Date.now()) {
+      onFinish();
+    }
   }, []);
+
   const onFinish = () => {
     console.log('finished!');
   };
@@ -36,7 +41,7 @@ const ExamQuestions = (props) => {
           <Row gutter={[16, 16]} justify='center'>
             <Questions />
             <Col span={24} className='mt-2'>
-              <Row>
+              {/* <Row>
                 <Col flex={1}>
                   <Button>
                     <BackwardOutlined /> Câu hỏi trước
@@ -47,7 +52,7 @@ const ExamQuestions = (props) => {
                     Câu hỏi tiếp theo <ForwardOutlined />
                   </Button>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
             <Col>
               <Button type='primary'>Nộp bài thi</Button>
@@ -64,10 +69,9 @@ const ExamQuestions = (props) => {
                 <h3>Thời gian làm bài kiểm tra còn lại</h3>
 
                 <Statistic.Countdown
-                  value={Date.now() + 60 * 1000}
+                  value={Number(new Date('2022-12-16 00:40:00')) + 60 * 1000}
                   onFinish={onFinish}
                 />
-
                 <small>
                   Khi hết thời gian làm bài, kết quả sẽ chỉ được tính ở các câu
                   bạn đã chọn đáp án.
@@ -86,13 +90,19 @@ const ExamQuestions = (props) => {
                       <Col span={22}>
                         <a
                           href={`#${question.index}`}
-                          className='text-bold text_mute'
+                          className={
+                            checkQuestionDone(question, listAnswers)
+                              ? 'text-bold'
+                              : 'text-bold text_mute'
+                          }
                         >
                           Cau {index + 1}: {question.name}
                         </a>
                       </Col>
                       <Col span={2}>
-                        <CheckCircleOutlined />
+                        {checkQuestionDone(question, listAnswers) && (
+                          <CheckCircleOutlined />
+                        )}
                       </Col>
                     </Row>
                   </Col>

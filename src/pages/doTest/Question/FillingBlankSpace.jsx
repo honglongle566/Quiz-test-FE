@@ -1,13 +1,28 @@
 import { Col, Row } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateListAnswer, doTestSelector } from 'slices/doTest/doTest';
 
 const FillingBlankSpace = ({ data }) => {
   const [answers, setAnswers] = useState({});
+  const dispatch = useDispatch();
+  const { listAnswers } = useSelector(doTestSelector);
   const handleChangeAnswer = (e) => {
-    setAnswers((pre) => {
-      let newAnswer = { ...pre, [e.target.id]: e.target.value };
-      return newAnswer;
-    });
+    let newAnswer = { ...answers, [e.target.id]: e.target.value };
+    setAnswers(newAnswer);
+    dispatch(
+      updateListAnswer({
+        index: data.index,
+        answer: convertChooseAnswer(newAnswer),
+      }),
+    );
+  };
+  const convertChooseAnswer = (answer) => {
+    let newAnswer = [];
+    for (const [key, value] of Object.entries(answer)) {
+      newAnswer.push({ key: key, content: value });
+    }
+    return newAnswer;
   };
 
   const changeContent = (answers) => {
@@ -28,12 +43,21 @@ const FillingBlankSpace = ({ data }) => {
     return newContent;
   };
 
+  useEffect(() => {
+    if (listAnswers[data.index]) {
+      let newAnswer = {};
+      for (let item of listAnswers[data.index]) {
+        newAnswer = { ...newAnswer, [item.key]: [item.content] };
+      }
+      setAnswers(newAnswer);
+    }
+  }, []);
+
   return (
     <div className='fill-blank'>
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <div
-            className='mb-3s'
             dangerouslySetInnerHTML={{ __html: changeContent(answers) }}
           ></div>
           <div className='mt-3'>
@@ -47,6 +71,7 @@ const FillingBlankSpace = ({ data }) => {
                   <div>
                     <input
                       type='text'
+                      value={answers[item.key] || ''}
                       className='fill-blank__box__item__input'
                       id={item.key}
                       onChange={handleChangeAnswer}
