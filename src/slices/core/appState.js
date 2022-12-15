@@ -28,7 +28,11 @@ export const loginUser = createAsyncThunk(
   async (userForm, thunkAPI) => {
     try {
       const response = await authApi.login(userForm);
-      if (response.data.success) {
+      if (response.code) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'error password or username', type: 'error' }),
+        );
+      } else {
         localStorage.setItem(
           LOCAL_STORAGE_TOKEN_NAME,
           response.data.accessToken,
@@ -47,11 +51,12 @@ export const registerUser = createAsyncThunk(
   async (userForm, thunkAPI) => {
     try {
       const response = await authApi.register(userForm);
-      if (response.data.success) {
-        localStorage.setItem(
-          LOCAL_STORAGE_TOKEN_NAME,
-          response.data.accessToken,
+      if (response.code) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'error email exist', type: 'error' }),
         );
+      } else {
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.accessToken);
         thunkAPI.dispatch(loadUser());
       }
     } catch (error) {
@@ -115,7 +120,7 @@ const appState = createSlice({
       state.authLoading = true;
     },
     [loginUser.fulfilled]: (state, action) => {
-      state.authLoading = true;
+      state.authLoading = false;
     },
     [loginUser.rejected]: (state, action) => {
       state.authLoading = false;
@@ -125,7 +130,7 @@ const appState = createSlice({
       state.authLoading = true;
     },
     [registerUser.fulfilled]: (state, action) => {
-      state.authLoading = true;
+      state.authLoading = false;
     },
     [registerUser.rejected]: (state, action) => {
       state.authLoading = false;
