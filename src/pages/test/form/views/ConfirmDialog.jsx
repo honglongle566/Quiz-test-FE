@@ -29,7 +29,7 @@ const ConfirmDialog = () => {
   };
   return (
     <Modal
-      title='Update Test'
+      title='Cài đặt đề thi'
       visible={isDialog}
       onCancel={() => dispatch(hiddenDialog())}
       style={{ top: 25 }}
@@ -63,7 +63,7 @@ const ConfirmDialog = () => {
           <Input placeholder={t('your_input_here', { ns: 'test' })} />
         </Form.Item>
         <Row gutter={8}>
-          <Col span={16}>
+          <Col span={12}>
             <Form.Item
               label={t('category', { ns: 'test' })}
               style={{ fontWeight: '500' }}
@@ -102,42 +102,27 @@ const ConfirmDialog = () => {
               </TreeSelect>
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <Form.Item
-              label={t('language_setting', { ns: 'test' })}
               style={{ fontWeight: '500' }}
-              name='language'
+              name='time_limit'
+              label='Thời gian làm bài (phút)'
               rules={[
                 {
                   required: true,
                   message: `${t('this_is_required_information', {
                     ns: 'test',
                   })}`,
+                  type: 'number',
+                  min: 0,
+                  max: 999999,
                 },
               ]}
-              initialValue='Tiếng Anh'
             >
-              <Select placeholder={t('choose_an_category', { ns: 'test' })}>
-                <Select.Option value='VN'>Tiếng Việt</Select.Option>
-                <Select.Option value='EN'>Tiếng Anh</Select.Option>
-              </Select>
+              <InputNumber style={{ width: '100%' }} />
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-          style={{ fontWeight: '500' }}
-          name='time_limit'
-          label='Thời gian làm bài (phút)'
-          rules={[
-            {
-              type: 'number',
-              min: 0,
-              max: 999999,
-            },
-          ]}
-        >
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
         <Form.Item name='type' label='Cài đặt hiển thị'>
           <Radio.Group>
             <Radio value={1}>Hiển thị một câu hỏi trên một trang</Radio>

@@ -107,8 +107,6 @@ const RegisterForm = (props) => {
             <Input.Password
               prefix={<LockOutlined />}
               placeholder={t('Password_confirmation', { ns: 'login' })}
-              minLength={6}
-              maxLength={20}
             />
           </Form.Item>
 

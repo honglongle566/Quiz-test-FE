@@ -56,7 +56,10 @@ export const registerUser = createAsyncThunk(
           showAlert({ message: 'error email exist', type: 'error' }),
         );
       } else {
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.accessToken);
+        localStorage.setItem(
+          LOCAL_STORAGE_TOKEN_NAME,
+          response.data.accessToken,
+        );
         thunkAPI.dispatch(loadUser());
       }
     } catch (error) {

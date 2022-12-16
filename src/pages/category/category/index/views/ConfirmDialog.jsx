@@ -117,11 +117,7 @@ const ConfirmDialog = () => {
               {fields.map((field, index) => (
                 <Form.Item
                   style={{ fontWeight: '500' }}
-                  label={
-                    index === 0
-                      ? `${t('subject_name1', { ns: 'category' })}`
-                      : ''
-                  }
+                  label={index === 0 ? 'Tên danh mục con' : ''}
                   key={field.key}
                 >
                   <Form.Item {...field} noStyle>
@@ -139,7 +135,7 @@ const ConfirmDialog = () => {
                   icon={<PlusOutlined />}
                   className='btn-primary-inverse'
                 >
-                  {t('new_subject1', { ns: 'category' })}
+                  Thêm danh mục con
                 </Button>
                 <Form.ErrorList errors={errors} />
               </Form.Item>

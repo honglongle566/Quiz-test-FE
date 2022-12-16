@@ -1,4 +1,4 @@
-import { UpOutlined } from '@ant-design/icons';
+import { UpOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, BackTop, Button, Card, Col, Dropdown, Menu, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -65,34 +65,9 @@ const HeaderPage = () => {
       <Col span={3} className='flex-end'>
         <Dropdown overlay={menu} placement='bottomRight'>
           <a onClick={(e) => e.preventDefault()}>
-            <Card.Meta
-              className='avatar'
-              avatar={<Avatar src='https://joeschmoe.io/api/v1/random' />}
-            />
+            <Card.Meta avatar={<Avatar size={36} icon={<UserOutlined />} />} />
           </a>
         </Dropdown>
-      </Col>
-      <Col span={1} className='flex-end'>
-        <Button
-          type='link'
-          onClick={() => handleClick(language)}
-          className='btn-space-none'
-        >
-          {t('header.language')}&nbsp;
-          {language === LANGUAGE_VI ? (
-            <img
-              className='language'
-              src={require('assets/img/US.png')}
-              alt=''
-            />
-          ) : (
-            <img
-              className='language'
-              src={require('assets/img/VI.png')}
-              alt=''
-            />
-          )}
-        </Button>
       </Col>
       <BackTop>
         <div className='up'>
