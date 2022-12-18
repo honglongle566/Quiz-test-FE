@@ -9,6 +9,7 @@ import testFormReducer from './test/testForm';
 import testCampaignFormReducer from './testCampain/testCampaignForm';
 import testCampaignIndexReducer from './testCampain/testCampaignIndex';
 import doTestReducer from './doTest/doTest';
+import testCampaignReviewReducer from './testCampain/testCampaignReview';
 
 const rootReducer = {
   appStateReducer,
@@ -21,6 +22,7 @@ const rootReducer = {
   testCampaignFormReducer,
   testCampaignIndexReducer,
   doTestReducer,
+  testCampaignReviewReducer,
 };
 
 const store = configureStore({

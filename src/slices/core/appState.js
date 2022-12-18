@@ -6,6 +6,7 @@ export const PAGE_SIZE = 10;
 export const PAGE_SIZE_MAX = 9999;
 export const LOCAL_STORAGE_TOKEN_NAME = 'token-name';
 export const LOCAL_STORAGE_ANSWER = 'answer';
+export const LOCAL_STORAGE_TOKEN_CANDIDATE = 'token-candiate';
 
 export const loadUser = createAsyncThunk(
   'appState/loadUser',

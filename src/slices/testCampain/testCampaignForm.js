@@ -118,6 +118,41 @@ const testCampaignFormSlice = createSlice({
   name: 'testCampaignForm',
   initialState: { ...initialState },
   reducers: {
+    setDataEdit: (state, action) => {
+      const data = action.payload;
+      state.item = {
+        exam_id: data.exam_id,
+        name: data.name,
+        code_type: data.code_type,
+        pass_mark: data.pass_mark,
+        code_room: data.code_room,
+        description: data.description,
+        time_limit: data.time_limit || [],
+        is_require_full_name: data.is_require_full_name,
+        is_require_email: data.is_require_email,
+        is_require_phone: data.is_require_phone,
+        is_require_group: data.is_require_group,
+        is_require_identify_code: data.is_require_identify_code,
+      };
+      let newRequireInfo = [];
+      if (data.is_require_full_name) {
+        newRequireInfo.push(0);
+      }
+      if (data.is_require_email) {
+        newRequireInfo.push(1);
+      }
+      if (data.is_require_phone) {
+        newRequireInfo.push(2);
+      }
+      if (data.is_require_group) {
+        newRequireInfo.push(3);
+      }
+      if (data.is_require_identify_code) {
+        newRequireInfo.push(4);
+      }
+      state.requireInfo = newRequireInfo;
+      state.exams = [data.exam];
+    },
     destroy: (state, action) => {
       for (const [key] of Object.entries(state)) {
         state[key] = initialState[key];
@@ -205,6 +240,7 @@ export const {
   setCodeRoom,
   setRequireInfo,
   destroy,
+  setDataEdit,
 } = testCampaignFormSlice.actions;
 
 export default testCampaignFormSlice.reducer;

@@ -1,36 +1,31 @@
 import {
-  CopyOutlined,
+  LinkOutlined,
   ProjectOutlined,
   SettingOutlined,
-  LinkOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, message, Row, Switch } from 'antd';
-import copy from 'copy-text-to-clipboard';
+import { Breadcrumb, Button, Col, Row } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SettingTestCampaigns from 'shares/testCampaign/SettingTestCampaigns';
+import { onchangeRouterLink } from 'slices/core/appState';
+import {
+  testCampaignReviewSelector,
+  updateTestCampaign,
+} from 'slices/testCampain/testCampaignReview';
+import { formatDate } from 'utils/utils';
 
 const ReviewInfo = (props) => {
   const { t } = useTranslation('testCampaign');
+  const dispatch = useDispatch();
 
   const [renderSetting, setRenderSetting] = useState(false);
+  const { test } = useSelector(testCampaignReviewSelector);
 
-  const onClickBtnCopy = () => {
-    copy('hello');
-    message.success({
-      content: t('Copied_successfully', { ns: 'testCampaign' }),
-    });
-  };
-
-  const onChange = (checked) => {
-    //console.log(`switch to ${checked}`);
-    message.success(t('Update_status_successfully', { ns: 'testCampaign' }));
-  };
-
-  function onClickSetting() {
+  const onClickSetting = () => {
     setRenderSetting(true);
-  }
+  };
 
   return (
     <div className='preview container'>
@@ -42,7 +37,7 @@ const ReviewInfo = (props) => {
                 {t('test_campaign', { ns: 'testCampaign' })}
               </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>dot thi</Breadcrumb.Item>
+            <Breadcrumb.Item>{test.name}</Breadcrumb.Item>
           </Breadcrumb>
         </Col>
 
@@ -51,7 +46,7 @@ const ReviewInfo = (props) => {
             <Col span={24}>
               <Row gutter={[8, 8]} align='middle'>
                 <Col flex={1}>
-                  <h4>dot thi</h4>
+                  <h4>{test.name}</h4>
                 </Col>
                 <Col>
                   <Button type='primary' onClick={onClickSetting}>
@@ -59,20 +54,17 @@ const ReviewInfo = (props) => {
                   </Button>
                 </Col>
                 <Col>
-                  <Link to='/test-campaigns/26626/result'>
+                  <Link to={`/test-campaigns/${test.name}/result`}>
                     <Button>
                       <ProjectOutlined />{' '}
                       {t('View_Resul', { ns: 'testCampaign' })}
                     </Button>
                   </Link>
                 </Col>
-                <Col>
-                  <Switch defaultChecked onChange={onChange} />
-                </Col>
               </Row>
             </Col>
 
-            <Col span={9}>
+            <Col span={10}>
               <div className='white-bg p-4'>
                 <Row gutter={[8, 8]} align='middle' className='ma-0'>
                   <Col flex={1}>
@@ -88,34 +80,39 @@ const ReviewInfo = (props) => {
                   </Col>
                   <Col span={20}>
                     <a
-                      href={`http://localhost:8080/do-test/123`}
-                      target='_blank'
+                      href={`http://localhost:8080/info-collect/${test.link_room_exam}`}
+                      target='blank'
                     >
                       <LinkOutlined />
-                      {`http://localhost:8080/do-test/123`}
+                      {`http://localhost:8080/info-collect/${test.link_room_exam}`}
                     </a>
-                  </Col>
-                  <Col span={4}>
-                    <Button type='primary' onClick={onClickBtnCopy}>
-                      <CopyOutlined />
-                    </Button>
                   </Col>
                   <Col span={12}>
                     <Row gutter={[16, 16]}>
                       <Col span={24}>
                         <p>{t('DESCRIPTION', { ns: 'testCampaign' })}</p>
-                        <p>ewf</p>
+                        <p>{test.description}</p>
                       </Col>
                       <Col span={24}>
                         <p>{t('TEST', { ns: 'testCampaign' })}</p>
-                        <Link to='/test-campaigns'>dot thi</Link>
+                        <a
+                          onClick={() =>
+                            dispatch(
+                              onchangeRouterLink(
+                                `tests/${test?.exam?.id}/edit`,
+                              ),
+                            )
+                          }
+                        >
+                          {test?.exam?.name}
+                        </a>
                       </Col>
                     </Row>
                   </Col>
                 </Row>
               </div>
             </Col>
-            <Col span={15}>
+            <Col span={14}>
               <div className='white-bg p-4'>
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
@@ -123,15 +120,55 @@ const ReviewInfo = (props) => {
                   </Col>
                   <Col span={12}>
                     <p>{t('AVAILABLE', { ns: 'testCampaign' })}</p>
-                    <span>{t('Unlimited', { ns: 'testCampaign' })}</span>
+                    {test.time_limit?.length ? (
+                      <span>
+                        {test.time_limit
+                          .map((time) => formatDate(time))
+                          .join('~')}
+                      </span>
+                    ) : (
+                      <span>{t('Unlimited', { ns: 'testCampaign' })}</span>
+                    )}
                   </Col>
                   <Col span={12}>
                     <p>{t('ACCESS_CODE_LINK', { ns: 'testCampaign' })}</p>
-                    <span>{t('Public_Link', { ns: 'testCampaign' })}</span>
+                    {test.code_room ? (
+                      <div>{test.code_room}</div>
+                    ) : (
+                      <div>{t('Public_Link', { ns: 'testCampaign' })}</div>
+                    )}
                   </Col>
                   <Col span={12}>
                     <p>{t('Phone', { ns: 'testCampaign' })}</p>
+                    {test.is_require_phone ? (
+                      <div>Có</div>
+                    ) : (
+                      <div>{t('Public_Link', { ns: 'testCampaign' })}</div>
+                    )}
+                  </Col>
+                  <Col span={12}>
                     <span>{t('Fullname', { ns: 'testCampaign' })}</span>
+                    {test.is_require_full_name ? (
+                      <div>Có</div>
+                    ) : (
+                      <div>{t('Public_Link', { ns: 'testCampaign' })}</div>
+                    )}
+                  </Col>
+                  <Col span={12}>
+                    <p>Email</p>
+                    {test.is_require_email ? (
+                      <div>Có</div>
+                    ) : (
+                      <div>{t('Public_Link', { ns: 'testCampaign' })}</div>
+                    )}
+                  </Col>
+                  <Col span={12}>
+                    <span>Nhóm</span>
+                    {test.is_require_group ? (
+                      <div>Có</div>
+                    ) : (
+                      <div>{t('Public_Link', { ns: 'testCampaign' })}</div>
+                    )}
                   </Col>
                 </Row>
               </div>
@@ -150,10 +187,20 @@ const ReviewInfo = (props) => {
                   <h4>{t('Required_information', { ns: 'testCampaign' })}</h4>
                 </Col>
                 <Col>
-                  <Button type='primary' ghost className='mr-3'>
-                    Back
+                  <Button
+                    type='primary'
+                    ghost
+                    className='mr-3'
+                    onClick={() => onchangeRouterLink(`/test-campaigns`)}
+                  >
+                    Hủy
                   </Button>
-                  <Button type='primary'>Update</Button>
+                  <Button
+                    type='primary'
+                    onClick={() => dispatch(updateTestCampaign())}
+                  >
+                    Cập nhật
+                  </Button>
                 </Col>
               </Row>
             </Col>

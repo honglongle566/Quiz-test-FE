@@ -1,32 +1,14 @@
 import { Button, Col, Modal, Row } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import {
-  appStateSelector,
-  changeLocales,
-  LANGUAGE_EN,
-  LANGUAGE_VI,
-} from 'slices/core/appState';
 import { doTestSelector } from 'slices/doTest/doTest';
 
 const HeaderDoTest = () => {
   const { t, i18n } = useTranslation('common');
-  const { language } = useSelector(appStateSelector);
   const { examRoom } = useSelector(doTestSelector);
 
-  const dispatch = useDispatch();
-
-  const handleClick = (language) => {
-    if (language === LANGUAGE_VI) {
-      dispatch(changeLocales(LANGUAGE_EN));
-      i18n.changeLanguage(LANGUAGE_EN);
-    } else {
-      dispatch(changeLocales(LANGUAGE_VI));
-      i18n.changeLanguage(LANGUAGE_VI);
-    }
-  };
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -89,28 +71,6 @@ const HeaderDoTest = () => {
           </Col>
           <Col>
             <Button type='primary'>Thoát</Button>
-          </Col>
-          <Col>
-            <Button
-              type='link'
-              onClick={() => handleClick(language)}
-              className='btn-space-none btn-language'
-            >
-              {t('header.language')}&nbsp;
-              {language === LANGUAGE_VI ? (
-                <img
-                  className='language'
-                  src={require('assets/img/US.png')}
-                  alt=''
-                />
-              ) : (
-                <img
-                  className='language'
-                  src={require('assets/img/VI.png')}
-                  alt=''
-                />
-              )}
-            </Button>
           </Col>
         </Row>
       </div>

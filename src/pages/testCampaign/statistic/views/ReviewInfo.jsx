@@ -108,7 +108,7 @@ const ReviewInfo = (props) => {
               <Col span={24}>
                 <Row gutter={[8, 8]} align='middle'>
                   <Col flex={1}>
-                    <h4>examination.name</h4>
+                    <h4>Toán cao cấp</h4>
                   </Col>
                 </Row>
               </Col>
@@ -152,11 +152,11 @@ const ReviewInfo = (props) => {
                 <div className='white-bg p-4' style={{ height: '100%' }}>
                   <Row gutter={[24, 24]}>
                     <Col span={12}>
-                      <h6>50</h6>
+                      <h6>1</h6>
                       <p>{t('Participants', { ns: 'testCampaign' })}</p>
                     </Col>
                     <Col span={12}>
-                      <h6>10</h6>
+                      <h6>0</h6>
                       <p>{t('Havent_done_yet', { ns: 'testCampaign' })}</p>
                     </Col>
                   </Row>
@@ -201,15 +201,15 @@ const ReviewInfo = (props) => {
                 <div className='white-bg p-4' style={{ height: '100%' }}>
                   <Row gutter={[24, 24]}>
                     <Col span={12}>
-                      <h6>10</h6>
+                      <h6>7</h6>
                       <p>{t('Correct_Answer', { ns: 'testCampaign' })}</p>
                     </Col>
                     <Col span={12}>
-                      <h6>20</h6>
+                      <h6>3</h6>
                       <p>{t('Wrong_Answer', { ns: 'testCampaign' })}</p>
                     </Col>
                     <Col span={12}>
-                      <h6>30</h6>
+                      <h6>0</h6>
                       <p>{t('Empty_Answer', { ns: 'testCampaign' })}</p>
                     </Col>
                   </Row>
@@ -235,15 +235,15 @@ const ReviewInfo = (props) => {
                             ns: 'testCampaign',
                           })}
                         </th>
-                        <th>{t('COMPLETE_PERCENT', { ns: 'testCampaign' })}</th>
+                        <th>% HOÀN THÀNH ĐÚNG TRUNG BÌNH</th>
                         <th>{t('SCORE', { ns: 'testCampaign' })}</th>
                         <th>{t('DURATION', { ns: 'testCampaign' })}</th>
                         <th>{t('CREATED_AT', { ns: 'testCampaign' })}</th>
                       </tr>
                       <tr>
-                        <td>pro name</td>
+                        <td>Long</td>
                         <td>
-                          <Progress percent={40} showInfo={false} />
+                          <Progress percent={40} />
                         </td>
                         <td>20</td>
                         <td>10:00:10</td>

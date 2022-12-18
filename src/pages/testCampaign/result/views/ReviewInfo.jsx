@@ -55,7 +55,7 @@ const ReviewInfo = () => {
             <Col span={24}>
               <div className='white-bg p-4'>
                 <h6> Ho va ten</h6>
-                <p>
+                {/* <p>
                   <QrcodeOutlined /> ma dinh danh
                 </p>
                 <p>
@@ -72,7 +72,7 @@ const ReviewInfo = () => {
                 </p>
                 <p>
                   <IdcardOutlined /> 113.23.55.30
-                </p>
+                </p> */}
                 <Divider />
                 <Row gutter={[8, 8]} className='result_test'>
                   <Col flex={1}>
@@ -81,13 +81,13 @@ const ReviewInfo = () => {
                     </div>
                   </Col>
                   <Col>
-                    <div className='pass'>
+                    {/* <div className='pass'>
                       <CheckOutlined /> {t('passed', { ns: 'statistic' })}
                     </div>
                     <div className='not_pass'>
                       <ExclamationCircleFilled />{' '}
                       {t('failed', { ns: 'statistic' })}
-                    </div>
+                    </div> */}
                   </Col>
                   <Col span={24}>
                     <Row>

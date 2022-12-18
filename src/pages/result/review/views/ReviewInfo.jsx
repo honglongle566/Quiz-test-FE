@@ -28,16 +28,7 @@ const ReviewInfo = () => {
         <p className='my-1'>
           Bài thi này có thể làm lại nhiều lần, bạn có muốn thử lại ?
         </p>
-        <div className='my-3'>
-          <Button
-            type='primary'
-            ghost
-            icon={<RetweetOutlined />}
-            className='btn-outline'
-          >
-            Làm lại bài thi
-          </Button>
-        </div>
+        <div className='my-3'></div>
       </Col>
       <Col span={24}>
         <Row className='d-flex justify-content-center'>

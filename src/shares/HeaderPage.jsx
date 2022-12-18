@@ -17,32 +17,9 @@ const HeaderPage = () => {
 
   const dispatch = useDispatch();
 
-  const handleClick = (language) => {
-    if (language === LANGUAGE_VI) {
-      dispatch(changeLocales(LANGUAGE_EN));
-      i18n.changeLanguage(LANGUAGE_EN);
-    } else {
-      dispatch(changeLocales(LANGUAGE_VI));
-      i18n.changeLanguage(LANGUAGE_VI);
-    }
-  };
-
   const menu = (
     <Menu
       items={[
-        {
-          label: (
-            <Link to='/account/profile'>{t('header.account_manager')}</Link>
-          ),
-          key: '2',
-        },
-        {
-          label: <Link to='/account/profile'>{t('header.profile_info')}</Link>,
-          key: '3',
-        },
-        {
-          type: 'divider',
-        },
         {
           label: (
             <a onClick={() => dispatch(logoutUser())}>{t('header.logout')}</a>

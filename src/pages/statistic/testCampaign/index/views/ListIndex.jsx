@@ -1,44 +1,44 @@
-import { Button, Col, Pagination, Progress, Row } from "antd";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Button, Col, Pagination, Progress, Row } from 'antd';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const ListIndex = () => {
-  const { t } = useTranslation("statistic");
+  const { t } = useTranslation('statistic');
   const [page, setPage] = useState(1);
   return (
-    <Row gutter={[16, 16]} justify="center">
+    <Row gutter={[16, 16]} justify='center'>
       <Col span={24}>
-        <div className="table-box">
+        <div className='table-box'>
           <table>
-            <thead className="ant-table-thead">
+            <thead className='ant-table-thead'>
               <tr>
-                <th>{t("test_campaign_name", { ns: "statistic" })}</th>
-                <th>{t("completed_total", { ns: "statistic" })}</th>
+                <th>{t('test_campaign_name', { ns: 'statistic' })}</th>
+                <th>{t('completed_total', { ns: 'statistic' })}</th>
                 <th>
-                  {t("average_correct_completion_percent", {
-                    ns: "statistic",
+                  {t('average_correct_completion_percent', {
+                    ns: 'statistic',
                   })}
                 </th>
-                <th>{t("average_score", { ns: "statistic" })}</th>
-                <th>{t("average_duration", { ns: "statistic" })}</th>
+                <th>{t('average_score', { ns: 'statistic' })}</th>
+                <th>{t('average_duration', { ns: 'statistic' })}</th>
                 <th></th>
               </tr>
             </thead>
-            <tbody className="ant-table-tbody">
+            <tbody className='ant-table-tbody'>
               <tr>
-                <td>name</td>
-                <td className="text-center">
+                <td>Toán</td>
+                <td className='text-center'>
                   <span>_</span>
                 </td>
                 <td>
-                  <Progress percent={10} />
+                  <Progress percent={50} />
                 </td>
-                <td>average_score</td>
-                <td>average_completion_time</td>
+                <td>5</td>
+                <td>00:03:11</td>
                 <td>
                   <Link to={`/test-campaigns/$id}/result`}>
-                    <Button>{t("bt_result", { ns: "statistic" })}</Button>
+                    <Button>{t('bt_result', { ns: 'statistic' })}</Button>
                   </Link>
                 </td>
               </tr>
@@ -46,7 +46,7 @@ const ListIndex = () => {
           </table>
         </div>
       </Col>
-      <Col className="pagination-bottom">
+      <Col className='pagination-bottom'>
         <Pagination
           defaultCurrent={1}
           defaultPageSize={20}

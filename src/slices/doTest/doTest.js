@@ -2,8 +2,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { showAlert, onchangeRouterLink } from 'slices/core/appState';
 import examRoomApi from 'api/examRoomApi';
 import candidateApi from 'api/candidateApi';
+import candidateResultDetailApi from 'api/candidateResultDetailApi';
 import { convertToPlain } from 'utils/utils';
-import { LOCAL_STORAGE_ANSWER } from 'slices/core/appState';
+import {
+  LOCAL_STORAGE_ANSWER,
+  LOCAL_STORAGE_TOKEN_CANDIDATE,
+} from 'slices/core/appState';
 
 export const infoCollect = createAsyncThunk(
   'doTest/infoCollect',
@@ -40,6 +44,12 @@ export const registerCandidate = createAsyncThunk(
         thunkAPI.dispatch(
           onchangeRouterLink(`do-test/${currentState.targetId}/guide`),
         );
+        localStorage.setItem(
+          LOCAL_STORAGE_TOKEN_CANDIDATE,
+          candidate.data.accessToken,
+        );
+      } else {
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_CANDIDATE);
       }
       return candidate;
     } catch (error) {
@@ -54,6 +64,19 @@ export const submitTheExam = createAsyncThunk(
   'doTest/submitTheExam',
   async (data, thunkAPI) => {
     try {
+      const currentState = thunkAPI.getState().doTestReducer;
+      const andidateResultDetail = await candidateResultDetailApi.update({
+        list_answer: currentState.listAnswers,
+      });
+      if (!andidateResultDetail?.code) {
+        thunkAPI.dispatch(
+          onchangeRouterLink(`result/${andidateResultDetail?.data.id}`),
+        );
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_CANDIDATE);
+        localStorage.removeItem(LOCAL_STORAGE_ANSWER);
+      } else {
+        thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+      }
     } catch (error) {
       console.log('error', error);
       thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
@@ -89,12 +112,16 @@ export const startDoingExam = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const currentState = thunkAPI.getState().doTestReducer;
-      const examRoom = await examRoomApi.getExamQuestion(currentState.targetId);
-      if (examRoom?.success)
+      const candidateResultDetail = await candidateResultDetailApi.create();
+      if (!candidateResultDetail?.code) {
         thunkAPI.dispatch(
           onchangeRouterLink(`do-test/${currentState.targetId}/exam-question`),
         );
-      return examRoom;
+        return candidateResultDetail;
+      } else {
+        thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+        return thunkAPI.rejectWithValue('Lỗi');
+      }
     } catch (error) {
       console.log('error', error);
       thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
@@ -108,7 +135,8 @@ export const getExamQuestion = createAsyncThunk(
     try {
       const currentState = thunkAPI.getState().doTestReducer;
       const examRoom = await examRoomApi.getExamQuestion(currentState.targetId);
-      return examRoom;
+      const candidateResultDetail = await candidateResultDetailApi.create();
+      return { examRoom, candidateResultDetail };
     } catch (error) {
       console.log('error', error);
       thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
@@ -121,6 +149,7 @@ const initialState = {
   targetId: '',
   examRoom: {},
   candidate: {},
+  candidateResultDetail: {},
   questions: [],
   listQuestion: [],
   listAnswers: {},
@@ -130,7 +159,7 @@ const initialState = {
 
 const doTestSlice = createSlice({
   name: 'doTest',
-  initialState,
+  initialState: { ...initialState },
   reducers: {
     destroy: (state, action) => {
       for (const [key] of Object.entries(state)) {
@@ -187,13 +216,8 @@ const doTestSlice = createSlice({
       state.isLoading = true;
     },
     [startDoingExam.fulfilled]: (state, action) => {
-      state.examRoom = action.payload.data.exam_room;
-      state.questions = action.payload.data.questions;
-      state.listQuestion = action.payload.data.list_question.map((item) => ({
-        ...item,
-        name: convertToPlain(item.name),
-      }));
       state.isLoading = false;
+      state.candidateResultDetail = action.payload.data;
     },
     [startDoingExam.rejected]: (state, action) => {
       state.isLoading = false;
@@ -203,12 +227,15 @@ const doTestSlice = createSlice({
       state.isLoading = true;
     },
     [getExamQuestion.fulfilled]: (state, action) => {
-      state.examRoom = action.payload.data.exam_room;
-      state.questions = action.payload.data.questions;
-      state.listQuestion = action.payload.data.list_question.map((item) => ({
-        ...item,
-        name: convertToPlain(item.name),
-      }));
+      state.examRoom = action.payload.examRoom.data.exam_room;
+      state.questions = action.payload.examRoom.data.questions;
+      state.listQuestion = action.payload.examRoom.data.list_question.map(
+        (item) => ({
+          ...item,
+          name: convertToPlain(item.name),
+        }),
+      );
+      state.candidateResultDetail = action.payload.candidateResultDetail.data;
       state.isLoading = false;
       state.listAnswers =
         JSON.parse(localStorage[LOCAL_STORAGE_ANSWER] || null) || {};

@@ -13,7 +13,7 @@ const TestCampaignLayoutForm = () => {
     dispatch(destroy());
   };
   const { targetSubject, keyword } = useSelector(testCampaignFormSelector);
-  useDispatch(() => {
+  useEffect(() => {
     destroyLayer();
   }, []);
   useEffect(() => {

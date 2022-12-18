@@ -26,7 +26,7 @@ const QuestionFillingSpaces = () => {
       setFillBlankCorrectAnswers(
         fill_blank_correct_answers.map((answer) => {
           if (answer.key === Number(key)) {
-            return { ...answer, content: [e.target.value] };
+            return { ...answer, content: e.target.value };
           }
           return answer;
         }),
@@ -63,12 +63,12 @@ const QuestionFillingSpaces = () => {
           setFillBlankCorrectAnswers(
             keysToNumber.map((item) => {
               if (!fill_blank_correct_answers.length)
-                return { key: item, content: [] };
+                return { key: item, content: '' };
               let oldAnswer = fill_blank_correct_answers.find(
                 (x) => x.key === item,
               );
               if (oldAnswer) return oldAnswer;
-              return { key: item, content: [] };
+              return { key: item, content: '' };
             }),
           ),
         );

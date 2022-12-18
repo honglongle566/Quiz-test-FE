@@ -10,12 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { testCampaignIndexSelector } from 'slices/testCampain/testCampaignIndex';
+import { formatDate } from 'utils/utils';
 const ListIndex = () => {
   const { t } = useTranslation('testCampaign');
   const { list } = useSelector(testCampaignIndexSelector);
-  const onChange = (checked) => {
-    message.success(t('Update_status_successfully', { ns: 'testCampaign' }));
-  };
 
   const showModalDelete = () => {
     Modal.confirm({
@@ -39,13 +37,20 @@ const ListIndex = () => {
           justify='space-between'
           align='middle'
           className='bg-white box-radius pa-2 mb-3 ma-0'
+          key={item.id}
         >
           <Col flex={1}>
             <h5 dangerouslySetInnerHTML={{ __html: item.name }}></h5>
             <div>
               <span className='mr-2'>
                 <CalendarOutlined />{' '}
-                {t('Unlimited_Time', { ns: 'testCampaign' })}
+                {item.time_limit?.length ? (
+                  <span>
+                    {item.time_limit.map((time) => formatDate(time)).join('~')}
+                  </span>
+                ) : (
+                  <span>{t('Unlimited', { ns: 'testCampaign' })}</span>
+                )}
               </span>
               <a
                 href={`http://localhost:8080/info-collect/${item.link_room_exam}`}
@@ -72,7 +77,6 @@ const ListIndex = () => {
                 <DeleteOutlined />
               </Button>
             </Tooltip>
-            <Switch className='mr-2' defaultChecked onChange={onChange} />
             <Link to={`/test-campaigns/:id/question-statistic`}>
               <Button>{t('result', { ns: 'testCampaign' })}</Button>
             </Link>

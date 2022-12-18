@@ -9,6 +9,10 @@ const examRoomApi = {
     const url = `/api/examination-room/do-test/${id}`;
     return axiosClient.get(url);
   },
+  getById(id) {
+    const url = `/api/examination-room/${id}`;
+    return axiosClient.get(url);
+  },
   getAllPaging(params) {
     const url = `/api/examination-room/all-paging`;
     return axiosClient.get(url, params);

@@ -11,13 +11,15 @@ import {
   doTestSelector,
   getExamQuestion,
   setTargetId,
+  submitTheExam,
 } from 'slices/doTest/doTest';
 import Questions from './Questions';
 import { checkQuestionDone } from 'utils/utils';
 
 const ExamQuestions = (props) => {
   const dispatch = useDispatch();
-  const { listQuestion, listAnswers } = useSelector(doTestSelector);
+  const { listQuestion, listAnswers, candidateResultDetail, examRoom } =
+    useSelector(doTestSelector);
 
   const param = useParams();
   useEffect(() => {
@@ -55,7 +57,9 @@ const ExamQuestions = (props) => {
               </Row> */}
             </Col>
             <Col>
-              <Button type='primary'>Nộp bài thi</Button>
+              <Button type='primary' onClick={() => dispatch(submitTheExam())}>
+                Nộp bài thi
+              </Button>
             </Col>
           </Row>
         </Col>
@@ -69,7 +73,12 @@ const ExamQuestions = (props) => {
                 <h3>Thời gian làm bài kiểm tra còn lại</h3>
 
                 <Statistic.Countdown
-                  value={Number(new Date('2022-12-16 00:40:00')) + 60 * 1000}
+                  value={
+                    Number(
+                      new Date(candidateResultDetail?.time_start || null),
+                    ) +
+                    (examRoom?.exam?.time_limit || 0) * 60 * 1000
+                  }
                   onFinish={onFinish}
                 />
                 <small>
