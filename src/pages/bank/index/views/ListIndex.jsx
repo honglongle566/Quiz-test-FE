@@ -80,21 +80,6 @@ const ListIndex = () => {
   };
   return (
     <div>
-      <Checkbox checked={checkAll} className='checkAll'>
-        {checkAll
-          ? t('Uncheck_all', { ns: 'bank' })
-          : t('Check_all', { ns: 'bank' })}
-      </Checkbox>
-      {showOption && (
-        <select onChange={handleMassDelete} className='check-option'>
-          <option key='option' value='option'>
-            {t('Select', { ns: 'bank' })}
-          </option>
-          <option key='delete' value='delete'>
-            {t('Delete', { ns: 'bank' })}
-          </option>
-        </select>
-      )}
       <div className='mt-3'>
         {list.map((item, index) => (
           <Collapse
@@ -164,14 +149,6 @@ const ListIndex = () => {
               header={
                 <div className='d-flex'>
                   <div className='mr-3'>
-                    <Checkbox
-                      value={123}
-                      checked={false}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                      }}
-                      className='mr-2'
-                    />
                     <b>{`${t('Question', { ns: 'bank' })} ${index + 1}`}:</b>
                   </div>
                   <div

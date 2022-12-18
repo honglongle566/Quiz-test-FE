@@ -17,13 +17,12 @@ import {
   Dropdown,
   Menu,
   Row,
-  Tooltip,
   Typography,
 } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { testFormSelector, showDialog } from 'slices/test/testForm';
+import { showDialog, testFormSelector } from 'slices/test/testForm';
 import ConfirmDialog from './ConfirmDialog';
 import FormInfo from './FormInfo';
 
@@ -37,7 +36,7 @@ const LayoutForm = () => {
   };
   const { test } = useSelector(testFormSelector);
   return (
-    <div>
+    <div className='container'>
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Breadcrumb>
@@ -53,14 +52,17 @@ const LayoutForm = () => {
               <Typography.Title level={3}>{test.name}</Typography.Title>
             </Col>
             <Col>
-              <Tooltip title={t('test_setting', { ns: 'test' })}>
-                <Button type='text' onClick={() => dispatch(showDialog())}>
-                  <SettingFilled style={{ fontSize: '16px' }} />
-                </Button>
-              </Tooltip>
+              <Button
+                type='primary'
+                size='large'
+                onClick={() => dispatch(showDialog())}
+              >
+                <SettingFilled />
+                {t('test_setting', { ns: 'test' })}
+              </Button>
             </Col>
           </Row>
-          <Divider className='ma-0 pa-0' />
+          <Divider className='ma-0 pa-0 mt-4' />
         </Col>
         <Col span={24}>
           <Row gutter={[24, 24]} align='middle' justify='space-between'>
@@ -95,7 +97,7 @@ const LayoutForm = () => {
               </Row>
             </Col>
             <Col>
-              <Link to='/tests/12/result' className='link mr-2'>
+              <Link to={`/tests/${test.id}/result`} className='link mr-2'>
                 <Button size='large'>
                   <FileDoneOutlined />
                   <Typography.Text>

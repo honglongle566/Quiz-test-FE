@@ -1,31 +1,19 @@
 import {
   CaretRightOutlined,
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
   CopyOutlined,
   DeleteOutlined,
   EditOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
-import {
-  Checkbox,
-  Col,
-  Collapse,
-  Divider,
-  Row,
-  Select,
-  Tooltip,
-  Typography,
-  Button,
-  Modal,
-} from 'antd';
+import { Button, Col, Collapse, Divider, Modal, Row, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
-  testFormSelector,
   addQuestion,
   removeQuestionsToExam,
+  testFormSelector,
 } from 'slices/test/testForm';
-import { useNavigate } from 'react-router-dom';
 
 const { Panel } = Collapse;
 const { confirm } = Modal;
@@ -65,26 +53,6 @@ const FormInfo = () => {
   };
   return (
     <Row span={24}>
-      <Row align='middle' justify='start' gutter={24} className='mt-3'>
-        <Col style={{ marginLeft: 18 }}>
-          <Checkbox>
-            <Typography.Title level={5}>
-              {t('check_all', { ns: 'test' })}
-            </Typography.Title>
-          </Checkbox>
-        </Col>
-        <Col>
-          <Select style={{ width: 120 }}>
-            <Select.Option value='none'>
-              {t('select', { ns: 'test' })}
-            </Select.Option>
-            <Select.Option value='remove'>
-              {t('remove', { ns: 'test' })}
-            </Select.Option>
-          </Select>
-        </Col>
-      </Row>
-
       <Col span={24} className='mt-3'>
         {list.map((item, index) => (
           <Collapse
@@ -123,14 +91,6 @@ const FormInfo = () => {
               header={
                 <div className='d-flex'>
                   <div className='mr-3'>
-                    <Checkbox
-                      value={123}
-                      checked={false}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                      }}
-                      className='mr-2'
-                    />
                     <b>{`${t('Question', { ns: 'bank' })} ${index + 1}`}:</b>
                   </div>
                   <div

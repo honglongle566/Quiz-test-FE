@@ -1,19 +1,24 @@
 import { useEffect } from 'react';
 import LayoutForm from './views/LayoutForm';
 import {
+  destroy,
   initData,
   setIsPage,
   setTargetId,
   setTargetTestId,
 } from 'slices/bank/bankForm';
 import { useDispatch } from 'react-redux';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 const BankLayoutForm = () => {
   const param = useParams();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const destroyLayer = () => {
+    dispatch(destroy());
+  };
   useEffect(() => {
+    destroyLayer();
     if (searchParams.get('test_id') && param?.id) {
       dispatch(setTargetTestId(searchParams.get('test_id')));
       dispatch(setTargetId(param.id));
@@ -29,6 +34,11 @@ const BankLayoutForm = () => {
     }
     dispatch(initData());
   }, []);
+  useEffect(() => {
+    return () => {
+      destroyLayer();
+    };
+  });
   return (
     <div className='BankLayoutForm container'>
       <LayoutForm />

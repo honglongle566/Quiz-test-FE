@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { showAlert } from 'slices/core/appState';
+import { showAlert, onchangeRouterLink } from 'slices/core/appState';
 import examApi from 'api/examApi';
 import categoryApi from 'api/categoryApi';
 import { PAGE_SIZE } from 'slices/core/appState';
@@ -78,9 +78,10 @@ export const addExam = createAsyncThunk(
       thunkAPI.dispatch(
         showAlert({ message: 'Them thanh công', type: 'success' }),
       );
-      thunkAPI.dispatch(setTargetCreate(newExam?.data?.id));
-      thunkAPI.dispatch(setIsCreate());
       thunkAPI.dispatch(hiddenDialog());
+      thunkAPI.dispatch(
+        onchangeRouterLink(`/tests/${newExam?.data?.id}/create`),
+      );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
       console.log('error', error);
@@ -98,8 +99,6 @@ const initialState = {
   isLoading: false,
   keyword: '',
   isDialog: false,
-  isCreate: false,
-  targetCreate: 0,
   pagination: {
     total_items: 0,
     total_pages: 0,
@@ -120,12 +119,6 @@ const testIndexSlice = createSlice({
     onChangeSubject: (state, action) => {
       state.targetSubject = action.payload.targetSubject;
       state.keyword = action.payload.keyword;
-    },
-    setTargetCreate: (state, action) => {
-      state.targetCreate = action.payload;
-    },
-    setIsCreate: (state, action) => {
-      state.isCreate = true;
     },
     showDialog: (state, action) => {
       state.isDialog = true;
@@ -195,9 +188,7 @@ export const {
   hiddenDialog,
   onSearch,
   changePageNo,
-  setIsCreate,
   destroy,
-  setTargetCreate,
   onChangeSubject,
 } = testIndexSlice.actions;
 

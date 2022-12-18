@@ -3,7 +3,7 @@ import { showAlert } from 'slices/core/appState';
 import examApi from 'api/examApi';
 import questionApi from 'api/questionApi';
 import categoryApi from 'api/categoryApi';
-import { PAGE_SIZE_MAX } from 'slices/core/appState';
+import { PAGE_SIZE_MAX, onchangeRouterLink } from 'slices/core/appState';
 
 export const reloadData = createAsyncThunk(
   'testForm/reloadData',
@@ -80,11 +80,23 @@ export const addQuestion = createAsyncThunk(
       delete newItem.user_id;
       delete newItem.id;
       const currentState = thunkAPI.getState().testFormReducer;
-      await examApi.createQuestion(currentState.targetExam, newItem);
-      thunkAPI.dispatch(
-        showAlert({ message: 'Copy thanh công', type: 'success' }),
+      const newQuestion = await examApi.createQuestion(
+        currentState.targetExam,
+        newItem,
       );
-      thunkAPI.dispatch(reloadData());
+      if (!newQuestion.code) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Copy thanh công', type: 'success' }),
+        );
+        thunkAPI.dispatch(reloadData());
+        thunkAPI.dispatch(
+          onchangeRouterLink(`bank/question/${newQuestion.data.id}/edit`),
+        );
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Copy không thanh công', type: 'success' }),
+        );
+      }
     } catch (error) {
       console.log('error', error);
       thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));

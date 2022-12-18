@@ -214,8 +214,13 @@ const initialState = {
 
 const bankFormSlice = createSlice({
   name: 'bankFormSlice',
-  initialState,
+  initialState: { ...initialState },
   reducers: {
+    destroy: (state, action) => {
+      for (const [key] of Object.entries(state)) {
+        state[key] = initialState[key];
+      }
+    },
     setIsShowQuestionSpace: (state, action) => {
       state.isShowQuestionSpace = action.payload;
     },
@@ -321,6 +326,7 @@ const bankFormSliceReducer = bankFormSlice.reducer;
 export const bankFormSliceSelector = (state) => state.bankFormSliceReducer;
 
 export const {
+  destroy,
   setTargetTestId,
   setIsPage,
   setIsShowQuestionSpace,

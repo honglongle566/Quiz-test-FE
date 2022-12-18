@@ -1,7 +1,7 @@
 import { Breadcrumb, Button, Col, Radio, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   addQuestion,
   bankFormSliceSelector,
@@ -19,6 +19,7 @@ import Setting from './Setting';
 const FormView = () => {
   const { t } = useTranslation('bank');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     isPage,
     item: { type },
@@ -34,6 +35,7 @@ const FormView = () => {
     } else {
       dispatch(updateQuestion());
     }
+    navigate(-1);
   };
 
   return (

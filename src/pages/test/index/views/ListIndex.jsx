@@ -79,7 +79,7 @@ const ListIndex = () => {
                   </div>
                   <div className='text-info-small'>
                     <LinkOutlined />
-                    <p>1 đợt thi</p>
+                    <p>{item.examination_rooms.length || 0} đợt thi</p>
                   </div>
                   <div className='text-info-small'>
                     <QuestionCircleOutlined />
@@ -96,7 +96,7 @@ const ListIndex = () => {
                   </div>
                   <div className='text-info-small'>
                     <FolderOutlined />
-                    <p>name</p>
+                    <p>{item.subject.name || ''}</p>
                   </div>
                 </div>
               </div>
@@ -109,23 +109,26 @@ const ListIndex = () => {
               </Button>
             </div>
             <Divider className='ma-0' />
+            {item.examination_rooms.map((exam_room) => (
+              <div className='d-flex justify-content-between align-items-center pt-3 pb-2'>
+                <div>
+                  <h3>{exam_room.name}</h3>
 
-            <div className='d-flex justify-content-between align-items-center pt-3 pb-2'>
-              <div>
-                <h3>exam.name</h3>
-                <p>exam.link</p>
+                  <a
+                    href={`info-collect/${exam_room.link_room_exam}`}
+                    target='blank'
+                  >
+                    http://localhost:8080/info-collect/
+                    {exam_room.link_room_exam}
+                  </a>
+                </div>
+                <div>
+                  <Link to={`/tests/${item.id}/result`}>
+                    <Button>{t('button.result', { ns: 'common' })}</Button>
+                  </Link>
+                </div>
               </div>
-              <div>
-                <Button type='link'>
-                  {t('button.copy_link', { ns: 'common' })}
-                </Button>
-                <Link to={`/tests/${item.id}/result`}>
-                  <Button type='link'>
-                    {t('button.result', { ns: 'common' })}
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            ))}
           </Panel>
         </Collapse>
       ))}
