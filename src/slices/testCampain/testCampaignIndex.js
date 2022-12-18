@@ -13,7 +13,7 @@ export const reloadData = createAsyncThunk(
         page_size: PAGE_SIZE,
         name: currentState.keyword || null,
       };
-      return examRoomApi.getAllPaging(params);
+      return examRoomApi.getAllPaging({ params });
     } catch (error) {
       console.log('error', error);
       return thunkAPI.rejectWithValue(error.toString());

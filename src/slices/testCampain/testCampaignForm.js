@@ -90,32 +90,39 @@ const convertDataRoom = (item, requireInfo) => {
   return { ...item, ...newData };
 };
 
+const initialState = {
+  exams: [],
+  category: [],
+  keyword: '',
+  item: {
+    exam_id: null,
+    name: '',
+    code_type: 0,
+    pass_mark: 0,
+    code_room: '',
+    description: '',
+    time_limit: [],
+    is_require_full_name: 1, //0
+    is_require_email: null, //1
+    is_require_phone: null, //2
+    is_require_group: null, //3
+    is_require_identify_code: null, //4
+  },
+  requireInfo: [0],
+  targetSubject: '',
+  isLoading: false,
+  isDialog: false,
+};
+
 const testCampaignFormSlice = createSlice({
   name: 'testCampaignForm',
-  initialState: {
-    exams: [],
-    category: [],
-    keyword: '',
-    item: {
-      exam_id: null,
-      name: '',
-      code_type: 0,
-      pass_mark: 0,
-      code_room: '',
-      description: '',
-      time_limit: [],
-      is_require_full_name: 1, //0
-      is_require_email: null, //1
-      is_require_phone: null, //2
-      is_require_group: null, //3
-      is_require_identify_code: null, //4
-    },
-    requireInfo: [0],
-    targetSubject: '',
-    isLoading: false,
-    isDialog: false,
-  },
+  initialState: { ...initialState },
   reducers: {
+    destroy: (state, action) => {
+      for (const [key] of Object.entries(state)) {
+        state[key] = initialState[key];
+      }
+    },
     onSearch: (state, action) => {
       state.keyword = action.payload;
     },
@@ -197,6 +204,7 @@ export const {
   setPassMark,
   setCodeRoom,
   setRequireInfo,
+  destroy,
 } = testCampaignFormSlice.actions;
 
 export default testCampaignFormSlice.reducer;

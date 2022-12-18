@@ -16,7 +16,6 @@ const ListIndex = () => {
   const onChange = (checked) => {
     message.success(t('Update_status_successfully', { ns: 'testCampaign' }));
   };
-  console.log('list', list);
 
   const showModalDelete = () => {
     Modal.confirm({
