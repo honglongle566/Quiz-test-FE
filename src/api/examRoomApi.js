@@ -29,8 +29,8 @@ const examRoomApi = {
     const url = `/api/examination-room/${data.id}`;
     return axiosClient.put(url, data);
   },
-  delete(data) {
-    const url = `/api/examination-room/${data.id}`;
+  delete(id) {
+    const url = `/api/examination-room/${id}`;
     return axiosClient.delete(url);
   },
 };

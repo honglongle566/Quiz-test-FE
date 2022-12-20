@@ -7,15 +7,20 @@ import {
 } from '@ant-design/icons';
 import { Button, Col, message, Modal, Row, Switch, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { testCampaignIndexSelector } from 'slices/testCampain/testCampaignIndex';
+import {
+  testCampaignIndexSelector,
+  deleteTestCampain,
+} from 'slices/testCampain/testCampaignIndex';
 import { formatDate } from 'utils/utils';
 const ListIndex = () => {
   const { t } = useTranslation('testCampaign');
   const { list } = useSelector(testCampaignIndexSelector);
+  const dispatch = useDispatch();
 
-  const showModalDelete = () => {
+  const showModalDelete = (id) => {
     Modal.confirm({
       title: t('Notification', { ns: 'testCampaign' }),
       icon: <ExclamationCircleOutlined />,
@@ -23,7 +28,8 @@ const ListIndex = () => {
       okText: t('yes', { ns: 'testCampaign' }),
       cancelText: t('no', { ns: 'testCampaign' }),
       onOk() {
-        //console.log('delete')
+        console.log('id', id);
+        dispatch(deleteTestCampain(id));
       },
       maskClosable: true,
     });
@@ -73,7 +79,11 @@ const ListIndex = () => {
               placement='top'
               title={t('delete', { ns: 'testCampaign' })}
             >
-              <Button type='text' danger onClick={showModalDelete}>
+              <Button
+                type='text'
+                danger
+                onClick={() => showModalDelete(item.id)}
+              >
                 <DeleteOutlined />
               </Button>
             </Tooltip>

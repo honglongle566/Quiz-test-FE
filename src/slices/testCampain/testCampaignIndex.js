@@ -21,6 +21,31 @@ export const reloadData = createAsyncThunk(
   },
 );
 
+export const deleteTestCampain = createAsyncThunk(
+  'testCampaignIndex/deleteTestCampain',
+  async (id, thunkAPI) => {
+    try {
+      // const currentState = thunkAPI.getState().testCampaignFormReducer;
+      const testCampaign = await examRoomApi.delete(id);
+      if (!testCampaign.data.code) {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Xoá thành công', type: 'success' }),
+        );
+        thunkAPI.dispatch(reloadData());
+      } else {
+        thunkAPI.dispatch(
+          showAlert({ message: 'Xoá không thành công', type: 'success' }),
+        );
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      console.log('error', error);
+      thunkAPI.dispatch(showAlert({ message: 'Lỗi kết nốt', type: 'error' }));
+      return thunkAPI.rejectWithValue(error.toString());
+    }
+  },
+);
+
 const testCampaignIndex = createSlice({
   name: 'testCampaignIndex',
   initialState: {
@@ -54,6 +79,15 @@ const testCampaignIndex = createSlice({
       state.isLoading = false;
     },
     [reloadData.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [deleteTestCampain.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [deleteTestCampain.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [deleteTestCampain.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
