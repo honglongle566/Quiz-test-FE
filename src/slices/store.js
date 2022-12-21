@@ -12,6 +12,7 @@ import doTestReducer from './doTest/doTest';
 import testCampaignReviewReducer from './testCampain/testCampaignReview';
 import resultCandiateReducer from './result/resultCandiate';
 import testCampaignResultReducer from './testCampain/testCampaignResult';
+import statisticAllReducer from './statistic/statisticAll';
 
 const rootReducer = {
   appStateReducer,
@@ -27,6 +28,7 @@ const rootReducer = {
   testCampaignReviewReducer,
   resultCandiateReducer,
   testCampaignResultReducer,
+  statisticAllReducer,
 };
 
 const store = configureStore({

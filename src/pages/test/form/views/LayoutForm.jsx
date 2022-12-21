@@ -90,21 +90,9 @@ const LayoutForm = () => {
                     {t('show_all_questions_per_page', { ns: 'test' })}
                   </span>
                 </Col>
-                <Col>
-                  <ForkOutlined style={{ marginRight: 4 }} />
-                  <span>{t('shuffle_question', { ns: 'test' })}</span>
-                </Col>
               </Row>
             </Col>
             <Col>
-              <Link to={`/tests/${test.id}/result`} className='link mr-2'>
-                <Button size='large'>
-                  <FileDoneOutlined />
-                  <Typography.Text>
-                    {t('view_result', { ns: 'test' })}
-                  </Typography.Text>
-                </Button>
-              </Link>
               <Dropdown.Button
                 onClick={handleAddQuestion}
                 overlay={

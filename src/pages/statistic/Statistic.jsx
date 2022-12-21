@@ -2,12 +2,17 @@ import { Menu, Row, Col } from 'antd';
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { reloadData } from 'slices/statistic/statisticAll';
 
-function Statistic(props) {
+const Statistic = (props) => {
   const { t } = useTranslation('statistic');
-
+  const dispatch = useDispatch();
   const location = useLocation();
-
+  useEffect(() => {
+    dispatch(reloadData());
+  }, []);
   return (
     <div className='statistic container'>
       <h6 className='ma-0 mb-4'>Thống kê</h6>
@@ -50,6 +55,6 @@ function Statistic(props) {
       </Row>
     </div>
   );
-}
+};
 
 export default Statistic;

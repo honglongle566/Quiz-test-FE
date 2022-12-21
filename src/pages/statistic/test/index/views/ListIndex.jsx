@@ -1,13 +1,14 @@
 import { Button, Col, Pagination, Progress, Row } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { statisticAllSelector } from 'slices/statistic/statisticAll';
 
 const ListIndex = () => {
   const { t } = useTranslation('statistic');
   const [page, setPage] = useState(1);
-
+  const { test } = useSelector(statisticAllSelector);
   return (
     <Row gutter={[16, 16]} justify='center'>
       <Col span={24}>
@@ -24,39 +25,33 @@ const ListIndex = () => {
                 </th>
                 <th>{t('average_score', { ns: 'statistic' })}</th>
                 <th>{t('average_duration', { ns: 'statistic' })}</th>
-                <th></th>
               </tr>
             </thead>
             <tbody className='ant-table-tbody'>
-              <tr>
-                <td>Văn</td>
-                <td className='text-center'>
-                  <span>_</span>
-                </td>
-                <td>
-                  <Progress percent={10} />
-                </td>
-                <td>6</td>
-                <td>00:12:06</td>
-                <td>
-                  <Link to={`/tests/items.id/result`}>
-                    <Button>{t('bt_result', { ns: 'statistic' })}</Button>
-                  </Link>
-                </td>
-              </tr>
+              {test &&
+                test.map((item) => (
+                  <tr>
+                    <td>{item.name}</td>
+                    <td className='text-center'>
+                      <span>
+                        {item.total_candidate_done}/{item.total_candidate}
+                      </span>
+                    </td>
+                    <td>
+                      <Progress
+                        percent={Math.floor(
+                          (item.total_candidate_done / item.total_candidate) *
+                            100 || 0,
+                        )}
+                      />
+                    </td>
+                    <td>{item.score || 0}</td>
+                    <td>{item.time === 'NaN:NaN:NaN' ? '_' : item.time}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
-      </Col>
-      <Col className='pagination-bottom'>
-        <Pagination
-          defaultCurrent={1}
-          defaultPageSize={10}
-          current={page}
-          onChange={(values) => setPage(values)}
-          total={20}
-          hideOnSinglePage
-        />
       </Col>
     </Row>
   );

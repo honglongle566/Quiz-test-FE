@@ -53,14 +53,6 @@ const ReviewInfo = (props) => {
                     <SettingOutlined /> {t('Setting', { ns: 'testCampaign' })}
                   </Button>
                 </Col>
-                <Col>
-                  <Link to={`/test-campaigns/${test.name}/result`}>
-                    <Button>
-                      <ProjectOutlined />{' '}
-                      {t('View_Resul', { ns: 'testCampaign' })}
-                    </Button>
-                  </Link>
-                </Col>
               </Row>
             </Col>
 

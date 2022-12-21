@@ -26,7 +26,6 @@ export const getLetter = (num) => {
 export const getRandomInt = (max, min) => {
   return Math.floor(Math.random() * max) + min;
 };
-
 export const formatTime = (dateTime) => {
   const date = dateTime.slice(0, 10).split('-').reverse().join('/');
   const time = dateTime.slice(11, 19);

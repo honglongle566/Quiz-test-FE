@@ -16,77 +16,12 @@ import { Pie } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import AddFilterOptionsTestCam from './AddFilterOptionsTestCam';
-
-ChartJS.register(ArcElement, Legend);
-
-const { Option } = Select;
+import { statisticAllSelector } from 'slices/statistic/statisticAll';
+import { useSelector } from 'react-redux';
 
 const ReviewInfo = (props) => {
   const { t } = useTranslation('testCampaign');
-  const { id } = useParams();
-  const [orderBy, setOrderBy] = useState('latest');
-  const [optionsSelected, setOptionsSelected] = useState({});
-  const [page, setPage] = useState(1);
-  const dispatch = useDispatch();
-
-  const styleChart = {
-    backgroundColor: [
-      'rgba(44, 74, 159, 1)',
-      'rgba(255, 99, 132, 1)',
-      'rgba(189, 195, 199, 1)',
-      'rgba(255, 206, 86, 1)',
-      'rgba(75, 192, 192, 1)',
-      'rgba(153, 102, 255, 1)',
-      'rgba(54, 162, 235, 1)',
-      'rgba(255, 159, 64, 1)',
-    ],
-    borderColor: ['rgba(255, 255, 255, 1)'],
-    borderWidth: 2,
-  };
-
-  const options = {
-    plugins: {
-      legend: {
-        position: 'bottom',
-      },
-    },
-  };
-
-  const showEvaluate = (items) => {
-    // if (!items.endAt) return "";
-    // if (items.is_grading_it_questions)
-    //   return (
-    //     <span className="need_grade">
-    //       {t("need_grade", { ns: "testCampaign" })}
-    //     </span>
-    //   );
-    // if (items.is_passed)
-    //   return (
-    //     <span className="pass">{t("passed", { ns: "testCampaign" })}</span>
-    //   );
-    // return (
-    <span className='not_pass'>{t('not_pass', { ns: 'testCampaign' })}</span>;
-    // );
-  };
-
-  const showModalDelete = (id) => {
-    Modal.confirm({
-      title: t('Notification', { ns: 'testCampaign' }),
-      icon: <ExclamationCircleOutlined />,
-      content: t('Do_you_want_to_remove_the_result', { ns: 'testCampaign' }),
-      okText: t('yes', { ns: 'testCampaign' }),
-      cancelText: t('no', { ns: 'testCampaign' }),
-      onOk: () => deleteCandidate(id),
-      maskClosable: true,
-    });
-  };
-
-  const deleteCandidate = (id) => {};
-  const onChangePagination = (values) => {
-    setPage(values);
-  };
-
+  const { listTestCamapain } = useSelector(statisticAllSelector);
   return (
     <div className='result_campaign container'>
       <Row gutter={[16, 16]}>
@@ -108,123 +43,10 @@ const ReviewInfo = (props) => {
               <Col span={24}>
                 <Row gutter={[8, 8]} align='middle'>
                   <Col flex={1}>
-                    <h4>Toán cao cấp</h4>
+                    <h6>Đợt thi</h6>
                   </Col>
                 </Row>
               </Col>
-              <Col span={4}>
-                <div className='white-bg p-4' style={{ height: '100%' }}>
-                  {true ? (
-                    <Row gutter={[16, 16]} justify='center'>
-                      <Col>
-                        <img
-                          className='img-md'
-                          src={require('assets/img/no_chart.png')}
-                          alt=''
-                        />
-                      </Col>
-                      <Col>
-                        <p>
-                          {t('Havent_setup_pass_mark_for_campaign', {
-                            ns: 'testCampaign',
-                          })}
-                        </p>
-                      </Col>
-                    </Row>
-                  ) : (
-                    <Pie
-                      data={{
-                        labels: ['Max score', 'Need grade passed'],
-                        datasets: [
-                          {
-                            label: '# of Votes',
-                            data: [1, 2],
-                            ...styleChart,
-                          },
-                        ],
-                      }}
-                      options={options}
-                    />
-                  )}
-                </div>
-              </Col>
-              <Col span={8}>
-                <div className='white-bg p-4' style={{ height: '100%' }}>
-                  <Row gutter={[24, 24]}>
-                    <Col span={12}>
-                      <h6>1</h6>
-                      <p>{t('Participants', { ns: 'testCampaign' })}</p>
-                    </Col>
-                    <Col span={12}>
-                      <h6>0</h6>
-                      <p>{t('Havent_done_yet', { ns: 'testCampaign' })}</p>
-                    </Col>
-                  </Row>
-                </div>
-              </Col>
-              <Col span={4}>
-                <div className='white-bg' style={{ height: '100%' }}>
-                  <Pie
-                    data={{
-                      labels: [
-                        'Correct Answer',
-                        'Wrong Answer',
-                        'Empty Answer',
-                      ],
-                      datasets: [
-                        {
-                          label: '# of Votes',
-                          data: [10, 5, 2],
-                          ...styleChart,
-                        },
-                      ],
-                    }}
-                    options={options}
-                  />
-                  <>
-                    <Row gutter={[16, 16]} justify='center'>
-                      <Col>
-                        {/* <img src={require("assets/img/no_chart.png")} alt="" /> */}
-                      </Col>
-                      <Col>
-                        {/* <p>
-                          {t("not_enough_data_for_display", {
-                            ns: "testCampaign",
-                          })}
-                        </p> */}
-                      </Col>
-                    </Row>
-                  </>
-                </div>
-              </Col>
-              <Col span={8}>
-                <div className='white-bg p-4' style={{ height: '100%' }}>
-                  <Row gutter={[24, 24]}>
-                    <Col span={12}>
-                      <h6>7</h6>
-                      <p>{t('Correct_Answer', { ns: 'testCampaign' })}</p>
-                    </Col>
-                    <Col span={12}>
-                      <h6>3</h6>
-                      <p>{t('Wrong_Answer', { ns: 'testCampaign' })}</p>
-                    </Col>
-                    <Col span={12}>
-                      <h6>0</h6>
-                      <p>{t('Empty_Answer', { ns: 'testCampaign' })}</p>
-                    </Col>
-                  </Row>
-                </div>
-              </Col>
-              <Col span={24}>
-                <AddFilterOptionsTestCam
-                  orderBy={orderBy}
-                  setOrderBy={setOrderBy}
-                  optionsSelected={optionsSelected}
-                  setOptionsSelected={setOptionsSelected}
-                  // isLoading={isLoading}
-                />
-              </Col>
-
               <Col span={24}>
                 <div className='white-bg p-4'>
                   <table>
@@ -240,49 +62,42 @@ const ReviewInfo = (props) => {
                         <th>{t('DURATION', { ns: 'testCampaign' })}</th>
                         <th>{t('CREATED_AT', { ns: 'testCampaign' })}</th>
                       </tr>
-                      <tr>
-                        <td>Long</td>
-                        <td>
-                          <Progress percent={40} />
-                        </td>
-                        <td>20</td>
-                        <td>10:00:10</td>
-                        <td>11/02/2033</td>
-                        <td>{showEvaluate()}</td>
-                        <td>
-                          <Link to='/test-campaigns/:id/result'>
-                            <Button>
-                              {t('View_Detail', { ns: 'testCampaign' })}
-                            </Button>
-                          </Link>
-                        </td>
-                        <td>
-                          <Button
-                            type='text'
-                            danger
-                            onClick={() => showModalDelete()}
-                          >
-                            <DeleteOutlined />
-                          </Button>
-                        </td>
-                      </tr>
+                      {listTestCamapain &&
+                        listTestCamapain.map((item) => (
+                          <tr>
+                            <td>{item.name}</td>
+                            <td>
+                              {item.candidate_result_details[0].length ? (
+                                <Progress
+                                  percent={
+                                    item.candidate_result_details[0].result || 0
+                                  }
+                                />
+                              ) : (
+                                '_'
+                              )}
+                            </td>
+                            <td>
+                              {item.candidate_result_details[0].length && (
+                                <>{item.candidate_result_details[0].score}</>
+                              )}
+                            </td>
+                            <td>10:00:10</td>
+                            <td>11/02/2033</td>
+                            <td></td>
+                            <td>
+                              <Link to='/test-campaigns/:id/result'>
+                                <Button>
+                                  {t('View_Detail', { ns: 'testCampaign' })}
+                                </Button>
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
-                  {/* {test_campaign_result.length === 0 && !isLoading ? (
-                    <Empty style={{ marginTop: "10px" }} />
-                  ) : null} */}
                 </div>
               </Col>
-            </Row>
-            <Row justify='center' align='middle'>
-              <Pagination
-                defaultCurrent={1}
-                // defaultPageSize={rowPerPage}
-                // current={currentPage}
-                // onChange={onChangePagination}
-                // total={totalRows}
-                hideOnSinglePage
-              />
             </Row>
           </Space>
         </Col>

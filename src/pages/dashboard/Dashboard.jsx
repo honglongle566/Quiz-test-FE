@@ -6,9 +6,21 @@ import {
 } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  getDashboard,
+  statisticAllSelector,
+} from 'slices/statistic/statisticAll';
 
 const Dashboard = (props) => {
   const { t } = useTranslation('common');
+  const { total_question, total_category, total_exam_room, total_exam } =
+    useSelector(statisticAllSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDashboard());
+  }, []);
   return (
     <div className='dashboard container'>
       <h6>{t('header.dashboard')}</h6>
@@ -16,7 +28,7 @@ const Dashboard = (props) => {
         <div className='box color-blue'>
           <div className='content'>
             <div className='title'> {t('header.test')}</div>
-            <div className='number'>123</div>
+            <div className='number'>{total_exam}</div>
           </div>
           <div className='icon'>
             <FileTextOutlined />
@@ -25,7 +37,7 @@ const Dashboard = (props) => {
         <div className='box color-yellow'>
           <div className='content'>
             <div className='title'> {t('header.question_bank')} </div>
-            <div className='number'>123</div>
+            <div className='number'>{total_question}</div>
           </div>
           <div className='icon'>
             <QuestionCircleOutlined />
@@ -34,7 +46,7 @@ const Dashboard = (props) => {
         <div className='box color-green'>
           <div className='content'>
             <div className='title'> {t('header.category')}</div>
-            <div className='number'>123</div>
+            <div className='number'>{total_category}</div>
           </div>
           <div className='icon'>
             <FolderOutlined />
@@ -43,7 +55,7 @@ const Dashboard = (props) => {
         <div className='box color-pink'>
           <div className='content'>
             <div className='title'> {t('header.test_campaign')}</div>
-            <div className='number'>123</div>
+            <div className='number'>{total_exam_room}</div>
           </div>
           <div className='icon'>
             <LinkOutlined />
