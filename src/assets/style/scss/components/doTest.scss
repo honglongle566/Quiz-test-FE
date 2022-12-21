@@ -191,6 +191,11 @@
   }
 }
 
+.active {
+  background-color: $BtnHover !important;
+  color: $light-color !important;
+}
+
 .preview-question {
   position: relative;
   &__hide {

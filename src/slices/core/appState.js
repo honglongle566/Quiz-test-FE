@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk(
       const response = await authApi.login(userForm);
       if (response.code) {
         thunkAPI.dispatch(
-          showAlert({ message: 'error password or username', type: 'error' }),
+          showAlert({ message: 'Lỗi mật khẩu hoặc email', type: 'error' }),
         );
       } else {
         localStorage.setItem(
@@ -54,7 +54,7 @@ export const registerUser = createAsyncThunk(
       const response = await authApi.register(userForm);
       if (response.code) {
         thunkAPI.dispatch(
-          showAlert({ message: 'error email exist', type: 'error' }),
+          showAlert({ message: 'Lỗi email đã được tồn tại', type: 'error' }),
         );
       } else {
         localStorage.setItem(

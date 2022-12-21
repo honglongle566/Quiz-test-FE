@@ -2,14 +2,12 @@ import { Button, Col, Row } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import Xarrow from 'react-xarrows';
-import { sortAnswers } from 'utils/utils';
 
-const Matching = ({ data, answers }) => {
+const Matching = ({ data, answers = {} }) => {
   const [showArrow, setShowArrow] = useState(false);
-
   const showIconResult = (questionID) => {
-    const dataCorrect = [...data.matching_correct_answers[questionID]].sort();
-    const dataAnswer = [...answers[questionID]].sort();
+    const dataCorrect = data.matching_correct[questionID] || [];
+    const dataAnswer = answers[questionID] || [];
     if (dataCorrect.length != dataAnswer.length)
       return <CloseCircleFilled className='text-red' />;
     for (let i = 0; i < dataCorrect.length; i++) {
@@ -59,82 +57,72 @@ const Matching = ({ data, answers }) => {
                 ))}
             </Col>
             <Col className='answers' span={12}>
-              {data?.matching_answers?.answers &&
-                data?.matching_answers?.answers
-                  .sort(sortAnswers)
-                  .map((answer) => (
-                    <div className='answers__box' key={answer.id}>
-                      <div className='answers__box__item'>
-                        <div className='answers__box__item__circle'>
-                          <div
-                            id={`${data.index}-${answer.id}`}
-                            className='answers__box__item__circle__icon'
-                          ></div>
-                        </div>
-                        <div className='answers__box__item__content'>
-                          <span>
-                            <strong>{answer.id.toUpperCase()}.</strong>
-                          </span>
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: answer.content,
-                            }}
-                          ></span>
-                        </div>
-                        {data.matching_answers.questions.map((question) => (
-                          <Xarrow
-                            key={`${question.id}+${answer.id}`}
-                            start={`${data.index}-${question.id}`}
-                            end={`${data.index}-${answer.id}`}
-                            path='straight'
-                            strokeWidth={2}
-                            headSize={4}
-                            color='#2c4a9f'
-                            showHead={showArrow}
-                          />
-                        ))}
-                      </div>
+              {data?.matching_answers?.answers.map((answer) => (
+                <div className='answers__box' key={answer.id}>
+                  <div className='answers__box__item'>
+                    <div className='answers__box__item__circle'>
+                      <div
+                        id={`${data.index}-${answer.id}`}
+                        className='answers__box__item__circle__icon'
+                      ></div>
                     </div>
-                  ))}
+                    <div className='answers__box__item__content'>
+                      <span>
+                        <strong>{answer.id.toUpperCase()}.</strong>
+                      </span>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: answer.content,
+                        }}
+                      ></span>
+                    </div>
+                    {data.matching_answers.questions.map((question) => (
+                      <Xarrow
+                        key={`${question.id}+${answer.id}`}
+                        start={`${data.index}-${question.id}`}
+                        end={`${data.index}-${answer.id}`}
+                        path='straight'
+                        strokeWidth={2}
+                        headSize={4}
+                        color='#2c4a9f'
+                        showHead={showArrow}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </Col>
           </Row>
           <div className='mt-3 mb-2'>
             <strong>Trả lời</strong>
           </div>
           <div>
-            {data?.matching_answers?.questions &&
-              data?.matching_answers?.questions.map((question) => (
-                <div
-                  className='d-flex align-items-center mb-2'
-                  key={question.id}
-                >
-                  <div style={{ width: '15px' }} className='mr-2'>
-                    {showIconResult(question.id)}
-                  </div>
-                  <div className='mr-2'>
-                    <strong>{question.id}.</strong>
-                  </div>
-                  <div>
-                    {data?.matching_answers?.answers &&
-                      data?.matching_answers?.answers
-                        .sort(sortAnswers)
-                        .map((answer) => (
-                          <Button
-                            type='primary'
-                            ghost
-                            className={
-                              answers[question.id].includes(answer.id)
-                                ? 'btn-outline btn-answer active mr-2'
-                                : 'btn-outline btn-answer mr-2'
-                            }
-                            key={answer.id}
-                          >
-                            {answer.id.toUpperCase()}
-                          </Button>
-                        ))}
-                  </div>
+            {data?.matching_answers?.questions.map((question) => (
+              <div className='d-flex align-items-center mb-2' key={question.id}>
+                <div style={{ width: '15px' }} className='mr-2'>
+                  {showIconResult(question.id)}
                 </div>
-              ))}
+                <div className='mr-2'>
+                  <strong>{question.id}.</strong>
+                </div>
+                <div>
+                  {data?.matching_answers?.answers.map((item) => (
+                    <Button
+                      type='primary'
+                      ghost
+                      className={
+                        answers[question.id]?.find((x) => x == item.id)
+                          ? 'btn-outline btn-answer active mr-2'
+                          : 'btn-outline btn-answer mr-2'
+                      }
+                      key={item.id}
+                    >
+                      {item.id.toUpperCase()}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </Col>
       </Row>

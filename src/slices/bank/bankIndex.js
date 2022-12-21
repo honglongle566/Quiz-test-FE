@@ -50,7 +50,7 @@ export const duplicateQuestion = createAsyncThunk(
       console.log('data', data);
       await questionApi.create(getDuplicateQuestion(data));
       thunkAPI.dispatch(
-        showAlert({ message: 'Nhân bản thanh công', type: 'success' }),
+        showAlert({ message: 'Nhân bản thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -69,7 +69,7 @@ export const addQuestionsToExam = createAsyncThunk(
         questions: [id],
       });
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Thêm thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {

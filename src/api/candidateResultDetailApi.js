@@ -9,6 +9,10 @@ const candidateResultDetailApi = {
     const url = '/api/candidate-result-detail';
     return axiosClientDoTest.put(url, data);
   },
+  getResult(id) {
+    const url = '/api/candidate-result-detail/' + id;
+    return axiosClientDoTest.get(url, id);
+  },
 };
 
 export default candidateResultDetailApi;

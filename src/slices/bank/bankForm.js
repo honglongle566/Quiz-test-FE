@@ -42,7 +42,7 @@ export const addQuestion = createAsyncThunk(
         );
       }
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Thêm thành công', type: 'success' }),
       );
     } catch (error) {
       console.log('error', error);
@@ -62,7 +62,7 @@ export const updateQuestion = createAsyncThunk(
         id: currentState.targetId,
       });
       thunkAPI.dispatch(
-        showAlert({ message: 'update thanh công', type: 'success' }),
+        showAlert({ message: 'Cập nhật thành công', type: 'success' }),
       );
     } catch (error) {
       console.log('error', error);

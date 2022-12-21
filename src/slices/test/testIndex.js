@@ -41,7 +41,7 @@ export const updateTest = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+          showAlert({ message: 'Cập nhật thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(reloadData());
@@ -59,7 +59,7 @@ export const removeTest = createAsyncThunk(
     try {
       await examApi.delete(id);
       thunkAPI.dispatch(
-        showAlert({ message: 'Xoá thanh công', type: 'success' }),
+        showAlert({ message: 'Xoá thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -76,7 +76,7 @@ export const addExam = createAsyncThunk(
     try {
       const newExam = await examApi.create(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Thêm thành công', type: 'success' }),
       );
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(

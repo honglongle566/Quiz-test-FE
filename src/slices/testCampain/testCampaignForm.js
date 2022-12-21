@@ -35,7 +35,7 @@ export const updateTestCampaign = createAsyncThunk(
     try {
       await examRoomApi.update(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+        showAlert({ message: 'Cập nhật thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -55,7 +55,7 @@ export const createTestCampaign = createAsyncThunk(
         convertDataRoom(currentState.item, currentState.requireInfo),
       );
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Thêm thành công', type: 'success' }),
       );
       thunkAPI.dispatch(
         onchangeRouterLink(`/test-campaigns/${examRoom?.data?.id}/edit`),

@@ -1,10 +1,10 @@
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 
-function FillingBlankSpace({ data, answers }) {
+const FillingBlankSpace = ({ data, answers }) => {
   const changeContent = () => {
-    let newContent = data?.content;
-    for (let item of data?.fill_blank_correct_answers) {
+    let newContent = data?.name;
+    for (let item of data?.fill_blank_correct_answer) {
       newContent = newContent.replace(
         `[%${item.key}%]`,
         `<strong>__${item.key}__</strong>`,
@@ -28,35 +28,33 @@ function FillingBlankSpace({ data, answers }) {
         <Col span={24}>
           <div
             className='mb-3'
-            dangerouslySetInnerHTML={{ __html: changeContent(data.content) }}
+            dangerouslySetInnerHTML={{ __html: changeContent(data.name) }}
           ></div>
           <div>
             <strong className='mb-3'>Trả lời</strong>
             <div>
-              {data?.fill_blank_correct_answers &&
-                data?.fill_blank_correct_answers.map((item) => (
-                  <div
-                    className='d-flex align-items-center mb-1'
-                    key={item.key}
-                  >
-                    <div className='mr-2'>
-                      <b>{item.key}</b>
-                    </div>
-                    <div className='mr-2'>
-                      <input
-                        type='text'
-                        className='fill_input'
-                        id={item.key}
-                        defaultValue={answers[item.key - 1]}
-                        readOnly='readonly'
-                      />
-                      {showIconResult(item.content[0], answers[item.key - 1])}
-                    </div>
-                    <div>
-                      <b> Đáp án:</b> <span>{item.content[0]}</span>
-                    </div>
+              {data?.fill_blank_correct_answer.map((item) => (
+                <div className='d-flex align-items-center mb-1' key={item.key}>
+                  <div className='mr-2'>
+                    <b>{item.key}</b>
                   </div>
-                ))}
+                  <div className='mr-2'>
+                    <input
+                      type='text'
+                      className='fill_input'
+                      id={item.key}
+                      defaultValue={
+                        answers.find((x) => x.key == item.key)?.content
+                      }
+                      readOnly='readonly'
+                    />
+                    {showIconResult(item.content, answers[item.key])}
+                  </div>
+                  <div>
+                    <b> Đáp án:</b> <span>{item.content}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </Col>
@@ -71,6 +69,6 @@ function FillingBlankSpace({ data, answers }) {
       )}
     </div>
   );
-}
+};
 
 export default FillingBlankSpace;

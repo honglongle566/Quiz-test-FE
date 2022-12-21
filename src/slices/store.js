@@ -10,6 +10,8 @@ import testCampaignFormReducer from './testCampain/testCampaignForm';
 import testCampaignIndexReducer from './testCampain/testCampaignIndex';
 import doTestReducer from './doTest/doTest';
 import testCampaignReviewReducer from './testCampain/testCampaignReview';
+import resultCandiateReducer from './result/resultCandiate';
+import testCampaignResultReducer from './testCampain/testCampaignResult';
 
 const rootReducer = {
   appStateReducer,
@@ -23,6 +25,8 @@ const rootReducer = {
   testCampaignIndexReducer,
   doTestReducer,
   testCampaignReviewReducer,
+  resultCandiateReducer,
+  testCampaignResultReducer,
 };
 
 const store = configureStore({

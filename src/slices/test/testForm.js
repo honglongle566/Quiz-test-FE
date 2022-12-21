@@ -37,7 +37,7 @@ export const updateTest = createAsyncThunk(
     try {
       await examApi.update(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+        showAlert({ message: 'Cập nhật thành công', type: 'success' }),
       );
       thunkAPI.dispatch(hiddenDialog());
     } catch (error) {
@@ -57,7 +57,7 @@ export const removeQuestionsToExam = createAsyncThunk(
         questions: [id],
       });
       thunkAPI.dispatch(
-        showAlert({ message: 'Xoá thanh công', type: 'success' }),
+        showAlert({ message: 'Xoá thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -86,7 +86,7 @@ export const addQuestion = createAsyncThunk(
       );
       if (!newQuestion.code) {
         thunkAPI.dispatch(
-          showAlert({ message: 'Copy thanh công', type: 'success' }),
+          showAlert({ message: 'Copy thành công', type: 'success' }),
         );
         thunkAPI.dispatch(reloadData());
         thunkAPI.dispatch(
@@ -94,7 +94,7 @@ export const addQuestion = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Copy không thanh công', type: 'success' }),
+          showAlert({ message: 'Copy không thành công', type: 'success' }),
         );
       }
     } catch (error) {

@@ -1,6 +1,11 @@
 import { Button, Col, Row } from 'antd';
 import ReviewInfo from './ReviewInfo';
+import { useSelector, useDispatch } from 'react-redux';
+import { resultCandiateSelector } from 'slices/result/resultCandiate';
+import { onchangeRouterLink } from 'slices/core/appState';
 const LayoutReview = () => {
+  const { resultData } = useSelector(resultCandiateSelector);
+  const dispatch = useDispatch();
   return (
     <div className='layout-result'>
       <div className='layout-result__header'>
@@ -10,14 +15,16 @@ const LayoutReview = () => {
           </Col>
           <Col>
             <div>
-              <b>Ten</b>
+              <b>{resultData.name}</b>
             </div>
-            <div>ten dot thi</div>
+            <div>{resultData.exam_room_name}</div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button>Thoát</Button>
+            <Button onClick={() => dispatch(onchangeRouterLink('/'))}>
+              Thoát
+            </Button>
           </Col>
         </Row>
       </div>

@@ -29,7 +29,7 @@ export const updateTestCampaign = createAsyncThunk(
         id: currentStateReview.test.id,
       });
       thunkAPI.dispatch(
-        showAlert({ message: 'Them thanh công', type: 'success' }),
+        showAlert({ message: 'Thêm thành công', type: 'success' }),
       );
       thunkAPI.dispatch(onchangeRouterLink(`/test-campaigns`));
     } catch (error) {

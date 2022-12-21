@@ -32,7 +32,7 @@ export const updateQuestionGroup = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+          showAlert({ message: 'Cập nhật thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(reloadData());
@@ -50,7 +50,7 @@ export const removeQuestionGroup = createAsyncThunk(
     try {
       await questionGroupApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Xoá thanh công', type: 'success' }),
+        showAlert({ message: 'Xoá thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -72,7 +72,7 @@ export const addQuestionGroup = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Them thanh công', type: 'success' }),
+          showAlert({ message: 'Thêm thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(hiddenDialog());

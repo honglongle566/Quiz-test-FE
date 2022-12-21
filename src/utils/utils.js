@@ -65,3 +65,21 @@ export const checkQuestionDone = (question, listAnswers) => {
   }
   return false;
 };
+
+export const subDateTime = (startTime, endTime) => {
+  if (!startTime) return '00:00:00';
+  if (!endTime) return '00:00:00';
+  const newStartTime = new Date(startTime).getTime();
+  const newEndTime = new Date(endTime).getTime();
+  const subTime = (Number(newEndTime) - Number(newStartTime)) / 1000;
+  let hour = 0;
+  let minutes = 0;
+  let seconds = 0;
+  hour = Math.floor(subTime / 3600) || 0;
+  minutes = Math.floor((subTime - hour * 3600) / 60) || 0;
+  seconds = Math.floor(subTime - hour * 3600 - minutes * 60) || 0;
+  let time = `${hour < 10 ? `0${hour}` : hour}:${
+    minutes < 10 ? `0${minutes}` : minutes
+  }:${seconds < 10 ? `0${seconds}` : seconds}`;
+  return time;
+};

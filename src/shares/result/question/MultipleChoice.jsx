@@ -4,11 +4,10 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import { Col, Row } from 'antd';
-import { sortAnswers } from 'utils/utils';
 
 const MultipleChoice = ({ data, answers }) => {
   const showIconResult = (answer) => {
-    if (data.correct_answers.includes(answer.id)) {
+    if (data.correct_answer.includes(answer.id)) {
       if (answers.includes(answer.id)) {
         return <CheckCircleFilled className='text-green' />;
       }
@@ -27,29 +26,28 @@ const MultipleChoice = ({ data, answers }) => {
           <div className='my-2'>
             <strong
               dangerouslySetInnerHTML={{
-                __html: data.content,
+                __html: data.name,
               }}
             ></strong>
           </div>
-          {data.answers &&
-            data.answers.sort(sortAnswers).map((answer) => (
-              <div className='d-flex' key={answer.id}>
-                <div style={{ width: '15px' }} className='mr-2'>
-                  {showIconResult(answer)}
-                </div>
-                <div className='mr-1'>
-                  <b>
-                    {answer.id}
-                    {')'}
-                  </b>
-                </div>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: answer.content,
-                  }}
-                ></div>
+          {data.answer.map((item) => (
+            <div className='d-flex' key={item.id}>
+              <div style={{ width: '15px' }} className='mr-2'>
+                {showIconResult(item)}
               </div>
-            ))}
+              <div className='mr-1'>
+                <b>
+                  {item.id}
+                  {')'}
+                </b>
+              </div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: item.content,
+                }}
+              ></div>
+            </div>
+          ))}
         </Col>
         {data.note_answer && (
           <Col>

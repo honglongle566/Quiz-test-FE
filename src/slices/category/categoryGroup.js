@@ -41,7 +41,7 @@ export const updateCategoryGroup = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+          showAlert({ message: 'Cập nhật thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(hiddenDialog());
@@ -65,7 +65,7 @@ export const updateSubject = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Cập nhật thanh công', type: 'success' }),
+          showAlert({ message: 'Cập nhật thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(reloadData());
@@ -83,7 +83,7 @@ export const removeCategoryGroup = createAsyncThunk(
     try {
       await categoryApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Xoá thanh công', type: 'success' }),
+        showAlert({ message: 'Xoá thành công', type: 'success' }),
       );
       thunkAPI.dispatch(hiddenDialog());
       thunkAPI.dispatch(reloadData());
@@ -100,7 +100,7 @@ export const removeSubject = createAsyncThunk(
     try {
       await subjectApi.delete(item);
       thunkAPI.dispatch(
-        showAlert({ message: 'Xoá thanh công', type: 'success' }),
+        showAlert({ message: 'Xoá thành công', type: 'success' }),
       );
       thunkAPI.dispatch(reloadData());
     } catch (error) {
@@ -122,7 +122,7 @@ export const addCategoryGroup = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Them thanh công', type: 'success' }),
+          showAlert({ message: 'Thêm thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(hiddenDialog());
@@ -146,7 +146,7 @@ export const addSubject = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Them thanh công', type: 'success' }),
+          showAlert({ message: 'Thêm thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(hiddenDialog());
@@ -170,7 +170,7 @@ export const moveSubject = createAsyncThunk(
         );
       } else {
         thunkAPI.dispatch(
-          showAlert({ message: 'Them thanh công', type: 'success' }),
+          showAlert({ message: 'Thêm thành công', type: 'success' }),
         );
       }
       thunkAPI.dispatch(hiddenDialog());
